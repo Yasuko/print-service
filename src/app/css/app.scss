@@ -1,0 +1,94 @@
+h1 {
+	font-size: 1.2em;
+	color: #999;
+	margin-bottom: 0;
+}
+h2 {
+	font-size: 2em;
+	margin-top: 0;
+	padding-top: 0;
+}
+nav a {
+	padding: 5px 10px;
+	text-decoration: none;
+	margin-top: 10px;
+	display: inline-block;
+	background-color: #eee;
+	border-radius: 4px;
+}
+nav a:visited, a:link {
+	color: #607D8B;
+}
+nav a:hover {
+	color: #039be5;
+	background-color: #CFD8DC;
+}
+nav a.active {
+	color: #039be5;
+}
+main {
+    padding: 0 20px;
+    min-height: 300px;
+	&.products-table {
+		margin-top: 20px;
+	}
+	&.products-table > .delete-column {
+		width: 60px;
+	}
+}
+.grid {
+	width: 100%;
+}
+.center {
+	
+}
+.title-m {
+	text-align: center;
+	font-weight: bolder;
+	line-height: 2em;
+	width: 300px;
+	height: 30px;
+}
+
+[class *= 'container'] {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: baseline;
+	margin: auto;
+}
+[class *= 'cargo'] {
+	align-self: center;
+	border: solid 1px #D3D3D3;
+	box-shadow: 1px 1px 3px #E6E6E6;
+}
+.container {
+	width: 100%;
+}
+
+.cargo {
+	flex-basis: 300px;
+	height: 100px;
+	border-radius: 10px;
+	margin: 30px;
+}
+
+.container-s {
+	width: 100%;
+}
+
+.cargo-s {
+	text-align: center;
+	font-size: 0.9em;
+	flex-basis: 200px;
+	margin: 5px;
+}
+
+.click {
+	cursor: pointer;
+}
+.click:hover {
+	background-color: #DFDFDF;
+	box-shadow: -2px -2px -2px #BBBBBB;
+}

@@ -1,0 +1,41 @@
+<div>履歴書印刷</div>
+
+<div class="load-screen" *ngIf="flags['onLoad']">
+    <div>読み込み中</div>
+</div>
+
+<ng-container *ngIf="flags['onType']">
+<div>
+    <div class="cargo click" (click)="setRecruiteType(0)">
+        <div class="label-s"><h3>JIS規格</h3></div>
+    </div>
+    <div class="cargo click">
+        <div class="label-s"><h3>一般</h3></div>
+    </div>
+    <div class="cargo click">
+        <div class="label-s"><h3>転職</h3></div>
+    </div>
+    <div class="cargo click">
+        <div class="label-s"><h3>パート・バイト</h3></div>
+    </div>
+</div>
+</ng-container>
+
+<ng-container *ngIf="flags['onFileLoad']">
+<form action=""
+method="post"
+enctype="multipart/form-data">
+<div 
+    [class.drag-over]="flags['onDrag']"
+    class="drag-drop-area"
+    (dragover)="onDragOverHandler($event)" 
+    (dragleave)="onDragLeaveHandler($event)"
+    (drop)="onDropHandler($event)" >
+    <div class="drag-drop-inside">
+        <p>ここに画像をドロップ</p>
+        <p>または</p>
+        <input name="images[]" (change)="onSelectHandler($event)" type="file" value="ファイルを選択" accept="image/*" multiple >
+    </div>
+</div>
+</form>
+</ng-container>
