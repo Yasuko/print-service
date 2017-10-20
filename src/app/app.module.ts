@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 // import Route Component
@@ -25,6 +26,7 @@ import { ListLayoutService, RecruiteLayoutService } from './_lib_service/index';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule
   ],
   providers: [

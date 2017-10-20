@@ -1,41 +1,88 @@
-<div>履歴書印刷</div>
-
 <div class="load-screen" *ngIf="flags['onLoad']">
     <div>読み込み中</div>
 </div>
 
 <ng-container *ngIf="flags['onType']">
-<div>
-    <div class="cargo click" (click)="setRecruiteType(0)">
+<div class="print-caption">履歴書のタイプを選択</div>
+<div class="select-box">
+    <div class="print-cargo click" (click)="setRecruiteType(0)">
         <div class="label-s"><h3>JIS規格</h3></div>
     </div>
-    <div class="cargo click">
+    <div class="print-cargo click" (click)="setRecruiteType(1)">
         <div class="label-s"><h3>一般</h3></div>
     </div>
-    <div class="cargo click">
+    <div class="print-cargo click" (click)="setRecruiteType(2)">
         <div class="label-s"><h3>転職</h3></div>
     </div>
-    <div class="cargo click">
+    <div class="print-cargo click" (click)="setRecruiteType(3)">
         <div class="label-s"><h3>パート・バイト</h3></div>
     </div>
 </div>
 </ng-container>
+<ng-container *ngIf="flags['onSelectPhoto']">
+    <div class="print-caption">顔写真を取り込みますか？</div>
+    <div class="select-box">
+        <div class="print-cargo click" (click)="setPicutureType(1)">
+            <div class="label-s"><h3>取り込む</h3></div>
+        </div>
+        <div class="print-cargo click" (click)="setPicutureType(0)">
+            <div class="label-s"><h3>取り込まない</h3></div>
+        </div>
+        <div class="print-cargo click" (click)="moveWindow('type')">
+            <div class="label-s"><h3>戻る</h3></div>
+        </div>
+    </div>
+</ng-container>
 
 <ng-container *ngIf="flags['onFileLoad']">
+<ng-container *ngIf="flags['onPicuture']">
 <form action=""
-method="post"
-enctype="multipart/form-data">
-<div 
-    [class.drag-over]="flags['onDrag']"
-    class="drag-drop-area"
-    (dragover)="onDragOverHandler($event)" 
-    (dragleave)="onDragLeaveHandler($event)"
-    (drop)="onDropHandler($event)" >
-    <div class="drag-drop-inside">
-        <p>ここに画像をドロップ</p>
-        <p>または</p>
-        <input name="images[]" (change)="onSelectHandler($event)" type="file" value="ファイルを選択" accept="image/*" multiple >
+    method="post"
+    enctype="multipart/form-data">
+    <div 
+        [class.drag-over]="flags['onDrag']"
+        class="drag-drop-area"
+        (dragover)="onDragOverHandler($event)" 
+        (dragleave)="onDragLeaveHandler($event)"
+        (drop)="onSelectHandler($event,'drag')" >
+        <div class="drag-drop-inside">
+            <p>ここに画像をドロップ</p>
+            <p>または</p>
+            <input name="images[]" (change)="onSelectHandler($event, 'select')" type="file" value="ファイルを選択" accept="image/*" multiple >
+        </div>
+    </div>
+</form>
+</ng-container>
+<ng-container *ngIf="flags['onReview']">
+<div class="faceShot">
+    <canvas id="face-shot"></canvas>
+</div>
+<div class="select-box-right">
+    <ng-container *ngIf="flags['onFaceCat']">
+    <div class="print-cargo_s click" (click)="catImage()">
+        <div class="label-s">切り取り</div>
+    </div>
+    </ng-container>
+    <ng-container *ngIf="flags['onFaceCat']">
+    <div class="print-cargo_s click" (click)="buildPdf()">
+        <div class="label-s">ダウンロード</div>
+    </div>
+    </ng-container>
+    <div class="print-cargo_s click" (click)="moveWindow('type')">
+        <div class="label-s">戻る</div>
     </div>
 </div>
-</form>
+</ng-container>
+</ng-container>
+
+<ng-container *ngIf="flags['onDownload']">
+    <div class="print-caption">PDFをダウンロードします</div>
+    <div class="select-box-bottom">
+        <div class="print-cargo_s click" (click)="buildPdf()">
+            <div class="label-s"><h3>ダウンロード</h3></div>
+        </div>
+        <div class="print-cargo_s click" (click)="moveWindow('type')">
+            <div class="label-s"><h3>初めに戻る</h3></div>
+        </div>
+    </div>
 </ng-container>

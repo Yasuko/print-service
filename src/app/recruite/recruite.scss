@@ -1,10 +1,49 @@
-.print-carg{
-	flex-basis: 300px;
-	height: 100px;
+.print-caption {
+    text-align: center;
+    width: 100%;
+}
+.select-box {
+    display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: baseline;
+	margin: auto;
+}
+.select-box-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: baseline;
+}
+.select-box-right {
+    position: absolute;
+    right: 0;
+    width: 150px;
+    display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: baseline;
+}
+.print-cargo {
+    flex-basis: 200px;
+    width: 200px;
+	height: 80px;
 	border-radius: 10px;
 	margin: 30px;
 }
-
+.print-cargo_s {
+    text-align: center;
+    flex-basis: 130px;
+	height: 30px;
+	border-radius: 5px;
+	margin: 10px;
+}
 .drag-drop-area {
     position: absolute;
     top: 0;
@@ -33,6 +72,21 @@
 .drag-over {
     background-color: rgba(100,100,100,0.5);
 }
+
+
+.faceShot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 300px;
+    border: dashed 2px #BFEBFF;
+    border-radius: 10px;
+    margin: auto;
+}
+
 
 .view-area {
     width: 400px;

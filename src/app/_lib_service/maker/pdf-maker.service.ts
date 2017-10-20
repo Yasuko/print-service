@@ -35,8 +35,12 @@ export class PdfMakerService {
     testPdfMake(docDefinition: any) {
         docDefinition.defaultStyle = docDefinition.defaultStyle || {};
         // docDefinition.defaultStyle.font = 'msgothic';
-
         return pdfMake.createPdf(docDefinition);
+    }
+    pdfMakeForIE(docDefinition: any) {
+        docDefinition.defaultStyle = docDefinition.defaultStyle || {};
+        // docDefinition.defaultStyle.font = 'msgothic';
+        pdfMake.createPdf(docDefinition).download('optionalName.pdf');
     }
 
     // URLの取得にもラップをかける
