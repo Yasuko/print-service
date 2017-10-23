@@ -15,15 +15,12 @@ import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index'
 export class TacksheetComponent {
 
     flags = {
-        onFileLoad: false,
-            onPicuture: true,
-            onReview: false,
-            onFaceCat: false,
         onDrag: false,
         onType: true,
-        onSheetSpec: true,
-        onSheetDesine: true,
-        onIncludeCSV: false,
+        onSheetSpec: false,
+        onSheetDesine: false,
+        onLoadCSV: false,
+        onReviewCSV: false,
         onDownload: false,
         onLoad: false
     };
@@ -36,6 +33,8 @@ export class TacksheetComponent {
         LabelMarginTop: 0,
         LabelMarginLeft: 0
     };
+
+    cellCounter = 0;
 
     reader = new FileReader();
     catOn = false;
@@ -109,14 +108,46 @@ export class TacksheetComponent {
     }
 
     setSheetType(id: number): void {
-
+        this.moveWindow('spec');
+    }
+    setSheetSpec(): void {
+        this.moveWindow('desine');
+    }
+    setSheetDesine(): void {
+        this.moveWindow('loadcsv');
+    }
+    setLoadCSV(): void {
+        this.moveWindow('reviewcsv');
+    }
+    setReviewCSV(): void {
+        this.moveWindow('download');
     }
 
     sheetDesiner(): void {
-
+        
     }
 
+    moveWindow(window: string): void {
+        for (const key in this.flags) {
+            if (this.flags.hasOwnProperty(key)) {
+                this.flags[key] = false;
+            }
+        }
+        if (window === 'type') {
+            this.flags.onType = true;
+        } else if (window === 'spec') {
+            this.flags.onSheetSpec = true;
+        } else if (window === 'desine') {
+            this.flags.onSheetDesine = true;
+        } else if (window === 'loadcsv') {
+            this.flags.onLoadCSV = true;
+        } else if (window === 'reviewcsv') {
+            this.flags.onReviewCSV = false;
+        } else if (window === 'download') {
+            this.flags.onDownload = false;
+        }
 
+    }
     reset(type: string): void {
         if (type === 'last') {
 

@@ -30,6 +30,11 @@
 	justify-content: center;
 	align-items: baseline;
 }
+.box-cargo {
+    flex-basis: 35%;
+	border-radius: 10px;
+	margin: 10px;    
+}
 .print-cargo {
     flex-basis: 200px;
     width: 200px;
@@ -73,39 +78,19 @@
     background-color: rgba(100,100,100,0.5);
 }
 
+.spec-list > li{
+    height: 50px;
+}
+.spec-list > li > div{
+    width: 45%;
+    text-align: center;
+    line-height: 2em;
+    margin: 0 5px;
+}
 
-.faceShot {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 300px;
+.sheet-review {
+    width: 213px;
     height: 300px;
-    border: dashed 2px #BFEBFF;
-    border-radius: 10px;
-    margin: auto;
-}
-
-
-.view-area {
-    width: 400px;
-    height: 500px;
-    border: dashed 2px #000000;
-}
-
-.image-base {
-    position: relative;
-    border: dashed 1px #AAAAAA;
-    margin: 10px 0 0 0;
-}
-.image-box {
-    position: relative;
-    top: 0px;
-    width: 220px;
-    height: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
 }
 
 .box-content {

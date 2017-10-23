@@ -21,52 +21,74 @@
     </ng-container>
     <ng-container *ngIf="flags['onSheetSpec']">
     <div class="print-caption">シートサイズ設定・確認</div>
-    <ul>
-        <li>
-            <div>余白（上）</div>
-            <input type="number"
-                [(ngModel)]="sheetStatus['pageMarginTop']"
-                (change)="sheetDesiner()">
-        </li>
-        <li>
-            <div>余白（左）</div><input type="number"
-            [(ngModel)]="sheetStatus['pageMarginLeft']"
-            (change)="sheetDesiner()">
-        </li>
-        <li>
-            <div>ラベル（幅）</div><input type="number"
-            [(ngModel)]="sheetStatus['LabelWidth']"
-            (change)="sheetDesiner()">
-        </li>
-        <li>
-            <div>ラベル（高）</div><input type="number"
-            [(ngModel)]="sheetStatus['LabelHeight']"
-            (change)="sheetDesiner()">
-        </li>
-        <li>
-            <div>マージン（上下）</div><input type="number"
-            [(ngModel)]="sheetStatus['LabelMarginTop']"
-            (change)="sheetDesiner()">
-        </li>
-        <li>
-            <div>マージン（左右）</div><input type="number"
-            [(ngModel)]="sheetStatus['LabelMarginLeft']"
-            (change)="sheetDesiner()">
-        </li>
-    </ul>
-    <div>
-        <div>盤面数：</div>
-        <div class="sheet-review">
-
-        </div>
-    </div>
-
     <div class="select-box">
-        <div class="print-cargo click" (click)="setRecruiteType(0)">
-            <div class="label-s"><h3>決定</h3></div>
+        <div class="box-cargo">
+            <ul class="spec-list">
+                <li>
+                    <div class="sort-left">余白(上)</div>
+                    <div class="sort-left">
+                        <input type="number"
+                        [(ngModel)]="sheetStatus['pageMarginTop']"
+                        (change)="sheetDesiner()">
+                    </div>
+                </li>
+                <li>
+                    <div class="sort-left">余白(左)</div>
+                    <div class="sort-left">
+                        <input type="number"
+                        [(ngModel)]="sheetStatus['pageMarginLeft']"
+                        (change)="sheetDesiner()">
+                    </div>
+                </li>
+                <li>
+                    <div class="sort-left">ﾗﾍﾞﾙ(幅)</div>
+                    <div class="sort-left">
+                        <input type="number"
+                        [(ngModel)]="sheetStatus['LabelWidth']"
+                        (change)="sheetDesiner()">
+                    </div>
+                </li>
+                <li>
+                    <div class="sort-left">ﾗﾍﾞﾙ(高)</div>
+                    <div class="sort-left">
+                        <input type="number"
+                        [(ngModel)]="sheetStatus['LabelHeight']"
+                        (change)="sheetDesiner()">
+                    </div>
+                </li>
+                <li>
+                    <div class="sort-left">ﾏｰｼﾞﾝ(上下)</div>
+                    <div class="sort-left">
+                        <input type="number"
+                        [(ngModel)]="sheetStatus['LabelMarginTop']"
+                        (change)="sheetDesiner()">
+                    </div>
+                </li>
+                <li>
+                    <div class="sort-left">ﾏｰｼﾞﾝ(左右)</div>
+                    <div class="sort-left">
+                        <input type="number"
+                        [(ngModel)]="sheetStatus['LabelMarginLeft']"
+                        (change)="sheetDesiner()">
+                    </div>
+                </li>
+            </ul>
         </div>
-        <div class="print-cargo click" (click)="setRecruiteType(3)">
-            <div class="label-s"><h3>戻る</h3></div>
+        <div class="box-cargo">
+            <div>盤面数：</div>
+            <div class="sheet-review">
+             <ng-container *ngFor="let cell of cellCounter">
+                <div class="ghost-cell"> </div>
+            </ng-container>
+            </div>
+        </div>
+        <div class="select-box-bottom">
+            <div class="print-cargo click" (click)="setSheetDesine()">
+                <div class="label-s"><h3>決定</h3></div>
+            </div>
+            <div class="print-cargo click" (click)="moveWindow('type')">
+                <div class="label-s"><h3>戻る</h3></div>
+            </div>
         </div>
     </div>
     </ng-container>
@@ -91,6 +113,8 @@
             </div>
         </div>
     </div>
+    </ng-container>
+    <ng-container *ngIf="flags['onLoadCSV']">
     <div class="print-caption">csvを取り込みますか？</div>
 
     <div class="select-box">

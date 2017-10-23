@@ -8,6 +8,15 @@ h2 {
 	margin-top: 0;
 	padding-top: 0;
 }
+h4 {
+	line-height: 2.5em;
+	margin: 0;
+	padding: 0;
+}
+ul,li{
+	padding: 0;
+	margin: 0;
+}
 nav a {
 	padding: 5px 10px;
 	text-decoration: none;
@@ -92,3 +101,36 @@ main {
 	background-color: #DFDFDF;
 	box-shadow: -2px -2px -2px #BBBBBB;
 }
+
+.content-box {
+	position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+}
+
+.content-sub {
+	position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+	left: 0;
+	width: 40%;
+    margin: auto;
+}
+
+
+input[type="number"],
+textarea {
+	width: 80px;
+    padding: 0.3em;
+    outline: none;
+    border: 1px solid #DDD;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 1em;
+}
+

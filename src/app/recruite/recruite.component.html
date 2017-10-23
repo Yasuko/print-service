@@ -6,16 +6,19 @@
 <div class="print-caption">履歴書のタイプを選択</div>
 <div class="select-box">
     <div class="print-cargo click" (click)="setRecruiteType(0)">
-        <div class="label-s"><h3>JIS規格</h3></div>
+        <div class="label-s"><h4>JIS規格(職歴多め)</h4></div>
     </div>
     <div class="print-cargo click" (click)="setRecruiteType(1)">
-        <div class="label-s"><h3>一般</h3></div>
+        <div class="label-s"><h4>JIS規格(職歴少なめ)</h4></div>
     </div>
     <div class="print-cargo click" (click)="setRecruiteType(2)">
-        <div class="label-s"><h3>転職</h3></div>
+        <div class="label-s"><h4>職歴なし</h4><h4>健康状態あり</h4></div>
     </div>
     <div class="print-cargo click" (click)="setRecruiteType(3)">
-        <div class="label-s"><h3>パート・バイト</h3></div>
+        <div class="label-s"><h4>職歴なし</h4><h4>特技自己PR広め</h4></div>
+    </div>
+    <div class="print-cargo click" (click)="setRecruiteType(4)">
+        <div class="label-s"><h4>学歴職歴統合</h4></div>
     </div>
 </div>
 </ng-container>
