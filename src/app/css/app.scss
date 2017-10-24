@@ -123,8 +123,8 @@ main {
 
 
 input[type="number"],
+input[type="text"],
 textarea {
-	width: 80px;
     padding: 0.3em;
     outline: none;
     border: 1px solid #DDD;
@@ -133,4 +133,7 @@ textarea {
     border-radius: 5px;
     font-size: 1em;
 }
-
+input[type="number"],
+textarea{
+	width: 80px;
+}

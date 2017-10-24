@@ -15,6 +15,9 @@ import { TacksheetComponent } from './tacksheet/tacksheet.component';
 import { PdfMakerService } from './_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from './_lib_service/index';
 
+// Import Service
+import { LavelSheetService } from './service/sheetDesine/index';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +35,8 @@ import { ListLayoutService, RecruiteLayoutService } from './_lib_service/index';
   providers: [
     PdfMakerService,
     ListLayoutService,
-    RecruiteLayoutService
+    RecruiteLayoutService,
+    LavelSheetService
   ],
   bootstrap: [AppComponent]
 })

@@ -30,8 +30,9 @@
 	justify-content: center;
 	align-items: baseline;
 }
-.box-cargo {
-    flex-basis: 35%;
+.box-flex {
+    align-self: center;
+    flex-basis: 28%;
 	border-radius: 10px;
 	margin: 10px;    
 }
@@ -40,7 +41,7 @@
     width: 200px;
 	height: 80px;
 	border-radius: 10px;
-	margin: 30px;
+	margin: 15px;
 }
 .print-cargo_s {
     text-align: center;
@@ -48,6 +49,13 @@
 	height: 30px;
 	border-radius: 5px;
 	margin: 10px;
+}
+.print-cargo_high {
+    flex-basis: 200px;
+    width: 200px;
+	height: 150px;
+	border-radius: 10px;
+	margin: 15px;
 }
 .drag-drop-area {
     position: absolute;
@@ -89,8 +97,14 @@
 }
 
 .sheet-review {
-    width: 213px;
-    height: 300px;
+    width: 210px;
+    height: 297px;
+}
+.ghost-cell {
+    position: relative;
+    float: left;
+    border: solid 1px #a1a1a1;
+    border-radius: 3px;
 }
 
 .box-content {
@@ -176,4 +190,9 @@
 }
 .list-content > img {
     width: 120px;
+}
+
+
+.selected {
+    background-color: #ccffd7;
 }
