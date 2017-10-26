@@ -1,9 +1,15 @@
+input[type="number"],
+textarea{
+	width: 80px;
+}
 .print-caption {
     text-align: center;
     width: 100%;
 }
 .select-box {
+    position: relative;
     display: flex;
+    max-width: 600px;
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -33,6 +39,12 @@
 .box-flex {
     align-self: center;
     flex-basis: 28%;
+	border-radius: 10px;
+	margin: 10px;    
+}
+.box-flex-single {
+    align-self: center;
+    flex-basis: 50%;
 	border-radius: 10px;
 	margin: 10px;    
 }
@@ -85,17 +97,26 @@
 .drag-over {
     background-color: rgba(100,100,100,0.5);
 }
-
+.spec-list {
+    width: 190px;
+}
 .spec-list > li{
-    height: 50px;
+    width: 100%;
+    height: 40px;
 }
 .spec-list > li > div{
-    width: 45%;
+    position: relative;
+    float: left;
+    font-size: 1em;
     text-align: center;
-    line-height: 2em;
+    line-height: 1.5em;
+    height: 100%;
     margin: 0 5px;
 }
-
+.spec-list > li > div:first-child {
+    width: 90px;
+    padding-top: 5px;
+}
 .sheet-review {
     width: 210px;
     height: 297px;
@@ -131,21 +152,18 @@
     width: 200px;
 }
 
-
-.catBase {
-    cursor: move;
-    border: dashed 2px #6BFA9A;
+.input-form {
+    width: 400px;
 }
-.catSub {
-    cursor: move;
-    border: solid 1px #6BFA9A;
-    width: 10px;
-    height: 10px;
+.input-form > div {
+	position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+	left: 0;
+	width: 80%;
+    margin: 8px auto;
 }
-
-
-
-
 
 .load-screen {
     position: absolute;
@@ -195,4 +213,52 @@
 
 .selected {
     background-color: #ccffd7;
+}
+
+
+[class *= 'sheet_'] {
+    display: flex;
+    flex-direction: column;
+}
+[class *= 'sheet_'] > div {
+    margin: 0;
+    padding: 0;
+    transform: scale(0.3781);
+}
+
+.sheet_line2 > div{
+    font-size: 0.2em;
+    line-height: 0.3em;
+    height: 0.5em;
+}
+.sheet_line3 {
+    font-size: 0.15em;
+    line-height: 0.2em;
+    height: 0.5em;
+}
+.sheet_line4 {
+    font-size: 0.15em;
+    line-height: 0.2em;
+    height: 0.5em;
+}
+.sheet_line5 {
+    font-size: 0.15em;
+    line-height: 0.2em;
+    height: 0.5em;
+}
+.sheet_address3 > div {
+    position: relative;
+    left: -1.5em;
+    font-size: 1em;
+    height: 0.3em;
+}
+.sheet_address4 {
+    font-size: 0.05px;
+    line-height: 0.2em;
+    height: 0.5em;
+}
+.sheet_address5 {
+    font-size: 0.15em;
+    line-height: 0.2em;
+    height: 0.5em;
 }

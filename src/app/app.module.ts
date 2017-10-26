@@ -11,12 +11,15 @@ import { BusinessCardComponent } from './business_card/business_card.component';
 import { PostcardComponent } from './postcard/postcard.component';
 import { RecuruiteComponent } from './recruite/recruite.component';
 import { TacksheetComponent } from './tacksheet/tacksheet.component';
+import { TacksheetStatusService } from './tacksheet/tacksheet-status.service';
 
 import { PdfMakerService } from './_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from './_lib_service/index';
 
 // Import Service
 import { LavelSheetService } from './service/sheetDesine/index';
+
+
 
 @NgModule({
   declarations: [
@@ -36,7 +39,8 @@ import { LavelSheetService } from './service/sheetDesine/index';
     PdfMakerService,
     ListLayoutService,
     RecruiteLayoutService,
-    LavelSheetService
+    LavelSheetService,
+    TacksheetStatusService
   ],
   bootstrap: [AppComponent]
 })

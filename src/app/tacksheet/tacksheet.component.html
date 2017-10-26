@@ -1,7 +1,9 @@
 <div class="load-screen" *ngIf="flags['onLoad']">
         <div>読み込み中</div>
     </div>
-    
+    <!-- ---------------------------------------
+        タックシールのタイプ簡易設定
+    --------------------------------------- -->
     <ng-container *ngIf="flags['onType']">
     <div class="print-caption">シートタイプを選択</div>
     <div class="select-box">
@@ -19,6 +21,9 @@
         </div>
     </div>
     </ng-container>
+    <!-- ---------------------------------------
+        タックシールレイアウトの確認・設定
+    --------------------------------------- -->
     <ng-container *ngIf="flags['onSheetSpec']">
     <div class="print-caption">シートサイズ設定・確認</div>
     <div class="select-box">
@@ -87,7 +92,7 @@
             </ng-container>
             </div>
         </div>
-        <div class="select-box-bottom">
+        <div class="select-box">
             <div class="print-cargo click" (click)="setSheetSpec()">
                 <div class="label-s"><h3>決定</h3></div>
             </div>
@@ -98,7 +103,9 @@
     </div>
     </ng-container>
 
-
+    <!-- ---------------------------------------
+        タックシールのデザイン設定
+    --------------------------------------- -->
     <ng-container *ngIf="flags['onSheetDesine']">
     <div class="select-box">
         <div class="print-cargo_high click" (click)="setSheetDesine('line1')">
@@ -130,11 +137,19 @@
         </div>
     </div>
     </ng-container>
+    <!-- ---------------------------------------
+        印刷開始位置
+    --------------------------------------- -->
     <ng-container *ngIf="flags['onPrintPosition']">
-    <div class="print-caption">印刷開始位置</div>
     <div class="select-box">
-        <div class="box-flex">
-            <div class="sheet-review">
+        <div class="box-flex-single">
+            <div class="print-caption">印刷開始位置</div>
+            <div class="print-caption">
+                印刷数：<input type="number" [(ngModel)]="printCellCount">
+            </div>
+        </div>
+        <div class="box-flex-single">
+            <div class="sheet-review order-center">
             <ng-container *ngFor="let cell of cellCounter; index as i">
                 <div class="ghost-cell click"
                     (click)="setPrintStartIndex(i)"
@@ -147,16 +162,19 @@
             </ng-container>
             </div>
         </div>
-    </div>
-    <div class="select-box-bottom">
-        <div class="print-cargo click" (click)="setPrintPosition()">
-            <div class="label-s"><h3>決定</h3></div>
-        </div>
-        <div class="print-cargo click" (click)="moveWindow('desine')">
-            <div class="label-s"><h3>戻る</h3></div>
+        <div class="select-box">
+            <div class="print-cargo click" (click)="setPrintPosition()">
+                <div class="label-s"><h3>決定</h3></div>
+            </div>
+            <div class="print-cargo click" (click)="moveWindow('desine')">
+                <div class="label-s"><h3>戻る</h3></div>
+            </div>
         </div>
     </div>
     </ng-container>
+    <!-- ---------------------------------------
+        CSVを読み込むか読み込まないか
+    --------------------------------------- -->
     <ng-container *ngIf="flags['onLoadCSV']">
     <div class="print-caption">csvを取り込みますか？</div>
 
@@ -167,11 +185,14 @@
         <div class="print-cargo click" (click)="setLoadCSV(0)">
             <div class="label-s"><h3>取り込まない</h3></div>
         </div>
-        <div class="print-cargo click" (click)="moveWindow('type')">
+        <div class="print-cargo click" (click)="moveWindow('position')">
             <div class="label-s"><h3>戻る</h3></div>
         </div>
     </div>
-    </ng-container>    
+    </ng-container> 
+    <!-- ---------------------------------------
+        CSVファイルの読込
+    --------------------------------------- -->   
     <ng-container *ngIf="flags['onIncludeCSV']">
     <form action=""
         method="post"
@@ -192,49 +213,101 @@
     <div></div>
 
     <div class="select-box">
-        <div class="print-cargo click" (click)="moveWindow('type')">
-            <div class="label-s"><h3>戻る</h3></div>
-        </div>
-    </div>
-    </ng-container>
-    <ng-container *ngIf="flags['onInputContents']">
-    <div class="print-caption">内容入力</div>
-    <div class="input-form">
-        <ng-container *ngIf="inputForm.line1">
-        項目１： <input type="text"></ng-container>
-        <ng-container *ngIf="inputForm.line2">
-        項目２： <input type="text"></ng-container>
-        <ng-container *ngIf="inputForm.line3">
-        項目３： <input type="text"></ng-container>
-        <ng-container *ngIf="inputForm.line4">
-        項目４： <input type="text"></ng-container>
-        <ng-container *ngIf="inputForm.line5">
-        項目５： <input type="text"></ng-container>
-        <ng-container *ngIf="inputForm.address1">
-        郵便番号： <input type="number"></ng-container>
-        <ng-container *ngIf="inputForm.address2">
-        住所： <input type="text"></ng-container>
-        <ng-container *ngIf="inputForm.address3">
-        建物： <input type="text"></ng-container>
-        <ng-container *ngIf="inputForm.address4">
-        会社： <input type="text"></ng-container>
-        <ng-container *ngIf="inputForm.address5">
-        名前： <input type="text"></ng-container>
-    </div>
-    <div class="select-box">
         <div class="print-cargo click" (click)="moveWindow('loadcsv')">
             <div class="label-s"><h3>戻る</h3></div>
         </div>
     </div>
     </ng-container>
-    <ng-container *ngIf="flags['onReviewCSV']">
-    <div class="select-box-right">
-        <div class="print-cargo_s click" (click)="moveWindow('type')">
-            <div class="label-s">戻る</div>
+    <!-- ---------------------------------------
+        表示内容の入力
+    --------------------------------------- -->
+    <ng-container *ngIf="flags['onInputContents']">
+    <div class="print-caption">内容入力</div>
+    <div class="select-box input-form">
+        <ng-container *ngIf="inputForm.line1">
+        <div>項目１：<input type="text" [(ngModel)]="formStatus.line1"></div></ng-container>
+        <ng-container *ngIf="inputForm.line2">
+        <div>項目２：<input type="text" [(ngModel)]="formStatus.line2"></div></ng-container>
+        <ng-container *ngIf="inputForm.line3">
+        <div>項目３：<input type="text" [(ngModel)]="formStatus.line3"></div></ng-container>
+        <ng-container *ngIf="inputForm.line4">
+        <div>項目４：<input type="text" [(ngModel)]="formStatus.line4"></div></ng-container>
+        <ng-container *ngIf="inputForm.line5">
+        <div>項目５：<input type="text" [(ngModel)]="formStatus.line5"></div></ng-container>
+        <ng-container *ngIf="inputForm.address1">
+        <div>郵便番号(ﾊｲﾌﾝ(-)無し)：<input type="number" [(ngModel)]="formStatus.postcode"></div></ng-container>
+        <ng-container *ngIf="inputForm.address2">
+        <div>住所：<input type="text" [(ngModel)]="formStatus.address"></div></ng-container>
+        <ng-container *ngIf="inputForm.address3">
+        <div>建物：<input type="text" [(ngModel)]="formStatus.building"></div></ng-container>
+        <ng-container *ngIf="inputForm.address4">
+        <div>会社：<input type="text" [(ngModel)]="formStatus.company"></div></ng-container>
+        <ng-container *ngIf="inputForm.address5">
+        <div>名前：<input type="text" [(ngModel)]="formStatus.name"></div></ng-container>
+    </div>
+    <div class="select-box">
+        <div class="print-cargo click" (click)="setInputContents()">
+            <div class="label-s"><h3>決定</h3></div>
+        </div>
+        <div class="print-cargo click" (click)="moveWindow('loadcsv')">
+            <div class="label-s"><h3>戻る</h3></div>
         </div>
     </div>
     </ng-container>
-    
+    <!-- ---------------------------------------
+        プレビュー　最終確認
+    --------------------------------------- -->
+    <ng-container *ngIf="flags['onReviewCSV']">
+    <div class="print-caption">内容確認※下記はイメージです</div>
+    <div class="select-box">
+        <div class="box-flex-sngle order-center">
+            <div class="sheet-review">
+            <ng-container *ngFor="let cell of cellCounter; index as i">
+                <div class="ghost-cell sheet_address3"
+                    (click)="setPrintStartIndex(i)"
+                    [style.width.px]="sheetStatus.LabelWidth"
+                    [style.height.px]="sheetStatus.LabelHeight"
+                    [style.margin-left.px]="sheetStatus.LabelMarginLeft"
+                    [style.margin-bottom.px]="sheetStatus.LabelMarginTop">
+                <ng-container *ngIf='checkStartPosition(i)'>
+                <ng-container *ngIf="inputForm.line1">
+                <div>{{formStatus.line1}}</div></ng-container>
+                <ng-container *ngIf="inputForm.line2">
+                <div>{{formStatus.line2}}</div></ng-container>
+                <ng-container *ngIf="inputForm.line3">
+                <div>{{formStatus.line3}}</div></ng-container>
+                <ng-container *ngIf="inputForm.line4">
+                <div>{{formStatus.line4}}</div></ng-container>
+                <ng-container *ngIf="inputForm.line5">
+                <div>{{formStatus.line5}}</div></ng-container>
+                <ng-container *ngIf="inputForm.address1">
+                <div>{{formStatus.postcode}}</div></ng-container>
+                <ng-container *ngIf="inputForm.address2">
+                <div>{{formStatus.address}}</div></ng-container>
+                <ng-container *ngIf="inputForm.address3">
+                <div>{{formStatus.building}}</div></ng-container>
+                <ng-container *ngIf="inputForm.address4">
+                <div>{{formStatus.company}}</div></ng-container>
+                <ng-container *ngIf="inputForm.address5">
+                <div>{{formStatus.name}}</div></ng-container>
+                </ng-container>
+                </div>
+            </ng-container>
+            </div>
+        </div>
+    </div>
+    <div class="select-box-bottom">
+        <div class="print-cargo click" (click)="setReviewSheet()">
+            <div class="label-s"><h3>決定</h3></div>
+        </div>
+        <div class="print-cargo click" (click)="moveWindow('desine')">
+            <div class="label-s"><h3>戻る</h3></div>
+        </div>
+    </div>
+    </ng-container>
+    <!-- ---------------------------------------
+        PDFのダウンロード
+    --------------------------------------- -->
     <ng-container *ngIf="flags['onDownload']">
         <div class="print-caption">PDFをダウンロードします</div>
         <div class="select-box-bottom">

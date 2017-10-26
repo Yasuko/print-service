@@ -48,8 +48,21 @@ main {
 .grid {
 	width: 100%;
 }
-.center {
-	
+.float-center {
+	position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+	left: 0;
+    margin: auto;
+}
+.order-center {
+	position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+	left: 0;
+    margin: auto;
 }
 .title-m {
 	text-align: center;
@@ -132,8 +145,4 @@ textarea {
     -moz-border-radius: 5px;
     border-radius: 5px;
     font-size: 1em;
-}
-input[type="number"],
-textarea{
-	width: 80px;
 }
