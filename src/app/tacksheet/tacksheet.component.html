@@ -120,15 +120,15 @@
             <div class="label-s">３行</div>
             <div class="sheet-sample"></div>
         </div>
-        <div class="print-cargo_high click" (click)="setSheetDesine('line3address')">
+        <div class="print-cargo_high click" (click)="setSheetDesine('address3')">
             <div class="label-s">３行住所</div>
             <div class="sheet-sample"></div>
         </div>
-        <div class="print-cargo_high click" (click)="setSheetDesine('line4address')">
+        <div class="print-cargo_high click" (click)="setSheetDesine('address4')">
             <div class="label-s">４行住所</div>
             <div class="sheet-sample"></div>
         </div>
-        <div class="print-cargo_high click" (click)="setSheetDesine('line5address')">
+        <div class="print-cargo_high click" (click)="setSheetDesine('address5')">
             <div class="label-s">５行住所</div>
             <div class="sheet-sample"></div>
         </div>
@@ -263,7 +263,8 @@
         <div class="box-flex-sngle order-center">
             <div class="sheet-review">
             <ng-container *ngFor="let cell of cellCounter; index as i">
-                <div class="ghost-cell sheet_address3"
+                <div 
+                    [ngClass]="reviewStyle"
                     (click)="setPrintStartIndex(i)"
                     [style.width.px]="sheetStatus.LabelWidth"
                     [style.height.px]="sheetStatus.LabelHeight"

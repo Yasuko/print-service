@@ -40,7 +40,7 @@ import { LavelSheetService } from './service/sheetDesine/index';
     ListLayoutService,
     RecruiteLayoutService,
     LavelSheetService,
-    TacksheetStatusService
+    TacksheetStatusService,
   ],
   bootstrap: [AppComponent]
 })

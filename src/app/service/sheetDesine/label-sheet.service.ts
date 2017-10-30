@@ -19,6 +19,16 @@ export class LavelSheetService {
         return spec[type];
     }
 
+    getLabelSheetDesineClass(id: number): string {
+        const desine = [
+            'sheet_line1', 'sheet_line2', 'sheet_line3',
+            'sheet_line4', 'sheet_line5', 'sheet_address3',
+            'sheet_address4', 'sheet_address5'
+        ];
+
+        return ;
+    }
+
     getLabelSheetDesine(type: string) {
         const desine = {
             line1: { input: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0], font: 20, height: 30 },
@@ -26,9 +36,9 @@ export class LavelSheetService {
             line3: { input: [1, 1, 1, 0, 0, 0, 0, 0, 0, 0], font: 12, height: 15 },
             line4: { input: [1, 1, 1, 1, 0, 0, 0, 0, 0, 0], font: 10, height: 10 },
             line5: { input: [1, 1, 1, 1, 1, 0, 0, 0, 0, 0], font: 8, height: 10 },
-            line3address: { input: [0, 0, 0, 0, 0, 1, 1, 0, 0, 1], font: 15, height: 20 },
-            line4address: { input: [0, 0, 0, 0, 0, 1, 1, 1, 0, 1], font: 12, height: 15 },
-            line5address: { input: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1], font: 10, height: 10 },
+            address3: { input: [0, 0, 0, 0, 0, 1, 1, 0, 0, 1], font: 15, height: 20 },
+            address4: { input: [0, 0, 0, 0, 0, 1, 1, 1, 0, 1], font: 12, height: 15 },
+            address5: { input: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1], font: 10, height: 10 },
         };
 
         return desine[type];

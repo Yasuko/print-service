@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 // import { SAWARABI_PDF_FONTS } from './SawarabiPDFFonts';
-import { CUSTOM_PDF_FONTS } from './CustomPDFFonts';
+import { NOTOSANS_PDF_FONTS } from './NotosansPDFFonts';
 
 import * as pdfMake from 'pdfmake/build/pdfmake.js';
 import * as vfsFonts from 'pdfmake/build/vfs_fonts.js';
@@ -14,13 +14,10 @@ export class PdfMakerService {
         // フォント設定を行う
         pdfMake.fonts = {
             ipag: {
-                normal: 'ipa_gothic.ttf',
-                bold: 'ipa_gothic.ttf',
-                italics: 'ipa_gothic.ttf',
-                bolditalics: 'ipa_gothic.ttf'
+                normal: 'notosans_medium.ttf',
             }
         };
-        pdfMake.vfs = CUSTOM_PDF_FONTS;
+        pdfMake.vfs = NOTOSANS_PDF_FONTS;
     }
 
     // 本家createPdfのラッパー、デフォルトフォントを設定

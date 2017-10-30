@@ -226,39 +226,82 @@ textarea{
     transform: scale(0.3781);
 }
 
-.sheet_line2 > div{
-    font-size: 0.2em;
-    line-height: 0.3em;
-    height: 0.5em;
+.sheet_line2 > div {
+    position: relative;
+    left: -1.9em;
+    font-size: 1.1em;
+    height: 0.6em;
+    margin: 1px;
+    left: -5.2em;
+    width: 250%;
 }
-.sheet_line3 {
-    font-size: 0.15em;
-    line-height: 0.2em;
+.sheet_line3 > div {
+    position: relative;
+    left: -1.9em;
+    font-size: 1em;
     height: 0.5em;
+    margin: 1px;
+    left: -5.2em;
+    width: 250%;
 }
-.sheet_line4 {
-    font-size: 0.15em;
-    line-height: 0.2em;
-    height: 0.5em;
+.sheet_line4 > div {
+    position: relative;
+    left: -1.9em;
+    font-size: 0.8em;
+    height: 0.3em;
+    margin: 1px;
+    left: -5.2em;
+    width: 250%;
 }
-.sheet_line5 {
-    font-size: 0.15em;
-    line-height: 0.2em;
-    height: 0.5em;
+.sheet_line5 > div {
+    position: relative;
+    left: -1.9em;
+    font-size: 0.8em;
+    height: 0.3em;
+    margin: 1px;
+    left: -5.2em;
+    width: 250%;
 }
+
 .sheet_address3 > div {
     position: relative;
-    left: -1.5em;
-    font-size: 1em;
-    height: 0.3em;
-}
-.sheet_address4 {
-    font-size: 0.05px;
-    line-height: 0.2em;
+    left: -1.9em;
+    font-size: 0.8em;
     height: 0.5em;
+    margin: 2px;
 }
-.sheet_address5 {
-    font-size: 0.15em;
-    line-height: 0.2em;
-    height: 0.5em;
+.sheet_address3 > div:nth-child(2),
+.sheet_address3 > div:nth-child(3) {
+    font-size: 0.6em;
+    left: -7em;
+    width: 250%;
 }
+.sheet_address4 > div {
+    position: relative;
+    left: -2em;
+    font-size: 0.8em;
+    height: 0.0.4em;
+    margin: 1.5px;
+}
+.sheet_address4 > div:nth-child(2),
+.sheet_address4 > div:nth-child(3),
+.sheet_address4 > div:nth-child(4) {
+    left: -5.2em;
+    width: 250%;
+}
+
+.sheet_address5 > div {
+    position: relative;
+    left: -2em;
+    font-size: 0.8em;
+    height: 0.0.4em;
+    margin: 1.5px;
+}
+.sheet_address5 > div:nth-child(2),
+.sheet_address5 > div:nth-child(3),
+.sheet_address5 > div:nth-child(4),
+.sheet_address5 > div:nth-child(5) {
+    left: -5.2em;
+    width: 250%;
+}
+

@@ -26,7 +26,7 @@ export class TacksheetComponent {
     previewClass = '';
     previewScale = 0.1;
     cellCounter = [];
-    reviewStyle = ['ghost-cell', 'sheet_address3'];
+    reviewStyle = ['ghost-cell'];
 
     reader = new FileReader();
     catOn = false;
@@ -116,6 +116,9 @@ export class TacksheetComponent {
         this.printSheetDesine = type;
         this.setupSheetDesine(type);
         this.moveWindow('position');
+
+        // レビュー時に適用するクラスを設定
+        this.setupSheetDesineClass();
     }
     /**
      * 印刷開始位置を設定
@@ -158,7 +161,7 @@ export class TacksheetComponent {
      * PDFをダウンロード
      */
     setDownloadPDF(): void {
-        
+
     }
 
 
@@ -220,6 +223,15 @@ export class TacksheetComponent {
             }
         }
     }
+    /**
+     * プレビューに表示するクラスを登録
+     */
+    setupSheetDesineClass(): void {
+        const calam = this.reviewStyle.length;
+        this.reviewStyle.splice(1, calam);
+        this.reviewStyle.push('sheet_' + this.printSheetDesine);
+    }
+
 
     /**
      * 画面切り替え
