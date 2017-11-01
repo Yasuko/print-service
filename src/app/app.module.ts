@@ -15,6 +15,8 @@ import { TacksheetStatusService } from './tacksheet/tacksheet-status.service';
 
 import { PdfMakerService } from './_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from './_lib_service/index';
+import { TacksheetLayoutService } from './_lib_service/index';
+import { TacksheetMakerService, ImageSaveService } from './_lib_service/index';
 
 // Import Service
 import { LavelSheetService } from './service/sheetDesine/index';
@@ -39,8 +41,10 @@ import { LavelSheetService } from './service/sheetDesine/index';
     PdfMakerService,
     ListLayoutService,
     RecruiteLayoutService,
+    TacksheetLayoutService,
     LavelSheetService,
     TacksheetStatusService,
+    TacksheetMakerService, ImageSaveService
   ],
   bootstrap: [AppComponent]
 })
