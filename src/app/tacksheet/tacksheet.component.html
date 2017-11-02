@@ -194,25 +194,27 @@
         CSVファイルの読込
     --------------------------------------- -->   
     <ng-container *ngIf="flags['onIncludeCSV']">
-    <form action=""
-        method="post"
-        enctype="multipart/form-data">
-        <div 
-            [class.drag-over]="flags['onDrag']"
-            class="drag-drop-area"
-            (dragover)="onDragOverHandler($event)" 
-            (dragleave)="onDragLeaveHandler($event)"
-            (drop)="onSelectHandler($event,'drag')" >
-            <div class="drag-drop-inside">
-                <p>ここにCSVをドロップ</p>
-                <p>または</p>
-                <input name="images[]" (change)="onSelectHandler($event, 'select')" type="file" value="ファイルを選択" accept="image/*" multiple >
-            </div>
-        </div>
-    </form>
-    <div></div>
-
+    <div class="print-caption">csv読込</div>
     <div class="select-box">
+        <form action=""
+            method="post"
+            enctype="multipart/form-data">
+            <div 
+                [class.drag-over]="flags['onDrag']"
+                class="drag-drop-area"
+                (dragover)="onDragOverHandler($event)" 
+                (dragleave)="onDragLeaveHandler($event)"
+                (drop)="onDropHandler($event)" >
+                <div class="drag-drop-inside">
+                    <p>ここにCSVをドロップ</p>
+                    <p>または</p>
+                    <input name="images[]" (change)="onSelectHandler($event, 'select')" type="file" value="ファイルを選択" accept="image/*" multiple >
+                </div>
+            </div>
+        </form>
+        <div></div>
+    </div>
+    <div class="select-box-bottom">
         <div class="print-cargo click" (click)="moveWindow('loadcsv')">
             <div class="label-s"><h3>戻る</h3></div>
         </div>
@@ -311,11 +313,11 @@
     --------------------------------------- -->
     <ng-container *ngIf="flags['onDownload']">
         <div class="print-caption">PDFをダウンロードします</div>
-        <div class="select-box-bottom">
-            <div class="print-cargo_s click" (click)="buildPdf()">
+        <div class="select-box">
+            <div class="print-cargo click" (click)="buildPdf()">
                 <div class="label-s"><h3>ダウンロード</h3></div>
             </div>
-            <div class="print-cargo_s click" (click)="moveWindow('type')">
+            <div class="print-cargo click" (click)="moveWindow('type')">
                 <div class="label-s"><h3>初めに戻る</h3></div>
             </div>
         </div>

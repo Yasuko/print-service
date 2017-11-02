@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 // Import TherdParty Service
 import { PdfMakerService } from '../_lib_service/index';
-import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index';
+import { TacksheetLayoutService, TacksheetMakerService } from '../_lib_service/index';
 // Import Service
 import { LavelSheetService } from '../service/sheetDesine/index';
 import { TacksheetStatusService } from './tacksheet-status.service';
@@ -23,27 +23,26 @@ export class TacksheetComponent {
     formStatus;
     inputForm;
 
+    sheetContent = [];
     previewClass = '';
     previewScale = 0.1;
     cellCounter = [];
     reviewStyle = ['ghost-cell'];
 
     reader = new FileReader();
-    catOn = false;
-    pdfOn = false;
 
     fname = '';
     name = '';
-
+    onDrag = false;
 
     subscription: Subscription;
     constructor(
         private router: Router,
         private pdfmakerService: PdfMakerService,
-        private listlayoutService: ListLayoutService,
-        private recruitelayoutService: RecruiteLayoutService,
         private labelsheetSetvice: LavelSheetService,
-        private tacksheetStatusService: TacksheetStatusService
+        private tacksheetStatusService: TacksheetStatusService,
+        private tacksheetmakeService: TacksheetMakerService,
+        private tacksheetlayoutService: TacksheetLayoutService
     ) {
         this.flags = tacksheetStatusService.flags;
         this.sheetStatus = tacksheetStatusService.sheetStatus;
@@ -51,12 +50,21 @@ export class TacksheetComponent {
         this.inputForm = tacksheetStatusService.inputForm;
     }
 
+    /** ********************************************
+     * ドラッグイベント
+    ******************************************** */
+ 
+    /**
+     *
+     * @param event ドラッグイベント
+     */
     onDragOverHandler(event: DragEvent): void {
         event.preventDefault();
-
+        this.onDrag = true;
     }
     onDragLeaveHandler(event: DragEvent): void {
         event.stopPropagation();
+        this.onDrag = false;
     }
     /**
      * ファイルドロップイベント
@@ -74,18 +82,24 @@ export class TacksheetComponent {
 
         } else {
             this.reader.onloadend = (e) => {
-
+                const result = [];
+                const data = this.reader.result;
+                const splitData = data[0].split('\n');
+                for (let i = 0; i < splitData.length; i++) {
+                    result[i] = splitData[i].split(',');
+                }
+                console.log(result);
             };
             this.reader.readAsDataURL(files[0]);
         }
         event.stopPropagation();
     }
 
-    /**
+    /** ********************************************
      *
      * 画面毎の処理
      *
-     */
+    ******************************************** */
 
     /**
      * タックシールのタイプを設定
@@ -147,8 +161,18 @@ export class TacksheetComponent {
      * 表示内容を入力
      */
     setInputContents(): void {
-        this.previewClass = 'sheet_' + this.printSheetDesine;
+        const contents = [];
+        for (const key in this.formStatus) {
+            if (this.formStatus.hasOwnProperty(key)
+            && this.formStatus[key] !== '') {
+                contents.push(this.formStatus[key]);
+            }
+        }
+        for (let i = 0; i <= this.cellCounter.length; i++) {
+            this.sheetContent[i] = contents;
+        }
 
+        this.previewClass = 'sheet_' + this.printSheetDesine;
         this.moveWindow('reviewcsv');
     }
     /**
@@ -165,9 +189,9 @@ export class TacksheetComponent {
     }
 
 
-    /**
+    /** ******************************************
      * 数値計算、移動先計算他、補助ライブラリ
-     */
+    ****************************************** */
 
     /**
      * タックシールの面数を計算
@@ -279,7 +303,6 @@ export class TacksheetComponent {
 
         } else if (type === 'first') {
             this.reader = null;
-            this.catOn = false;
         }
     }
 
@@ -287,9 +310,31 @@ export class TacksheetComponent {
      * PDFファイル作成
      */
     buildPdf(): void {
-        this.recruitelayoutService.setFName(this.fname);
-        this.recruitelayoutService.setName(this.name);
-        const layout = this.recruitelayoutService.makePdfLayout();
+        // const result = 3.781;
+
+        this.tacksheetmakeService.setResulution(13.78095);
+        this.tacksheetmakeService.setSheetSpec({
+            marginTop: this.sheetStatus['pageMarginTop'],
+            marginLeft: this.sheetStatus['pageMarginLeft'],
+            cellWidth: this.sheetStatus['LabelWidth'],
+            cellHeight: this.sheetStatus['LabelHeight'],
+            cellMarginTop: this.sheetStatus['LabelMarginTop'],
+            cellMarginLeft: this.sheetStatus['LabelMarginLeft'],
+        });
+        this.tacksheetmakeService.setTextDesine({
+            fontSize: 10,
+        });
+
+        this.tacksheetmakeService.setPrintOption({
+            cellCount: this.cellCounter.length,
+            startPosition: this.printStartPosition,
+            printCount: this.printCellCount
+        });
+        this.tacksheetmakeService.setContents(this.sheetContent);
+        this.tacksheetmakeService.sheetMaker();
+        const image = this.tacksheetmakeService.getSheetImage();
+
+        const layout = this.tacksheetlayoutService.makePdfLayout(image);
         const pdf = this.pdfmakerService.testPdfMake(layout);
         pdf.print();
     }

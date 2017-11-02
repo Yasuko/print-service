@@ -19,21 +19,23 @@ export class MainComponent {
 
     buildPdf(): void {
         // const result = 3.781;
-        const result = 10;
+
+        this.tacksheetmakeService.setResulution(13.78095);
         this.tacksheetmakeService.setSheetSpec({
-            marginTop: 23.3 * result,
-            marginLeft: 7 * result,
-            cellWidth: 96.5 * result,
-            cellHeight: 44.5 * result,
-            cellMarginTop: 0 * result,
-            cellMarginLeft: 6.5 * result,
+            marginTop: 23.3,
+            marginLeft: 7,
+            cellWidth: 96.5,
+            cellHeight: 44.5,
+            cellMarginTop: 0,
+            cellMarginLeft: 6.5,
         });
         this.tacksheetmakeService.setTextDesine({
-            fontSize: 100,
+            fontSize: 10,
         });
         this.tacksheetmakeService.setPrintOption({
-            count: 12,
-            start: 1
+            cellCount: 12,
+            startPosition: 3,
+            printCount: 4
         });
         this.tacksheetmakeService.setContents([
             [['ああああああ'], ['aaaaaaaaaaaa'], ['aaaaaaaaaaaa']],
