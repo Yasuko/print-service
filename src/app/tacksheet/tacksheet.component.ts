@@ -30,6 +30,8 @@ export class TacksheetComponent {
     reviewStyle = ['ghost-cell'];
 
     reader = new FileReader();
+    readCSVFile = [];
+    readCSVEncode = {utf: false, sjis: true};
 
     fname = '';
     name = '';
@@ -53,7 +55,7 @@ export class TacksheetComponent {
     /** ********************************************
      * ドラッグイベント
     ******************************************** */
- 
+
     /**
      *
      * @param event ドラッグイベント
@@ -70,31 +72,60 @@ export class TacksheetComponent {
      * ファイルドロップイベント
      * @param event ドラッグされたファイル
      */
-    onDropHandler(event: DragEvent): void {
+    onDropHandler(event, type: string): void {
         event.preventDefault();
         this.reset('fast');
 
-        const files = event.dataTransfer.files;
+        let files;
+        if (type === 'drag') {
+            files = event.dataTransfer.files;
+        } else if (type === 'select') {
+            files = event.target.files;
+        }
+
         this.reader = new FileReader();
 
         // データタイプの判定
-        if (!files[0] || files[0].type.indexOf('image/') < 0) {
-
+        if (!files[0] || files[0].type.indexOf('image/') > 0) {
         } else {
+            const result = [];
             this.reader.onloadend = (e) => {
-                const result = [];
-                const data = this.reader.result;
-                const splitData = data[0].split('\n');
-                for (let i = 0; i < splitData.length; i++) {
-                    result[i] = splitData[i].split(',');
+                const body = this.reader.result.split('\n');
+                for (let j = 0; j < body.length; j++) {
+                    result[j] = body[j].split(',');
                 }
-                console.log(result);
+                const jb = JSON.stringify(result);
+                this.readCSVFile = JSON.parse(jb);
             };
-            this.reader.readAsDataURL(files[0]);
+            const encode = (this.readCSVEncode.sjis) ? 'Shift_JIS' : 'UTF-8';
+            this.reader.readAsText(files[0], encode);
+
+            this.switchLoadtoPreview();
+
         }
         event.stopPropagation();
     }
+    switchLoadtoPreview(): void {
+        if (this.flags.onPreviewCSVFile) {
+            this.flags.onPreviewCSVFile = false;
+            this.flags.onDragCSVFile = true;
+        } else {
+            this.flags.onPreviewCSVFile = true;
+            this.flags.onDragCSVFile = false;
+        }
 
+    }
+    setupEncode(encode: string): any {
+        for (const key in this.readCSVEncode) {
+            if (this.readCSVEncode.hasOwnProperty(key)) {
+                if (key === encode) {
+                    this.readCSVEncode[key] = true;
+                } else {
+                    this.readCSVEncode[key] = false;
+                }
+            }
+        }
+    }
     /** ********************************************
      *
      * 画面毎の処理
@@ -279,6 +310,7 @@ export class TacksheetComponent {
             this.flags.onLoadCSV = true;
         } else if (window === 'includecsv') {
             this.flags.onIncludeCSV = true;
+            this.flags.onDragCSVFile = true;
         } else if (window === 'input') {
             this.flags.onInputContents = true;
         } else if (window === 'reviewcsv') {

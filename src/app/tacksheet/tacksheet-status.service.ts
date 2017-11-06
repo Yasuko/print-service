@@ -12,6 +12,8 @@ export class TacksheetStatusService {
         onPrintPosition: false,
         onLoadCSV: false,
         onIncludeCSV: false,
+            onDragCSVFile: true,
+            onPreviewCSVFile: false,
         onInputContents: false,
         onReviewCSV: false,
         onDownload: false,

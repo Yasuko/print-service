@@ -196,6 +196,7 @@
     <ng-container *ngIf="flags['onIncludeCSV']">
     <div class="print-caption">csv読込</div>
     <div class="select-box">
+    <ng-container *ngIf="flags['onDragCSVFile']">
         <form action=""
             method="post"
             enctype="multipart/form-data">
@@ -204,17 +205,48 @@
                 class="drag-drop-area"
                 (dragover)="onDragOverHandler($event)" 
                 (dragleave)="onDragLeaveHandler($event)"
-                (drop)="onDropHandler($event)" >
+                (drop)="onDropHandler($event, 'drag')" >
                 <div class="drag-drop-inside">
                     <p>ここにCSVをドロップ</p>
                     <p>または</p>
-                    <input name="images[]" (change)="onSelectHandler($event, 'select')" type="file" value="ファイルを選択" accept="image/*" multiple >
+                    <input name="csv" (change)="onDropHandler($event, 'select')" type="file" value="ファイルを選択" >
                 </div>
             </div>
         </form>
-        <div></div>
+        <div class="print-cargo_s click"
+            [class.selected]="readCSVEncode['utf']"
+            (click)="setupEncode('utf')">
+            <div class="label-s">utf-8</div>
+        </div>
+        <div class="print-cargo_s click"
+            [class.selected]="readCSVEncode['sjis']"
+            (click)="setupEncode('sjis')">
+            <div class="label-s">sjis</div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="flags['onPreviewCSVFile']">
+        <ul>
+            <li *ngFor="let csv of readCSVFile"
+                class="preview-csv-calam">
+                <div>カラム１：{{csv[0]}}</div>
+                <div>カラム２：{{csv[1]}}</div>
+                <div>カラム３：{{csv[2]}}</div>
+            </li>
+        </ul>
+        <div class="print-cargo click" (click)="moveWindow('loadcsv')">
+            <div class="label-s"><h3>再読込</h3></div>
+        </div>
+    </ng-container>
     </div>
     <div class="select-box-bottom">
+        <ng-container *ngIf="flags['onPreviewCSVFile']">
+        <div class="print-cargo click" (click)="switchLoadtoPreview()">
+            <div class="label-s"><h3>再読込</h3></div>
+        </div>
+        <div class="print-cargo click" (click)="setIncludeCSV()">
+            <div class="label-s"><h3>決定</h3></div>
+        </div>
+        </ng-container>
         <div class="print-cargo click" (click)="moveWindow('loadcsv')">
             <div class="label-s"><h3>戻る</h3></div>
         </div>

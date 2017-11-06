@@ -2,6 +2,9 @@ input[type="number"],
 textarea{
 	width: 80px;
 }
+.selected {
+    background-color: #c7c7c7;
+}
 .print-caption {
     text-align: center;
     width: 100%;
@@ -164,6 +167,16 @@ textarea{
 	width: 80%;
     margin: 8px auto;
 }
+.preview-csv-calam {
+    width: 100%;
+}
+.preview-csv-calam > div {
+    position: relative;
+    float: left;
+
+}
+
+
 
 .load-screen {
     position: absolute;
