@@ -52,11 +52,11 @@ export class TacksheetStatusService {
         line3: false,
         line4: false,
         line5: false,
-        address1: false,
-        address2: false,
-        address3: false,
-        address4: false,
-        address5: false
+        postcode: false,
+        address: false,
+        building: false,
+        company: false,
+        name: false
     };
 
     constructor() {}

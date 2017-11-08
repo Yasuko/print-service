@@ -32,7 +32,8 @@ export class TacksheetMakerService {
     private textDesine = {
         fontSize: 30,
         fontDesine: 'MS PMincho',
-        fontWeight: 'normal'
+        fontWeight: 'normal',
+        textMargin: 2
     };
     /**
      * 
@@ -120,7 +121,7 @@ export class TacksheetMakerService {
                 let Y = (sd.cellHeight * heightCount) + (sd.cellMarginTop * heightCount) + sd.marginTop;
                 for (const key in this.contents[textCount]) {
                     if (this.contents[textCount].hasOwnProperty(key)) {
-                        Y = Y + this.textDesine.fontSize + 23;
+                        Y = Y + this.textDesine.fontSize + this.textDesine.textMargin;
                         ctx.fillText(this.contents[textCount][key], X, Y);
                     }
                 }
@@ -140,11 +141,42 @@ export class TacksheetMakerService {
         this.sheetSize.width = this.sheetSize.width * this.resulution;
         this.sheetSize.height = this.sheetSize.height * this.resulution;
         this.textDesine.fontSize = this.textDesine.fontSize * (this.resulution / 2);
+        this.textDesine.textMargin = this.textDesine.textMargin * this.resulution;
     }
 
     getSheetImage(): string {
         return this.sheetImage;
     }
 
+    initialization(): void {
+        this.sheetImage = null;
+        this.sheetSize = {
+            width: 210,
+            height: 297
+        };
+        this.sheetSpec = {
+            marginTop: 0,
+            marginLeft: 0,
+            cellWidth: 0,
+            cellHeight: 0,
+            cellMarginTop: 0,
+            cellMarginLeft: 0
+        };
+
+        this.textDesine = {
+            fontSize: 30,
+            fontDesine: 'MS PMincho',
+            fontWeight: 'normal',
+            textMargin: 2
+        };
+
+        this.printOption = {
+            cellCount: 1,
+            startPosition: 0,
+            printCount: 1
+        };
+        this.resulution = 1;
+        this.contents = [];
+    }
 }
 

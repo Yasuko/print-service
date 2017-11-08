@@ -13,6 +13,7 @@ import { RecuruiteComponent } from './recruite/recruite.component';
 import { TacksheetComponent } from './tacksheet/tacksheet.component';
 import { TacksheetStatusService } from './tacksheet/tacksheet-status.service';
 
+import { ImageOrientationService } from './_lib_service/index';
 import { PdfMakerService } from './_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from './_lib_service/index';
 import { TacksheetLayoutService } from './_lib_service/index';
@@ -44,7 +45,8 @@ import { LavelSheetService } from './service/sheetDesine/index';
     TacksheetLayoutService,
     LavelSheetService,
     TacksheetStatusService,
-    TacksheetMakerService, ImageSaveService
+    TacksheetMakerService, ImageSaveService,
+    ImageOrientationService
   ],
   bootstrap: [AppComponent]
 })

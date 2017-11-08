@@ -1,3 +1,7 @@
+
+// Image Service
+export * from './image/image-orientation.service';
+
 // Maker Service
 export * from './maker/csv-maker.service';
 export * from './maker/pdf-maker.service';

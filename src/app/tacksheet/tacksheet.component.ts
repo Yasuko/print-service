@@ -24,6 +24,7 @@ export class TacksheetComponent {
     inputForm;
 
     sheetContent = [];
+    sheetContentPreview = [];
     previewClass = '';
     previewScale = 0.1;
     cellCounter = [];
@@ -186,22 +187,58 @@ export class TacksheetComponent {
      * CSVファイルの取り込み
      */
     setIncludeCSV(): void {
+        this.printCellCount = this.readCSVFile.length;
+        const contents_print = new Array(this.cellCounter.length);
+        const contents_preview = new Array(this.cellCounter.length);
+        let keyCount = 0;
+        for (let i = 0; i < this.readCSVFile.length; i++) {
+            const cp = {};
+            const cprint = [];
+            for (const key in this.inputForm) {
+                if (this.formStatus.hasOwnProperty(key)
+                && this.inputForm[key]
+                && this.readCSVFile[i][keyCount] !== undefined
+                && this.readCSVFile[i][keyCount] !== '') {
+                    cp[key] = this.readCSVFile[i][keyCount];
+                    cprint.push(this.readCSVFile[i][keyCount]);
+                    keyCount++;
+                } else  {
+                    cp[key] = '';
+                }
+            }
+            contents_preview[(i + this.printStartPosition)] = cp;
+            contents_print[i] = cprint;
+            keyCount = 0;
+        }
+
+        this.sheetContent = contents_print;
+        this.sheetContentPreview = contents_preview;
+        this.previewClass = 'sheet_' + this.printSheetDesine;
         this.moveWindow('reviewcsv');
     }
     /**
      * 表示内容を入力
      */
     setInputContents(): void {
-        const contents = [];
-        for (const key in this.formStatus) {
-            if (this.formStatus.hasOwnProperty(key)
-            && this.formStatus[key] !== '') {
-                contents.push(this.formStatus[key]);
+        const contents_print = new Array(this.cellCounter.length);
+        const contents_preview = new Array(this.cellCounter.length);
+        for (let i = 0; i <= this.printCellCount; i++) {
+            const cp = {};
+            const cprint = [];
+            for (const key in this.inputForm) {
+                if (this.formStatus.hasOwnProperty(key)
+                && this.inputForm[key]) {
+                    cp[key] = this.formStatus[key];
+                    cprint.push(this.formStatus[key]);
+                } else  {
+                    cp[key] = '';
+                }
             }
+            contents_preview[(i + this.printStartPosition)] = cp;
+            contents_print[i] = cprint;
         }
-        for (let i = 0; i <= this.cellCounter.length; i++) {
-            this.sheetContent[i] = contents;
-        }
+        this.sheetContent = contents_print;
+        this.sheetContentPreview = contents_preview;
 
         this.previewClass = 'sheet_' + this.printSheetDesine;
         this.moveWindow('reviewcsv');
@@ -242,9 +279,32 @@ export class TacksheetComponent {
             this.cellCounter = new Array(sheets);
         }
     }
-
+    /**
+     * 印刷開始位置設定
+     * @param id 印刷開始位置
+     */
     setPrintStartIndex(id: number): void {
         this.printStartPosition = id;
+    }
+
+    setupPrintData(): void {
+        const contents = [];
+        let printCount = 0;
+        for (let i = 0; i <= this.cellCounter.length; i++) {
+            if (this.printStartPosition <= i
+                && this.printCellCount >= printCount) {
+                for (const key in this.inputForm) {
+                    if (this.inputForm.hasOwnProperty(key)) {
+                        if (this.inputForm[key]) {
+                            contents[key] = this.formStatus[key];
+                        } else {
+                            contents[key] = '';
+                        }
+                    }
+                }
+                printCount++;
+            }
+        }
     }
 
     /**
@@ -319,7 +379,10 @@ export class TacksheetComponent {
             this.flags.onDownload = true;
         }
     }
-
+    /**
+     * 印刷開始位置判定
+     * @param id 印刷開始位置
+     */
     checkStartPosition(id): boolean {
         if (id >= this.printStartPosition
         && id < this.printStartPosition + this.printCellCount) {
@@ -342,7 +405,8 @@ export class TacksheetComponent {
      * PDFファイル作成
      */
     buildPdf(): void {
-        // const result = 3.781;
+
+        this.tacksheetmakeService.initialization();
 
         this.tacksheetmakeService.setResulution(13.78095);
         this.tacksheetmakeService.setSheetSpec({

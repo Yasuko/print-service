@@ -194,7 +194,12 @@
         CSVファイルの読込
     --------------------------------------- -->   
     <ng-container *ngIf="flags['onIncludeCSV']">
-    <div class="print-caption">csv読込</div>
+    <ng-container *ngIf="flags['onDragCSVFile']">
+        <div class="print-caption">csv読込</div>
+    </ng-container>
+    <ng-container *ngIf="flags['onPreviewCSVFile']">
+        <div class="print-caption">内容確認</div>
+    </ng-container>
     <div class="select-box">
     <ng-container *ngIf="flags['onDragCSVFile']">
         <form action=""
@@ -225,17 +230,13 @@
         </div>
     </ng-container>
     <ng-container *ngIf="flags['onPreviewCSVFile']">
-        <ul>
-            <li *ngFor="let csv of readCSVFile"
-                class="preview-csv-calam">
-                <div>カラム１：{{csv[0]}}</div>
-                <div>カラム２：{{csv[1]}}</div>
-                <div>カラム３：{{csv[2]}}</div>
+        <ul class="preview-csv-calam">
+            <li *ngFor="let csv of readCSVFile">
+                <div>■１:{{csv[0]}}</div>
+                <div>■２:{{csv[1]}}</div>
+                <div>■３:{{csv[2]}}</div>
             </li>
         </ul>
-        <div class="print-cargo click" (click)="moveWindow('loadcsv')">
-            <div class="label-s"><h3>再読込</h3></div>
-        </div>
     </ng-container>
     </div>
     <div class="select-box-bottom">
@@ -268,15 +269,15 @@
         <div>項目４：<input type="text" [(ngModel)]="formStatus.line4"></div></ng-container>
         <ng-container *ngIf="inputForm.line5">
         <div>項目５：<input type="text" [(ngModel)]="formStatus.line5"></div></ng-container>
-        <ng-container *ngIf="inputForm.address1">
+        <ng-container *ngIf="inputForm.postcode">
         <div>郵便番号(ﾊｲﾌﾝ(-)無し)：<input type="number" [(ngModel)]="formStatus.postcode"></div></ng-container>
-        <ng-container *ngIf="inputForm.address2">
+        <ng-container *ngIf="inputForm.address">
         <div>住所：<input type="text" [(ngModel)]="formStatus.address"></div></ng-container>
-        <ng-container *ngIf="inputForm.address3">
+        <ng-container *ngIf="inputForm.building">
         <div>建物：<input type="text" [(ngModel)]="formStatus.building"></div></ng-container>
-        <ng-container *ngIf="inputForm.address4">
+        <ng-container *ngIf="inputForm.company">
         <div>会社：<input type="text" [(ngModel)]="formStatus.company"></div></ng-container>
-        <ng-container *ngIf="inputForm.address5">
+        <ng-container *ngIf="inputForm.name">
         <div>名前：<input type="text" [(ngModel)]="formStatus.name"></div></ng-container>
     </div>
     <div class="select-box">
@@ -306,25 +307,25 @@
                     [style.margin-bottom.px]="sheetStatus.LabelMarginTop">
                 <ng-container *ngIf='checkStartPosition(i)'>
                 <ng-container *ngIf="inputForm.line1">
-                <div>{{formStatus.line1}}</div></ng-container>
+                <div>{{sheetContentPreview[i].line1}}</div></ng-container>
                 <ng-container *ngIf="inputForm.line2">
-                <div>{{formStatus.line2}}</div></ng-container>
+                <div>{{sheetContentPreview[i].line2}}</div></ng-container>
                 <ng-container *ngIf="inputForm.line3">
-                <div>{{formStatus.line3}}</div></ng-container>
+                <div>{{sheetContentPreview[i].line3}}</div></ng-container>
                 <ng-container *ngIf="inputForm.line4">
-                <div>{{formStatus.line4}}</div></ng-container>
+                <div>{{sheetContentPreview[i].line4}}</div></ng-container>
                 <ng-container *ngIf="inputForm.line5">
-                <div>{{formStatus.line5}}</div></ng-container>
-                <ng-container *ngIf="inputForm.address1">
-                <div>{{formStatus.postcode}}</div></ng-container>
-                <ng-container *ngIf="inputForm.address2">
-                <div>{{formStatus.address}}</div></ng-container>
-                <ng-container *ngIf="inputForm.address3">
-                <div>{{formStatus.building}}</div></ng-container>
-                <ng-container *ngIf="inputForm.address4">
-                <div>{{formStatus.company}}</div></ng-container>
-                <ng-container *ngIf="inputForm.address5">
-                <div>{{formStatus.name}}</div></ng-container>
+                <div>{{sheetContentPreview[i].line5}}</div></ng-container>
+                <ng-container *ngIf="inputForm.postcode">
+                <div>{{sheetContentPreview[i].postcode}}</div></ng-container>
+                <ng-container *ngIf="inputForm.address">
+                <div>{{sheetContentPreview[i].address}}</div></ng-container>
+                <ng-container *ngIf="inputForm.building">
+                <div>{{sheetContentPreview[i].building}}</div></ng-container>
+                <ng-container *ngIf="inputForm.company">
+                <div>{{sheetContentPreview[i].company}}</div></ng-container>
+                <ng-container *ngIf="inputForm.name">
+                <div>{{sheetContentPreview[i].name}}</div></ng-container>
                 </ng-container>
                 </div>
             </ng-container>
