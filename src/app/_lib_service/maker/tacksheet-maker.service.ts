@@ -36,18 +36,23 @@ export class TacksheetMakerService {
         textMargin: 2
     };
     /**
-     * 
+     * 印刷オプション
      */
     private printOption = {
         cellCount: 1,
         startPosition: 0,
         printCount: 1
     };
+
+    private textLayout;
+
+
     private resulution = 1;
 
     private contents = [];
 
     private sheetImage;
+    private prevewImage;
 
     constructor(
     ) {}
@@ -60,6 +65,9 @@ export class TacksheetMakerService {
     }
     setPrintOption(option): void {
         this.setParams(option, 'printOption');
+    }
+    setTextLayout(layout): void {
+        this.textLayout = layout;
     }
     setContents(contents): void {
         this.contents = contents;
@@ -91,12 +99,13 @@ export class TacksheetMakerService {
         const ctx = oc.getContext('2d');
         const sd = this.sheetSpec;
         const po = this.printOption;
+        const rectPoints = [];
+
         oc.setAttribute('width', (this.sheetSize.width).toString());
         oc.setAttribute('height', (this.sheetSize.height).toString());
         ctx.fillStyle = 'rgb(255, 255, 255)';
         ctx.fillRect(0, 0, this.sheetSize.width, this.sheetSize.height);
 
-        ctx.font = this.textDesine.fontSize + 'px "' + this.textDesine.fontDesine + '"';
         console.log(ctx.font);
         ctx.textAlign = 'start';
         ctx.textBaseline = 'bottom';
@@ -114,15 +123,31 @@ export class TacksheetMakerService {
                 heightCount++;
                 X = (sd.cellWidth * widthCount) + (sd.cellMarginLeft * widthCount) + sd.marginLeft;
             }
+            let Y = (sd.cellHeight * heightCount) + (sd.cellMarginTop * heightCount) + sd.marginTop;
+
             widthCount++;
+            rectPoints[i] = [X, Y, sd.cellWidth, sd.cellHeight];
 
             if (i >= po.startPosition
                 && printCount <= po.printCount) {
-                let Y = (sd.cellHeight * heightCount) + (sd.cellMarginTop * heightCount) + sd.marginTop;
+                let lineCount = 0;
                 for (const key in this.contents[textCount]) {
                     if (this.contents[textCount].hasOwnProperty(key)) {
-                        Y = Y + this.textDesine.fontSize + this.textDesine.textMargin;
-                        ctx.fillText(this.contents[textCount][key], X, Y);
+                        if (this.textLayout[lineCount] !== undefined) {
+                            const Layout = this.setLayout(this.textLayout[lineCount]);
+                            // ctx.font = (Layout[2] * this.resulution) + 'px "' + this.textDesine.fontDesine + '"';
+                            // const _Y = Y + (Layout[1] * this.resulution);
+                            // const _X = X + (Layout[0] * this.resulution);
+                            ctx.font = Layout[2] + 'px "' + this.textDesine.fontDesine + '"';
+                            const _Y = Y + Layout[1];
+                            const _X = X + Layout[0];
+                            ctx.fillText(this.contents[textCount][key], _X, _Y);
+                        } else {
+                            ctx.font = this.textDesine.fontSize + 'px "' + this.textDesine.fontDesine + '"';
+                            Y = Y + this.textDesine.fontSize + this.textDesine.textMargin;
+                            ctx.fillText(this.contents[textCount][key], X, Y);
+                        }
+                        lineCount++;
                     }
                 }
                 printCount++;
@@ -131,7 +156,52 @@ export class TacksheetMakerService {
         }
         this.sheetImage = oc.toDataURL('image/jpg');
 
+        for (const key in rectPoints) {
+            if (rectPoints.hasOwnProperty(key)) {
+                const rp = rectPoints[key];
+                this.setRoundRect(ctx, rp[0], rp[1], rp[2], rp[3], 50);
+                ctx.stroke();
+            }
+        }
+        this.prevewImage = oc.toDataURL('image/jpg');
+
     }
+
+    setLayout(layout): number[] {
+        const _layout = [0, 0, 0];
+        const wResult = this.sheetSpec.cellWidth / (200 * this.resulution);
+        const hResult = this.sheetSpec.cellHeight / (100 * this.resulution);
+        const fResult = (wResult + hResult) / 2;
+        console.log(wResult + '::' + hResult + '::' + fResult);
+        _layout[0] = Math.round(layout[0] * this.resulution * wResult);
+        _layout[1] = Math.round(layout[1] * this.resulution * hResult);
+        _layout[2] = Math.round(layout[2] * this.resulution * fResult);
+
+        return _layout;
+    }
+
+    /**
+     * シートの枠を描画
+     * @param ctx canvasコンテキスト
+     * @param x ｘ座標
+     * @param y Y座標
+     * @param h 高さ（ポジション指定の幅になる）
+     * @param w 幅（ポジション指定の高さになる）
+     * @param r 円弧の半径
+     */
+    setRoundRect(ctx, x, y, h, w, r): void {
+        ctx.beginPath();
+        ctx.moveTo(x, y + r);
+        ctx.arc(x + r,   y + w - r, r, Math.PI, Math.PI / 2, 1);
+        ctx.arc(x + h - r, y + w - r, r, Math.PI / 2, 0, 1);
+        ctx.arc(x + h - r, y + r,   r, 0, Math.PI * 3 / 2, 1);
+        ctx.arc(x + r,   y + r,   r, Math.PI * 3 / 2, Math.PI, 1);
+        ctx.closePath();
+    }
+
+    /**
+     * 指定倍率の応じたシートサイズの拡大
+     */
     doEnlargement(): void {
         for (const key in this.sheetSpec) {
             if (this.sheetSpec.hasOwnProperty(key)) {
@@ -146,6 +216,9 @@ export class TacksheetMakerService {
 
     getSheetImage(): string {
         return this.sheetImage;
+    }
+    getPreviewImage(): string {
+        return this.prevewImage;
     }
 
     initialization(): void {

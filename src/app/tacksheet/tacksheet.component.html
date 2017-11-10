@@ -297,38 +297,7 @@
     <div class="select-box">
         <div class="box-flex-sngle order-center">
             <div class="sheet-review">
-            <ng-container *ngFor="let cell of cellCounter; index as i">
-                <div 
-                    [ngClass]="reviewStyle"
-                    (click)="setPrintStartIndex(i)"
-                    [style.width.px]="sheetStatus.LabelWidth"
-                    [style.height.px]="sheetStatus.LabelHeight"
-                    [style.margin-left.px]="sheetStatus.LabelMarginLeft"
-                    [style.margin-bottom.px]="sheetStatus.LabelMarginTop">
-                <ng-container *ngIf='checkStartPosition(i)'>
-                <ng-container *ngIf="inputForm.line1">
-                <div>{{sheetContentPreview[i].line1}}</div></ng-container>
-                <ng-container *ngIf="inputForm.line2">
-                <div>{{sheetContentPreview[i].line2}}</div></ng-container>
-                <ng-container *ngIf="inputForm.line3">
-                <div>{{sheetContentPreview[i].line3}}</div></ng-container>
-                <ng-container *ngIf="inputForm.line4">
-                <div>{{sheetContentPreview[i].line4}}</div></ng-container>
-                <ng-container *ngIf="inputForm.line5">
-                <div>{{sheetContentPreview[i].line5}}</div></ng-container>
-                <ng-container *ngIf="inputForm.postcode">
-                <div>{{sheetContentPreview[i].postcode}}</div></ng-container>
-                <ng-container *ngIf="inputForm.address">
-                <div>{{sheetContentPreview[i].address}}</div></ng-container>
-                <ng-container *ngIf="inputForm.building">
-                <div>{{sheetContentPreview[i].building}}</div></ng-container>
-                <ng-container *ngIf="inputForm.company">
-                <div>{{sheetContentPreview[i].company}}</div></ng-container>
-                <ng-container *ngIf="inputForm.name">
-                <div>{{sheetContentPreview[i].name}}</div></ng-container>
-                </ng-container>
-                </div>
-            </ng-container>
+            <img [attr.src]="sheetPreviewImage" width=210 height=297>
             </div>
         </div>
     </div>

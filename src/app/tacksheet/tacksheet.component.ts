@@ -25,6 +25,9 @@ export class TacksheetComponent {
 
     sheetContent = [];
     sheetContentPreview = [];
+    sheetPreviewImage;
+    sheetPrintImage;
+
     previewClass = '';
     previewScale = 0.1;
     cellCounter = [];
@@ -187,7 +190,7 @@ export class TacksheetComponent {
      * CSVファイルの取り込み
      */
     setIncludeCSV(): void {
-        this.printCellCount = this.readCSVFile.length;
+        this.printCellCount = (this.readCSVFile.length <= this.printCellCount) ? this.readCSVFile.length : this.printCellCount;
         const contents_print = new Array(this.cellCounter.length);
         const contents_preview = new Array(this.cellCounter.length);
         let keyCount = 0;
@@ -215,6 +218,7 @@ export class TacksheetComponent {
         this.sheetContentPreview = contents_preview;
         this.previewClass = 'sheet_' + this.printSheetDesine;
         this.moveWindow('reviewcsv');
+        this.buildIMage();
     }
     /**
      * 表示内容を入力
@@ -242,6 +246,7 @@ export class TacksheetComponent {
 
         this.previewClass = 'sheet_' + this.printSheetDesine;
         this.moveWindow('reviewcsv');
+        this.buildIMage();
     }
     /**
      * タックシールをレビュー
@@ -400,12 +405,10 @@ export class TacksheetComponent {
             this.reader = null;
         }
     }
-
     /**
-     * PDFファイル作成
+     * タックシートイメージ画像作成
      */
-    buildPdf(): void {
-
+    buildIMage(): void {
         this.tacksheetmakeService.initialization();
 
         this.tacksheetmakeService.setResulution(13.78095);
@@ -427,10 +430,20 @@ export class TacksheetComponent {
             printCount: this.printCellCount
         });
         this.tacksheetmakeService.setContents(this.sheetContent);
+        const layout = this.tacksheetlayoutService.getTextLayout(this.printSheetDesine)
+        console.log(layout);
+        this.tacksheetmakeService.setTextLayout(layout);
         this.tacksheetmakeService.sheetMaker();
-        const image = this.tacksheetmakeService.getSheetImage();
 
-        const layout = this.tacksheetlayoutService.makePdfLayout(image);
+        this.sheetPrintImage = this.tacksheetmakeService.getSheetImage();
+        this.sheetPreviewImage = this.tacksheetmakeService.getPreviewImage();
+    }
+
+    /**
+     * PDFファイル作成
+     */
+    buildPdf(): void {
+        const layout = this.tacksheetlayoutService.makePdfLayout(this.sheetPrintImage);
         const pdf = this.pdfmakerService.testPdfMake(layout);
         pdf.print();
     }
