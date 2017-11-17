@@ -430,7 +430,7 @@ export class TacksheetComponent {
             printCount: this.printCellCount
         });
         this.tacksheetmakeService.setContents(this.sheetContent);
-        const layout = this.tacksheetlayoutService.getTextLayout(this.printSheetDesine)
+        const layout = this.tacksheetlayoutService.getTextLayout(this.printSheetDesine);
         console.log(layout);
         this.tacksheetmakeService.setTextLayout(layout);
         this.tacksheetmakeService.sheetMaker();

@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { BusinessCardComponent } from './business_card/business_card.component';
 import { PostcardComponent } from './postcard/postcard.component';
+import { PostcardStatusService } from './postcard/postcard-status.service';
 import { RecuruiteComponent } from './recruite/recruite.component';
 import { TacksheetComponent } from './tacksheet/tacksheet.component';
 import { TacksheetStatusService } from './tacksheet/tacksheet-status.service';
@@ -20,7 +21,7 @@ import { TacksheetLayoutService } from './_lib_service/index';
 import { TacksheetMakerService, ImageSaveService } from './_lib_service/index';
 
 // Import Service
-import { LavelSheetService } from './service/sheetDesine/index';
+import { LavelSheetService, PostcardService} from './service/sheetDesine/index';
 
 
 
@@ -43,11 +44,13 @@ import { LavelSheetService } from './service/sheetDesine/index';
     ListLayoutService,
     RecruiteLayoutService,
     TacksheetLayoutService,
-    LavelSheetService,
+    LavelSheetService, PostcardService,
     TacksheetStatusService,
+    PostcardStatusService,
     TacksheetMakerService, ImageSaveService,
     ImageOrientationService
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

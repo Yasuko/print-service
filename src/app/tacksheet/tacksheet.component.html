@@ -218,16 +218,6 @@
                 </div>
             </div>
         </form>
-        <div class="print-cargo_s click"
-            [class.selected]="readCSVEncode['utf']"
-            (click)="setupEncode('utf')">
-            <div class="label-s">utf-8</div>
-        </div>
-        <div class="print-cargo_s click"
-            [class.selected]="readCSVEncode['sjis']"
-            (click)="setupEncode('sjis')">
-            <div class="label-s">sjis</div>
-        </div>
     </ng-container>
     <ng-container *ngIf="flags['onPreviewCSVFile']">
         <ul class="preview-csv-calam">
@@ -239,6 +229,20 @@
         </ul>
     </ng-container>
     </div>
+    <ng-container *ngIf="flags['onDragCSVFile']">
+    <div class="select-box">
+        <div class="print-cargo_s click"
+            [class.selected]="readCSVEncode['utf']"
+            (click)="setupEncode('utf')">
+            <div class="label-s">utf-8</div>
+        </div>
+        <div class="print-cargo_s click"
+            [class.selected]="readCSVEncode['sjis']"
+            (click)="setupEncode('sjis')">
+            <div class="label-s">sjis</div>
+        </div>
+    </div>
+    </ng-container>
     <div class="select-box-bottom">
         <ng-container *ngIf="flags['onPreviewCSVFile']">
         <div class="print-cargo click" (click)="switchLoadtoPreview()">

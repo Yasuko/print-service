@@ -7,12 +7,12 @@ export class ImageOrientationService {
 
     constructor() {}
 
-    getOrientation(imgDataURL: string): void {
+    getOrientation(imgDataURL: string): number {
         const byteString = atob(imgDataURL.split(',')[1]);
         const orientaion = this.byteStringToOrientation(byteString);
         return orientaion;
     }
-    byteStringToOrientation(img: string): void {
+    private byteStringToOrientation(img: string): number {
         let head = 0;
         let orientation;
         while (1) {
@@ -44,6 +44,74 @@ export class ImageOrientationService {
             if (head > img.length) { break; }
         }
         return orientation;
+    }
+
+    /**
+     * 画像回転
+     * ローテーションの意味
+     * ０：未定義　１：通常　２：左右反転　３：180度回転　４：上下反転
+     * ５：反時計回りに９０度回転　上下反転
+     * ６：時計回りに９０度回転
+     * ７：時計回りに９０度回転　上下反転
+     * ８：反時計回りに９０度回転
+     * @param imgB64_src 画像データ
+     * @param width 横幅
+     * @param height 高さ
+     * @param rotate 取得したオリエンテーション情報
+     * @param callback あ
+     */
+    ImgRotation(imgB64_src, width, height, rotate, _ctx, _width, _height): void {
+        // Image Type
+        const img_type = imgB64_src.substring(5, imgB64_src.indexOf(';'));
+
+        // Source Image
+        const img = new Image();
+        img.onload = (e) => {
+            // New Canvas
+            const canvas = <HTMLCanvasElement> document.createElement('canvas');
+            if (rotate === 5 || rotate === 6 || rotate === 7 || rotate === 8) {
+                // swap w <==> h
+                canvas.setAttribute('width', height);
+                canvas.setAttribute('height', width);
+            } else {
+                canvas.width = width;
+                canvas.height = height;
+            }
+
+            // Draw (Resize)
+            const ctx = canvas.getContext('2d');
+            if (rotate === 0) {
+
+            } else if (rotate === 1) {
+
+            } else if (rotate === 2) {
+                ctx.transform(1, -1, 0, 0, 0, 0);
+            } else if (rotate === 3) {
+                ctx.rotate(rotate * Math.PI / 180);
+                ctx.translate(-width, -height);
+            } else if (rotate === 4) {
+                ctx.transform(1, 0, 0, -1, 0, 0);
+            } else if (rotate === 5) {
+                ctx.rotate(rotate * Math.PI / 180);
+                ctx.translate(-width, 0);
+                ctx.transform(1, 0, 0, -1, 0, 0);
+            } else if (rotate === 6) {
+                ctx.translate(0, -height);
+            } else if (rotate === 7) {
+                ctx.rotate(rotate * Math.PI / 180);
+                ctx.translate(0, -height);
+                ctx.transform(1, 0, 0, -1, 0, 0);
+            } else if (rotate === 8) {
+                ctx.rotate(rotate * Math.PI / 180);
+                ctx.translate(-width, 0);
+            }
+            ctx.drawImage(img, 0, 0, width, height);
+            // _ctx.drawImage(img, 0, 0, _width, _height);
+            // Destination Image
+
+            return Promise.resolve(canvas.toDataURL(img_type));
+        };
+        img.src = imgB64_src;
     }
 }
 

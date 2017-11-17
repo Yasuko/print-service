@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 // Import TherdParty Service
 import { PdfMakerService } from '../_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index';
-
+import { ImageOrientationService } from '../_lib_service/index';
 
 @Component({
     selector: 'recruite-print',
@@ -72,7 +72,8 @@ export class RecuruiteComponent {
         private router: Router,
         private pdfmakerService: PdfMakerService,
         private listlayoutService: ListLayoutService,
-        private recruitelayoutService: RecruiteLayoutService
+        private recruitelayoutService: RecruiteLayoutService,
+        private imageOrientationService: ImageOrientationService
     ) {}
 
     onDragOverHandler(event: DragEvent): void {
@@ -112,7 +113,13 @@ export class RecuruiteComponent {
             this.reader.onloadend = (e) => {
                 this.getFileType(e.target.result);
                 this.onImage = e.target.result;
-                this.resultImage();
+                const orientation = this.imageOrientationService.getOrientation(this.onImage);
+                console.log(orientation);
+                if (orientation === 0 || orientation === 1) {
+                    this.resultImage();
+                } else {
+                    this.rotationImage(orientation);
+                }
                 event.stopPropagation();
             };
             this.reader.readAsDataURL(files[0]);
@@ -123,12 +130,10 @@ export class RecuruiteComponent {
      * @param event マウスイベント
      */
     resultImage(): void {
-
         // canvas要素の取得doctypeを指定しないとエラーになるので注意
         this.canvasBase = <HTMLCanvasElement> document.getElementById('face-shot');
         const ctx = this.canvasBase.getContext('2d');
         ctx.imageSmoothingEnabled = true;
-
         /**
          * 画像追加処理
          */
@@ -140,10 +145,63 @@ export class RecuruiteComponent {
             this.canvasBase.setAttribute('width', this.canvasWidth.toString());
             this.canvasBase.setAttribute('height', this.canvasHeight.toString());
             ctx.drawImage(this.canvasImage, 0, 0, this.canvasWidth, this.canvasHeight);
-
             this.setMouseEvent();
         };
         this.canvasImage.src = this.onImage;
+    }
+    rotationImage(rotate): void {
+        const img_type = this.onImage.substring(5, this.onImage.indexOf(';'));
+        // Source Image
+        const img = new Image();
+        img.onload = (e) => {
+            // New Canvas
+            const canvas = <HTMLCanvasElement> document.createElement('canvas');
+            const width = img.naturalWidth;
+            const height = img.naturalHeight;
+
+            if (rotate === 5 || rotate === 6 || rotate === 7 || rotate === 8) {
+                // swap w <==> h
+                canvas.setAttribute('width', height.toString());
+                canvas.setAttribute('height', width.toString());
+            } else {
+                canvas.setAttribute('width', width.toString());
+                canvas.setAttribute('height', height.toString());
+            }
+
+            // Draw (Resize)
+            const ctx = canvas.getContext('2d');
+            if (rotate === 0) {
+
+            } else if (rotate === 1) {
+
+            } else if (rotate === 2) {
+                ctx.transform(1, -1, 0, 0, 0, 0);
+            } else if (rotate === 3) {
+                ctx.rotate(180 * Math.PI / 180);
+                ctx.translate(-width, -height);
+            } else if (rotate === 4) {
+                ctx.transform(1, 0, 0, -1, 0, 0);
+            } else if (rotate === 5) {
+                ctx.rotate(270 * Math.PI / 180);
+                ctx.translate(-width, 0);
+                ctx.transform(1, 0, 0, -1, 0, 0);
+            } else if (rotate === 6) {
+                ctx.rotate(90 * Math.PI / 180);
+                ctx.translate(0, -height);
+            } else if (rotate === 7) {
+                ctx.rotate(rotate * Math.PI / 180);
+                ctx.translate(0, -height);
+                ctx.transform(1, 0, 0, -1, 0, 0);
+            } else if (rotate === 8) {
+                ctx.rotate(270 * Math.PI / 180);
+                ctx.translate(-width, 0);
+            }
+            ctx.drawImage(img, 0, 0, width, height);
+
+            this.onImage = canvas.toDataURL(img_type);
+            this.resultImage();
+        };
+        img.src = this.onImage;
     }
 
     /**
@@ -210,7 +268,6 @@ export class RecuruiteComponent {
      * 切り取り位置の指定は縮小率を考慮する必要あり
      */
     catImage(): void {
-        console.log(this.mouseStartingPointX + ':' + this.mouseStartingPointY + ':' + this.mouseMoveX + ':' + this.mouseMoveY);
         const oc = <HTMLCanvasElement> document.createElement('canvas');
         const octx = oc.getContext('2d');
 
@@ -322,45 +379,4 @@ export class RecuruiteComponent {
         this.onImageType = type[1];
     }
 
-    getOrientation(imgDataURL) {
-        const byteString = atob(imgDataURL.split(',')[1]);
-        const orientaion = byteStringToOrientation(byteString);
-        return orientaion;
-
-        function byteStringToOrientation(img) {
-            let head = 0;
-            let orientation;
-            while (1) {
-                if (img.charCodeAt(head) === 255 && img.charCodeAt(head + 1) === 218) {break;}
-                if (img.charCodeAt(head) === 255 && img.charCodeAt(head + 1) === 216) {
-                    head += 2;
-                } else {
-                    const length = img.charCodeAt(head + 2) * 256 + img.charCodeAt(head + 3);
-                    const endPoint = head + length + 2;
-                    if (img.charCodeAt(head) === 255 && img.charCodeAt(head + 1) === 225) {
-                        const segment = img.slice(head, endPoint);
-                        const bigEndian = segment.charCodeAt(10) === 77;
-                        let count;
-                        if (bigEndian) {
-                            count = segment.charCodeAt(18) * 256 + segment.charCodeAt(19);
-                        } else {
-                            count = segment.charCodeAt(18) + segment.charCodeAt(19) * 256;
-                        }
-                        for (let i = 0; i < count; i++) {
-                            const field = segment.slice(20 + 12 * i, 32 + 12 * i);
-                            if ((bigEndian && field.charCodeAt(1) === 18) || (!bigEndian && field.charCodeAt(0) === 18)) {
-                                orientation = bigEndian ? field.charCodeAt(9) : field.charCodeAt(8);
-                            }
-                        }
-                        break;
-                    }
-                    head = endPoint;
-                }
-                if (head > img.length) {
-                    break;
-                }
-            }
-            return orientation;
-        }
-    }
 }

@@ -4,7 +4,8 @@ import { Subscription } from 'rxjs/Subscription';
 // Import TherdParty Service
 import { PdfMakerService } from '../_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index';
-
+import { PostcardStatusService } from './postcard-status.service';
+import { PostcardService } from '../service/sheetDesine/index';
 
 @Component({
     selector: 'postcard-print',
@@ -14,205 +15,301 @@ import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index'
 
 export class PostcardComponent {
 
+    flags;
+    formStatus;
+    inputForm;
+    desineFlagsAddress;
+    desineFlagsCompany;
+    desineFlagsName;
+
+    previewClass = '';
+    previewScale = 0.1;
+    reviewStyle = ['ghost-cell'];
+
     reader = new FileReader();
-    catOn = false;
-    pdfOn = false;
+    readCSVFile = [];
+    readCSVEncode = {utf: false, sjis: true};
 
     fname = '';
     name = '';
-
-    onImage = '';
-    moveSwitch = false;
-    mouseMoveCheckX = 0;
-    mouseMoveCheckY = 0;
-    mouseMoveBaseX = 0;
-    mouseMoveBaseY = 0;
-    mouseMoveX = 0;
-    mouseMoveY = 0;
-
-    transformSwitch = false;
-    mouseTranseW = 0;
-    mouseTranseH = 0;
-
-    x = 0;
-    y = 0;
-    width = 200;
-    height = 300;
-
-    canvasBase: HTMLCanvasElement;
-    canvasImage: HTMLImageElement;
-    canvasWidth;
-    canvasHeight;
-    canvasRatio;
+    onDrag = false;
 
     subscription: Subscription;
     constructor(
         private router: Router,
         private pdfmakerService: PdfMakerService,
-        private listlayoutService: ListLayoutService,
-        private recruitelayoutService: RecruiteLayoutService
-    ) {}
+        private postcardStatusService: PostcardStatusService,
+        private postcardService: PostcardService
+    ) {
+        this.flags = postcardStatusService.flags;
+        this.formStatus = postcardStatusService.formStatus;
+        this.inputForm = postcardStatusService.inputForm;
+        this.desineFlagsAddress = postcardStatusService.desineFlagsAddress;
+        this.desineFlagsCompany = postcardStatusService.desineFlagsCompany;
+        this.desineFlagsName = postcardStatusService.desineFlagsName;
+    }
+    /** ********************************************
+    * ドラッグイベント
+    ******************************************** */
 
+    /**
+    *
+    * @param event ドラッグイベント
+    */
     onDragOverHandler(event: DragEvent): void {
         event.preventDefault();
-
+        this.onDrag = true;
     }
     onDragLeaveHandler(event: DragEvent): void {
         event.stopPropagation();
+        this.onDrag = false;
     }
     /**
-     * ファイルドロップイベント
-     * @param event ドラッグされたファイル
-     */
-    onDropHandler(event: DragEvent): void {
+    * ファイルドロップイベント
+    * @param event ドラッグされたファイル
+    */
+    onDropHandler(event, type: string): void {
         event.preventDefault();
         this.reset('fast');
-        if (this.canvasImage) {
-            this.reset('last');
+
+        let files;
+        if (type === 'drag') {
+            files = event.dataTransfer.files;
+        } else if (type === 'select') {
+            files = event.target.files;
         }
-        const files = event.dataTransfer.files;
+
         this.reader = new FileReader();
-
         // データタイプの判定
-        if (!files[0] || files[0].type.indexOf('image/') < 0) {
-
+        if (!files[0] || files[0].type.indexOf('image/') > 0) {
         } else {
+            const result = [];
             this.reader.onloadend = (e) => {
-                this.resultImage(e);
+                const body = this.reader.result.split('\n');
+                for (let j = 0; j < body.length; j++) {
+                    result[j] = body[j].split(',');
+                }
+                const jb = JSON.stringify(result);
+                this.readCSVFile = JSON.parse(jb);
             };
-            this.reader.readAsDataURL(files[0]);
+            const encode = (this.readCSVEncode.sjis) ? 'Shift_JIS' : 'UTF-8';
+            this.reader.readAsText(files[0], encode);
+
+            this.switchLoadtoPreview();
+
         }
         event.stopPropagation();
     }
+    switchLoadtoPreview(): void {
+        if (this.flags.onPreviewCSVFile) {
+            this.flags.onPreviewCSVFile = false;
+            this.flags.onDragCSVFile = true;
+        } else {
+            this.flags.onPreviewCSVFile = true;
+            this.flags.onDragCSVFile = false;
+        }
 
-    /**
-     * 読み込まれた画像の表示
-     * @param event マウスイベント
-     */
-    resultImage(event): void {
-        this.onImage = event.target.result;
-
-        // canvas要素の取得doctypeを指定しないとエラーになるので注意
-        this.canvasBase = <HTMLCanvasElement> document.getElementById('canvas');
-        const ctx = this.canvasBase.getContext('2d');
-        ctx.imageSmoothingEnabled = true;
-
-        // いきなり画像を縮小するとブロックノイズが発生する対策用
-        // 非表示で画像要素を作成し段階的に縮小させる
-        // 無くても良い
-        const oc = <HTMLCanvasElement> document.createElement('canvas');
-        const octx = oc.getContext('2d');
-        /**
-         * 画像追加処理
-         */
-        this.canvasImage = new Image();
-        this.canvasImage.onload = (e) => {
-            const ctxw = this.canvasImage.naturalWidth * 0.5;
-            const ctxh = this.canvasImage.naturalHeight * 0.5;
-            octx.drawImage(this.canvasImage, 0, 0, ctxw, ctxh);
-            if ( ctxw >= 600 ) {
-                octx.drawImage(this.canvasImage, 0, 0, ctxw * 0.5, ctxh * 0.5);
+    }
+    setupEncode(encode: string): any {
+        for (const key in this.readCSVEncode) {
+            if (this.readCSVEncode.hasOwnProperty(key)) {
+                if (key === encode) {
+                    this.readCSVEncode[key] = true;
+                } else {
+                    this.readCSVEncode[key] = false;
+                }
             }
+        }
+    }
+    /** ********************************************
+         *
+         * 画面毎の処理
+         *
+    ******************************************** */
 
-            this.canvasWidth = 300;
-            this.canvasRatio = this.canvasWidth / this.canvasImage.naturalWidth;
-            this.canvasHeight = this.canvasImage.naturalHeight * this.canvasRatio;
-            this.canvasBase.setAttribute('width', this.canvasWidth.toString());
-            this.canvasBase.setAttribute('height', this.canvasHeight.toString());
-            ctx.drawImage(this.canvasImage, 0, 0, this.canvasWidth, this.canvasHeight);
-
-
-            this.setMouseEvent();
-        };
-        this.canvasImage.setAttribute('class', 'org-image');
-        this.canvasImage.src = this.onImage;
+    setSheetType(type: number): void {
+        this.moveWindow('desine');
+    }
+    setSheetDesine(desine: string): void {
+        this.moveWindow('title');
+    }
+    setNameTitle(id: number): void {
+        this.moveWindow('loadcsv');
     }
 
-
     /**
-     * マウスイベント登録
-     *
-     */
-    setMouseEvent(): void {
-        this.canvasBase.addEventListener('mousedown', (e) => {
-            this.mouseMoveCheckX = e.offsetX;
-            this.mouseMoveCheckY = e.offsetY;
-            this.moveSwitch = true;
-        }, false);
-        this.canvasBase.addEventListener('mouseup', (e) => {
-            console.log(this.mouseMoveCheckX + ':' + this.mouseMoveCheckY + ':' + this.mouseMoveX + ':' + this.mouseMoveY);
-            this.catOn = true;
-            this.moveSwitch = false;
-        }, false);
-        this.canvasBase.addEventListener('mousemove', (e) => {
-            if (this.moveSwitch) {
-                const ctx = this.canvasBase.getContext('2d');
-                ctx.clearRect( 0, 0, this.canvasWidth, this.canvasHeight);
-                this.mouseMoveX = -(this.mouseMoveCheckX - e.offsetX);
-                this.mouseMoveY = -(this.mouseMoveCheckY - e.offsetY);
-                ctx.drawImage(this.canvasImage, 0, 0, this.canvasWidth, this.canvasHeight);
-                ctx.fillRect(this.mouseMoveCheckX, this.mouseMoveCheckY, this.mouseMoveX, this.mouseMoveY);
-                ctx.fillStyle = 'rgba(100, 100, 100, 0.5)';
+    * CSVを取り込むか設定
+    * @param choice 読み込みの可否
+    */
+    setLoadCSV(choice): void {
+        if (choice) {
+            this.moveWindow('includecsv');
+        } else {
+            this.moveWindow('input');
+        }
+    }
+    /**
+    * CSVファイルの取り込み
+    */
+    setIncludeCSV(): void {
+
+        let keyCount = 0;
+        for (let i = 0; i < this.readCSVFile.length; i++) {
+            const cp = {};
+            const cprint = [];
+            for (const key in this.inputForm) {
+                if (this.formStatus.hasOwnProperty(key)
+                && this.inputForm[key]
+                && this.readCSVFile[i][keyCount] !== undefined
+                && this.readCSVFile[i][keyCount] !== '') {
+                    cp[key] = this.readCSVFile[i][keyCount];
+                    cprint.push(this.readCSVFile[i][keyCount]);
+                    keyCount++;
+                } else  {
+                    cp[key] = '';
+                }
             }
-        }, false);
-    }
-
-    /**
-     * 画像のトリミング
-     * リサイズ処理を行っているので
-     * 切り取り位置の指定は縮小率を考慮する必要あり
-     */
-    catImage(): void {
-        console.log(this.mouseMoveCheckX + ':' + this.mouseMoveCheckY + ':' + this.mouseMoveX + ':' + this.mouseMoveY);
-        const ctx = this.canvasBase.getContext('2d');
-        ctx.clearRect( 0, 0, this.canvasWidth, this.canvasHeight);
-
-        this.canvasBase.setAttribute('width', this.mouseMoveX.toString());
-        this.canvasBase.setAttribute('height', this.mouseMoveY.toString());
-        ctx.drawImage(
-            this.canvasImage, // 切り取りイメージ
-            (this.mouseMoveCheckX / this.canvasRatio),
-            (this.mouseMoveCheckY / this.canvasRatio),
-            this.mouseMoveX / this.canvasRatio,
-            this.mouseMoveY / this.canvasRatio, // 切り取り位置
-            0, 0, this.mouseMoveX, this.mouseMoveY); // 切り取り後の表示位置とサイズ
-
-        this.catOn = false;
-        this.pdfOn = true;
-        this.reset('last');
+                keyCount = 0;
+        }
+        this.moveWindow('reviewcsv');
+        this.buildIMage();
     }
     /**
-     * マウスイベント削除
-     * angularに依存せずにイベントを管理しているので必ず
-     * イベントを毎回破棄すること
-     */
-    removeMouseEvent(): void {
-        this.canvasBase.removeEventListener('mousedown', (e) => {});
-        this.canvasBase.removeEventListener('mouseup',   (e) => {});
-        this.canvasBase.removeEventListener('mousemove', (e) => {});
+    * 表示内容を入力
+    */
+    setInputContents(): void {
+
+        this.moveWindow('reviewcsv');
+        this.buildIMage();
+        }
+    /**
+    * タックシールをレビュー
+    */
+    setReviewSheet(): void {
+        this.moveWindow('download');
     }
-    reset(type: string): void {
-        if (type === 'last') {
-            this.removeMouseEvent();
-        } else if (type === 'first') {
-            this.reader = null;
-            this.canvasImage = null;
-            this.canvasBase = null;
-            this.canvasImage = null;
-            this.mouseMoveCheckX = null;
-            this.mouseMoveCheckY = null;
-            this.catOn = false;
-            this.moveSwitch = false;
+    /**
+    * PDFをダウンロード
+    */
+    setDownloadPDF(): void {
+
+    }
+
+    /** ******************************************
+    * 数値計算、移動先計算他、補助ライブラリ
+    ****************************************** */
+
+    /**
+    * 画面切り替え
+    * @param window 移動先
+    */
+    moveWindow(window: string): void {
+        for (const key in this.flags) {
+            if (this.flags.hasOwnProperty(key)) {
+                this.flags[key] = false;
+            }
+        }
+        if (window === 'type') {
+            this.flags.onType = true;
+        } else if (window === 'desine') {
+            this.flags.onSheetDesine = true;
+        } else if (window === 'title') {
+            this.flags.onNameTitle = true;
+        } else if (window === 'loadcsv') {
+            this.flags.onLoadCSV = true;
+        } else if (window === 'includecsv') {
+            this.flags.onIncludeCSV = true;
+            this.flags.onDragCSVFile = true;
+        } else if (window === 'input') {
+            this.flags.onInputContents = true;
+        } else if (window === 'reviewcsv') {
+            this.flags.onReviewCSV = true;
+        } else if (window === 'download') {
+            this.flags.onDownload = true;
+        }
+    }
+    /**
+     * シートデザインを決定
+     * @param desine デザイン名
+     */
+    setupSheetDesine(desine: string): void {
+        const data = this.postcardService.getLabelSheetDesine(desine);
+        let count = 0;
+        for (const key in this.inputForm) {
+            if (this.inputForm.hasOwnProperty(key)) {
+                this.inputForm[key] = data['input'][count];
+                count++;
+            }
         }
     }
 
-    buildPdf(): void {
-        this.recruitelayoutService.setImage(this.canvasBase.toDataURL('image/png'));
-        this.recruitelayoutService.setFName(this.fname);
-        this.recruitelayoutService.setName(this.name);
-        const layout = this.recruitelayoutService.makePdfLayout();
-        const pdf = this.pdfmakerService.testPdfMake(layout);
-        pdf.print();
+    setupAddressDesine(address: string): void {
+        for (const key in this.desineFlagsAddress) {
+            if (this.desineFlagsAddress.hasOwnProperty(key)) {
+                if (key === address) {
+                    if (this.desineFlagsAddress[key]) {
+                        this.desineFlagsAddress[key] = false;
+                    } else {
+                        this.desineFlagsAddress[key] = true;
+                    }
+
+                } else {
+                    this.desineFlagsAddress[key] = false;
+                }
+            }
+        }
+    }
+    setupCompanyDesine(company: string): void {
+        for (const key in this.desineFlagsCompany) {
+            if (this.desineFlagsCompany.hasOwnProperty(key)) {
+                if (key === company) {
+                    if (this.desineFlagsCompany[key]) {
+                        this.desineFlagsCompany[key] = false;
+                    } else {
+                        this.desineFlagsCompany[key] = true;
+                    }
+                } else {
+                    this.desineFlagsCompany[key] = false;
+                }
+            }
+        }
+    }
+    setupNameDesine(name: string): void {
+        for (const key in this.desineFlagsName) {
+            if (this.desineFlagsName.hasOwnProperty(key)) {
+                if (key === name) {
+                    if (this.desineFlagsName[key]) {
+                        this.desineFlagsName[key] = false;
+                    } else {
+                        this.desineFlagsName[key] = true;
+                        this.inputForm.name2 = true;
+                    }
+                } else {
+                    this.desineFlagsName[key] = false;
+                }
+            }
+        }
+    }
+    /**
+    * 初期パラメーターの初期化
+    */
+    reset(type: string): void {
+        if (type === 'last') {
+
+        } else if (type === 'first') {
+            this.reader = null;
+        }
+    }
+    /**
+     * タックシートイメージ画像作成
+     */
+    buildIMage(): void {
     }
 
+    /**
+    * PDFファイル作成
+    */
+    buildPdf(): void {
+
+    }
 }
