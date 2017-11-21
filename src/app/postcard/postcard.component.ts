@@ -18,6 +18,7 @@ export class PostcardComponent {
     flags;
     formStatus;
     inputForm;
+    nameTitles;
     desineFlagsAddress;
     desineFlagsCompany;
     desineFlagsName;
@@ -44,6 +45,7 @@ export class PostcardComponent {
         this.flags = postcardStatusService.flags;
         this.formStatus = postcardStatusService.formStatus;
         this.inputForm = postcardStatusService.inputForm;
+        this.nameTitles = postcardStatusService.nameTitles;
         this.desineFlagsAddress = postcardStatusService.desineFlagsAddress;
         this.desineFlagsCompany = postcardStatusService.desineFlagsCompany;
         this.desineFlagsName = postcardStatusService.desineFlagsName;
@@ -128,12 +130,6 @@ export class PostcardComponent {
     ******************************************** */
 
     setSheetType(type: number): void {
-        this.moveWindow('desine');
-    }
-    setSheetDesine(desine: string): void {
-        this.moveWindow('title');
-    }
-    setNameTitle(id: number): void {
         this.moveWindow('loadcsv');
     }
 
@@ -178,12 +174,12 @@ export class PostcardComponent {
     * 表示内容を入力
     */
     setInputContents(): void {
-
+        this.setupPostcardDesine();
         this.moveWindow('reviewcsv');
         this.buildIMage();
-        }
+    }
     /**
-    * タックシールをレビュー
+    * はがきをレビュー
     */
     setReviewSheet(): void {
         this.moveWindow('download');
@@ -211,8 +207,6 @@ export class PostcardComponent {
         }
         if (window === 'type') {
             this.flags.onType = true;
-        } else if (window === 'desine') {
-            this.flags.onSheetDesine = true;
         } else if (window === 'title') {
             this.flags.onNameTitle = true;
         } else if (window === 'loadcsv') {
@@ -228,64 +222,49 @@ export class PostcardComponent {
             this.flags.onDownload = true;
         }
     }
+
+
+    setupInputDesine(desine: string): void {
+        for (const key in this.inputForm) {
+            if (this.inputForm.hasOwnProperty(key)) {
+                if (key === desine) {
+                    this.inputForm[key] = (this.inputForm[key]) ? false : true;
+                }
+            }
+        }
+    }
+
     /**
      * シートデザインを決定
      * @param desine デザイン名
      */
-    setupSheetDesine(desine: string): void {
-        const data = this.postcardService.getLabelSheetDesine(desine);
-        let count = 0;
-        for (const key in this.inputForm) {
-            if (this.inputForm.hasOwnProperty(key)) {
-                this.inputForm[key] = data['input'][count];
-                count++;
-            }
+    setupPostcardDesine(): void {
+        if (this.formStatus.company !== '') {
+
+        } else if (this.formStatus.name2 !== '') {
+
+        }
+        if (this.formStatus.myName !== '') {
+
+        }
+        if (this.formStatus.title === '') {
+            this.formStatus.title = '様';
         }
     }
 
-    setupAddressDesine(address: string): void {
-        for (const key in this.desineFlagsAddress) {
-            if (this.desineFlagsAddress.hasOwnProperty(key)) {
-                if (key === address) {
-                    if (this.desineFlagsAddress[key]) {
-                        this.desineFlagsAddress[key] = false;
+    setupTitle(title): void {
+        for (const key in this.nameTitles) {
+            if (this.nameTitles.hasOwnProperty(key)) {
+                console.log(this.nameTitles[key][1]);
+                if (title === key) {
+                    if (this.nameTitles[key][1]) {
+                        this.nameTitles[key][1] = false;
                     } else {
-                        this.desineFlagsAddress[key] = true;
-                    }
-
-                } else {
-                    this.desineFlagsAddress[key] = false;
-                }
-            }
-        }
-    }
-    setupCompanyDesine(company: string): void {
-        for (const key in this.desineFlagsCompany) {
-            if (this.desineFlagsCompany.hasOwnProperty(key)) {
-                if (key === company) {
-                    if (this.desineFlagsCompany[key]) {
-                        this.desineFlagsCompany[key] = false;
-                    } else {
-                        this.desineFlagsCompany[key] = true;
+                        this.nameTitles[key][1] = true;
+                        this.formStatus.title = this.nameTitles[key][0];
                     }
                 } else {
-                    this.desineFlagsCompany[key] = false;
-                }
-            }
-        }
-    }
-    setupNameDesine(name: string): void {
-        for (const key in this.desineFlagsName) {
-            if (this.desineFlagsName.hasOwnProperty(key)) {
-                if (key === name) {
-                    if (this.desineFlagsName[key]) {
-                        this.desineFlagsName[key] = false;
-                    } else {
-                        this.desineFlagsName[key] = true;
-                        this.inputForm.name2 = true;
-                    }
-                } else {
-                    this.desineFlagsName[key] = false;
+                    this.nameTitles[key][1] = false;
                 }
             }
         }

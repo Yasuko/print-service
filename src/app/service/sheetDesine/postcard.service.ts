@@ -15,7 +15,6 @@ export class PostcardService {
             cell12: [23.3, 7, 96.5, 44.5, 0, 2.5],
             cell24: [12.9, 6, 66, 33.9, 0, 0],
         };
-
         return spec[type];
     }
 
@@ -25,22 +24,38 @@ export class PostcardService {
             'sheet_line4', 'sheet_line5', 'sheet_address3',
             'sheet_address4', 'sheet_address5'
         ];
-
         return ;
     }
 
-    getLabelSheetDesine(type: string) {
+    getPostcardDesine(type: string) {
         const desine = {
-            address1: { input: [1, 1, 0, 0, 0, 0, 1, 0, 0], font: 15},
-            address2: { input: [1, 1, 0, 0, 0, 0, 0, 0, 0], font: 15},
-            address3: { input: [1, 1, 1, 0, 0, 0, 0, 0, 0], font: 12},
-            company1: { input: [0, 0, 0, 0, 1, 0, 0, 0, 0], font: 10},
-            company2: { input: [1, 1, 1, 1, 1, 0, 0, 0, 0], font: 8},
-            twise: { input: [0, 0, 0, 0, 0, 1, 1, 0, 1], font: 15},
-            myName: {}
+            address: {
+                postcode: [50, 5, 0, 0, 10],
+                address1: [90, 15, 0, 0, 10],
+                address2: [80, 15, 0, 0, 10],
+                building: [70, 50, 0, 0, 10],
+                name1: [45, 20, 0, 0, 12]},
+            company: {
+                postcode: [50, 5, 0, 0, 10],
+                address1: [0, 0, 0, 0, 0],
+                address2: [0, 0, 0, 0, 0],
+                building: [0, 0, 0, 0, 0],
+                company: [0, 0, 0, 0, 0],
+                department: [0, 0, 0, 0, 0],
+                name1: [0, 0, 0, 0, 0]},
+            twise: {
+                postcode: [50, 5, 0, 0, 10],
+                address1: [0, 0, 0, 0, 0],
+                address2: [0, 0, 0, 0, 0],
+                building: [0, 0, 0, 0, 0],
+                name1: [0, 0, 0, 0, 0],
+                name2: [0, 0, 0, 0, 0]},
+            myAddress: {
+                myPostcode: [2, 50, 0, 0, 7],
+                myAddress: [20, 55, 0, 0, 7],
+                myBuilding: [20, 55, 0, 0, 7],
+                myName: [15, 60, 0, 0, 8]},
         };
-
         return desine[type];
     }
-
 }

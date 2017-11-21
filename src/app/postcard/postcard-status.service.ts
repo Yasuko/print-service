@@ -52,19 +52,18 @@ export class PostcardStatusService {
         myName: '',
     };
     inputForm = {
-        postcode: true,
-        address: true,
-        address2: false,
-        building: false,
         company: false,
-        department: false,
-        name1: true,
         name2: false,
         title: false,
-        myPostcode: false,
         myAddress: false,
-        myBuilding: false,
-        myName: false
+    };
+    nameTitles = {
+        0: ['様', false],
+        1: ['殿', false],
+        2: ['先生', false],
+        3: ['御中', false],
+        4: ['各位', false],
+        5: ['行', false]
     };
 
     constructor() {}

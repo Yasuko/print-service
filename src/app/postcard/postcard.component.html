@@ -16,64 +16,6 @@
 </div>
 </ng-container>
 
-
-<!-- ---------------------------------------
-    はがきレイアウト設定
---------------------------------------- -->
-<ng-container *ngIf="flags['onSheetDesine']">
-<div class="print-caption">はがきレイアウト選択</div>
-<div class="select-box">
-    <div class="print-cargo_high click"
-    [class.selected] = "desineFlagsAddress['address1']"
-     (click)="setupAddressDesine('address1')">
-        <div class="label-s">住所1列</div>
-        <div class="sheet-sample"></div>
-    </div>
-    <div class="print-cargo_high click"
-        [class.selected] = "desineFlagsAddress['address2']"
-        (click)="setupAddressDesine('address2')">
-        <div class="label-s">住所2列</div>
-        <div class="sheet-sample"></div>
-    </div>
-    <div class="print-cargo_high click"
-        [class.selected] = "desineFlagsAddress['address3']"
-        (click)="setupAddressDesine('address3')">
-        <div class="label-s">住所3列</div>
-        <div class="sheet-sample"></div>
-    </div>
-    <div class="print-cargo_high click"
-        [class.selected] = "desineFlagsCompany['company1']"
-        (click)="setupCompanyDesine('company1')">
-        <div class="label-s">企業名</div>
-        <div class="sheet-sample"></div>
-    </div>
-    <div class="print-cargo_high click"
-        [class.selected] = "desineFlagsCompany['company2']"
-        (click)="setupCompanyDesine('company2')">
-        <div class="label-s">企業名＋部署名</div>
-        <div class="sheet-sample"></div>
-    </div>
-    <div class="print-cargo_high click"
-        [class.selected] = "desineFlagsName['twice']"
-        (click)="setupNameDesine('twice')">
-        <div class="label-s">連名</div>
-        <div class="sheet-sample"></div>
-    </div>
-    <div class="print-cargo_high click"
-        [class.selected] = "desineFlagsName['myName']"
-        (click)="setupNameDesine('myName')">
-        <div class="label-s">自分の住所</div>
-        <div class="sheet-sample"></div>
-    </div>
-    <div class="print-cargo click" (click)="moveWindow('title')">
-        <div class="label-s"><h3>決定</h3></div>
-    </div>
-    <div class="print-cargo click" (click)="moveWindow('type')">
-        <div class="label-s"><h3>戻る</h3></div>
-    </div>
-</div>
-</ng-container>
-
 <!-- ---------------------------------------
     敬称設定
 --------------------------------------- -->
@@ -123,7 +65,7 @@
     <div class="print-cargo click" (click)="setLoadCSV(0)">
         <div class="label-s"><h3>取り込まない</h3></div>
     </div>
-    <div class="print-cargo click" (click)="moveWindow('title')">
+    <div class="print-cargo click" (click)="moveWindow('type')">
         <div class="label-s"><h3>戻る</h3></div>
     </div>
 </div>
@@ -201,32 +143,74 @@
 <ng-container *ngIf="flags['onInputContents']">
 <div class="print-caption">内容入力</div>
 <div class="select-box input-form">
-    <div>郵便番号(ﾊｲﾌﾝ(-)無し)：<input type="number" [(ngModel)]="formStatus.postcode"></div></ng-container>
-    <ng-container *ngIf="inputForm.address">
-    <div>住所：<input type="text" [(ngModel)]="formStatus.address"></div></ng-container>
-    <ng-container *ngIf="inputForm.address2">
-    <div>番地：<input type="text" [(ngModel)]="formStatus.addresss2"></div></ng-container>
-    <ng-container *ngIf="inputForm.building">
-    <div>建物：<input type="text" [(ngModel)]="formStatus.building"></div></ng-container>
+    <!-- 宛名 -->
+    <div>郵便番号(ﾊｲﾌﾝ無し)：<input type="number" [(ngModel)]="formStatus.postcode"></div>
+    <div>住所：<input type="text" [(ngModel)]="formStatus.address"></div>
+    <div>番地：<input type="text" [(ngModel)]="formStatus.addresss2"></div>
+    <div>建物：<input type="text" [(ngModel)]="formStatus.building"></div>
+    <!-- 企業情報 -->
+    <div class="button-m click"
+        (click)="setupInputDesine('company')">
+        企業情報を追加</div>
     <ng-container *ngIf="inputForm.company">
-    <div>会社：<input type="text" [(ngModel)]="formStatus.company"></div></ng-container>
-    <ng-container *ngIf="inputForm.department">
-    <div>部署：<input type="text" [(ngModel)]="formStatus.department"></div></ng-container>
-    <ng-container *ngIf="inputForm.name1">
-    <div>名前：<input type="text" [(ngModel)]="formStatus.name1"></div></ng-container>
+    <div>会社：<input type="text" [(ngModel)]="formStatus.company"></div>
+    <div>部署：<input type="text" [(ngModel)]="formStatus.department"></div>
+    </ng-container>
+
+    <div>名前：<input type="text" [(ngModel)]="formStatus.name1"></div>
+    <!-- 連名 -->
+    <div class="button-m click"
+        (click)="setupInputDesine('name2')">
+        連名を追加</div>
     <ng-container *ngIf="inputForm.name2">
     <div>連名：<input type="text" [(ngModel)]="formStatus.name2"></div></ng-container>
-    <ng-container *ngIf="inputForm.title">
-    <div>敬称：<input type="text" [(ngModel)]="formStatus.title"></div></ng-container>
-    
-    <ng-container *ngIf="inputForm.myPostcode">
-    <div>郵便番号(ﾊｲﾌﾝ(-)無し)：<input type="number" [(ngModel)]="formStatus.myPostcode"></div></ng-container>
+
+    <!-- 差出人 -->
+    <div class="button-m click"
+        (click)="setupInputDesine('myAddress')">
+        差出人住所</div>
     <ng-container *ngIf="inputForm.myAddress">
-    <div>住所：<input type="text" [(ngModel)]="formStatus.myAddress"></div></ng-container>
-    <ng-container *ngIf="inputForm.myBuilding">
-    <div>建物：<input type="text" [(ngModel)]="formStatus.myBuilding"></div></ng-container>
-    <ng-container *ngIf="inputForm.myName">
-    <div>名前：<input type="text" [(ngModel)]="formStatus.myName"></div></ng-container>
+    <div>郵便番号(ﾊｲﾌﾝ無し)：<input type="number" [(ngModel)]="formStatus.myPostcode"></div>
+    <div>住所：<input type="text" [(ngModel)]="formStatus.myAddress"></div>
+    <div>建物：<input type="text" [(ngModel)]="formStatus.myBuilding"></div>
+    <div>名前：<input type="text" [(ngModel)]="formStatus.myName"></div>
+    </ng-container>
+
+    <!-- 敬称 -->
+    <div class="button-m">敬称選択</div>
+    <div class="select-box">
+        <div class="print-cargo_ss click"
+            [class.selected]="nameTitles[0][1]"
+            (click)="setupTitle('0')">
+            <div class="label-s">様</div>
+        </div>
+        <div class="print-cargo_ss click"
+            [class.selected]="nameTitles[1][1]"
+            (click)="setupTitle('1')">
+            <div class="label-s">殿</div>
+        </div>
+        <div class="print-cargo_ss click"
+            [class.selected]="nameTitles[2][1]"
+            (click)="setupTitle('2')">
+            <div class="label-s">先生</div>
+        </div>
+        <div class="print-cargo_ss click"
+            [class.selected]="nameTitles[3][1]"
+            (click)="setupTitle('3')">
+            <div class="label-s">御中</div>
+        </div>
+        <div class="print-cargo_ss click"
+            [class.selected]="nameTitles[4][1]"
+            (click)="setupTitle('4')">
+            <div class="label-s">各位</div>
+        </div>
+        <div class="print-cargo_ss click"
+            [class.selected]="nameTitles[5][1]"
+            (click)="setupTitle('5')">
+            <div class="label-s">行</div>
+        </div>
+    </div>
+    
 </div>
 <div class="select-box">
     <div class="print-cargo click" (click)="setInputContents()">
@@ -253,7 +237,7 @@
     <div class="print-cargo click" (click)="setReviewSheet()">
         <div class="label-s"><h3>決定</h3></div>
     </div>
-    <div class="print-cargo click" (click)="moveWindow('desine')">
+    <div class="print-cargo click" (click)="moveWindow('loadcsv')">
         <div class="label-s"><h3>戻る</h3></div>
     </div>
 </div>
