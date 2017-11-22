@@ -24,10 +24,8 @@ export class PostcardMakerService {
      * 文字デザイン
      */
     private textDesine = {
-        fontSize: 30,
         fontDesine: 'MS PMincho',
         fontWeight: 'normal',
-        textMargin: 2
     };
     /**
      * 印刷オプション
@@ -35,12 +33,13 @@ export class PostcardMakerService {
     private printOption = {
     };
 
-    private textLayout;
-
+    private addressLayout;
+    private myAddressLayout;
+    private myAddressFlag = false;
 
     private resulution = 1;
 
-    private contents = [];
+    private printContents = [];
 
     private sheetImage;
     private prevewImage;
@@ -57,11 +56,15 @@ export class PostcardMakerService {
     setPrintOption(option): void {
         this.setParams(option, 'printOption');
     }
-    setTextLayout(layout): void {
-        this.textLayout = layout;
+    setAddressLayout(layout): void {
+        this.addressLayout = layout;
     }
-    setContents(contents): void {
-        this.contents = contents;
+    setMyAddressLayout(layout): void {
+        this.myAddressLayout = layout;
+        this.myAddressFlag = true;
+    }
+    setPrintContents(contents): void {
+        this.printContents = contents;
     }
     setResulution(magnification): void {
         this.resulution = magnification;
@@ -102,17 +105,34 @@ export class PostcardMakerService {
         ctx.textBaseline = 'bottom';
         ctx.fillStyle = 'rgb(0, 0, 0)';
 
-
-
+        for (const key in this.addressLayout) {
+            if (this.addressLayout.hasOwnProperty(key)) {
+                if (this.printContents[key] !== '') {
+                    console.log(this.addressLayout[key][4] + ':' + this.addressLayout[key][0] + this.addressLayout[key][1]);
+                    ctx.font = this.addressLayout[key][4] + 'px "' + this.textDesine.fontDesine + '"';
+                    ctx.fillText(
+                        this.printContents[key],
+                        this.addressLayout[key][0],
+                        this.addressLayout[key][1]);
+                }
+            }
+        }
+        if (this.myAddressFlag) {
+            for (const key in this.myAddressLayout) {
+                if (this.myAddressLayout.hasOwnProperty(key)) {
+                    if (this.printContents[key] !== '') {
+                        ctx.font = this.myAddressLayout[key][4] + 'px "' + this.textDesine.fontDesine + '"';
+                        ctx.fillText(
+                            this.printContents[key],
+                            this.myAddressLayout[key][0],
+                            this.myAddressLayout[key][1]);
+                    }
+                }
+            }
+        }
 
         this.sheetImage = oc.toDataURL('image/jpg');
 
-        for (const key in rectPoints) {
-            if (rectPoints.hasOwnProperty(key)) {
-                const rp = rectPoints[key];
-                ctx.stroke();
-            }
-        }
         this.prevewImage = oc.toDataURL('image/jpg');
 
     }
@@ -130,8 +150,6 @@ export class PostcardMakerService {
         }
         this.sheetSize.width = this.sheetSize.width * this.resulution;
         this.sheetSize.height = this.sheetSize.height * this.resulution;
-        this.textDesine.fontSize = this.textDesine.fontSize * (this.resulution / 2);
-        this.textDesine.textMargin = this.textDesine.textMargin * this.resulution;
     }
 
     getSheetImage(): string {
@@ -153,14 +171,12 @@ export class PostcardMakerService {
         };
 
         this.textDesine = {
-            fontSize: 30,
             fontDesine: 'MS PMincho',
             fontWeight: 'normal',
-            textMargin: 2
         };
 
         this.resulution = 1;
-        this.contents = [];
+        this.printContents = [];
     }
 }
 

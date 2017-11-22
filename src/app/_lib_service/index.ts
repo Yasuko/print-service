@@ -6,6 +6,7 @@ export * from './image/image-orientation.service';
 export * from './maker/csv-maker.service';
 export * from './maker/pdf-maker.service';
 export * from './maker/tacksheet-maker.service';
+export * from './maker/postcard-maker.service';
 
 // PDF Fonts
 export * from './maker/NotosansPDFFonts';

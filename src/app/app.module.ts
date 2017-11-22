@@ -19,6 +19,7 @@ import { PdfMakerService } from './_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from './_lib_service/index';
 import { TacksheetLayoutService } from './_lib_service/index';
 import { TacksheetMakerService, ImageSaveService } from './_lib_service/index';
+import { PostcardMakerService } from './_lib_service/index';
 
 // Import Service
 import { LavelSheetService, PostcardService} from './service/sheetDesine/index';
@@ -48,6 +49,7 @@ import { LavelSheetService, PostcardService} from './service/sheetDesine/index';
     TacksheetStatusService,
     PostcardStatusService,
     TacksheetMakerService, ImageSaveService,
+    PostcardMakerService,
     ImageOrientationService
   ],
   bootstrap: [AppComponent]

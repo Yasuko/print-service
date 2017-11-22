@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 // Import TherdParty Service
 import { PdfMakerService } from '../_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index';
+import { PostcardMakerService } from '../_lib_service/index';
 import { PostcardStatusService } from './postcard-status.service';
 import { PostcardService } from '../service/sheetDesine/index';
 
@@ -23,6 +24,12 @@ export class PostcardComponent {
     desineFlagsCompany;
     desineFlagsName;
 
+    postcardDesine = null;
+    postcarMyAddress = false;
+
+    postcardPreviewImage;
+    postcardImage;
+
     previewClass = '';
     previewScale = 0.1;
     reviewStyle = ['ghost-cell'];
@@ -40,7 +47,8 @@ export class PostcardComponent {
         private router: Router,
         private pdfmakerService: PdfMakerService,
         private postcardStatusService: PostcardStatusService,
-        private postcardService: PostcardService
+        private postcardService: PostcardService,
+        private postcardMakerService: PostcardMakerService
     ) {
         this.flags = postcardStatusService.flags;
         this.formStatus = postcardStatusService.formStatus;
@@ -175,8 +183,9 @@ export class PostcardComponent {
     */
     setInputContents(): void {
         this.setupPostcardDesine();
-        this.moveWindow('reviewcsv');
         this.buildIMage();
+
+        this.moveWindow('reviewcsv');
     }
     /**
     * はがきをレビュー
@@ -240,12 +249,12 @@ export class PostcardComponent {
      */
     setupPostcardDesine(): void {
         if (this.formStatus.company !== '') {
-
+            this.postcardDesine = 'company';
         } else if (this.formStatus.name2 !== '') {
-
+            this.postcardDesine = 'twise';
         }
         if (this.formStatus.myName !== '') {
-
+            this.postcarMyAddress = true;
         }
         if (this.formStatus.title === '') {
             this.formStatus.title = '様';
@@ -283,6 +292,15 @@ export class PostcardComponent {
      * タックシートイメージ画像作成
      */
     buildIMage(): void {
+        this.postcardMakerService.setAddressLayout(this.postcardDesine);
+        if (this.postcarMyAddress) {
+            const desine = this.postcardService.getPostcardDesine('myAddress');
+            this.postcardMakerService.setMyAddressLayout(desine);
+        }
+        this.postcardMakerService.setPrintContents(this.formStatus);
+        this.postcardMakerService.sheetMaker();
+        this.postcardPreviewImage = this.postcardMakerService.getPreviewImage();
+        console.log(this.postcardPreviewImage);
     }
 
     /**
