@@ -252,6 +252,8 @@ export class PostcardComponent {
             this.postcardDesine = 'company';
         } else if (this.formStatus.name2 !== '') {
             this.postcardDesine = 'twise';
+        } else {
+            this.postcardDesine = 'address';
         }
         if (this.formStatus.myName !== '') {
             this.postcarMyAddress = true;
@@ -292,7 +294,10 @@ export class PostcardComponent {
      * タックシートイメージ画像作成
      */
     buildIMage(): void {
-        this.postcardMakerService.setAddressLayout(this.postcardDesine);
+        this.postcardMakerService.setResulution(2);
+        this.postcardMakerService.setAddressLayout(
+            this.postcardService.getPostcardDesine(this.postcardDesine)
+        );
         if (this.postcarMyAddress) {
             const desine = this.postcardService.getPostcardDesine('myAddress');
             this.postcardMakerService.setMyAddressLayout(desine);

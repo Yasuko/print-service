@@ -37,13 +37,13 @@ export class PostcardStatusService {
     };
     printSheetDesine = '';
     formStatus = {
-        postcode: '',
-        address: '',
-        address2: '',
-        building: '',
+        postcode: '6711104',
+        address1: '兵庫県姫路市広畑区才',
+        address2: '６２９－８',
+        building: 'ももりやん亭',
         company: '',
         department: '',
-        name1: '',
+        name1: '守屋　雅之',
         name2: '',
         title: '',
         myPostcode: '',

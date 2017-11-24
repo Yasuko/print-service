@@ -30,11 +30,11 @@ export class PostcardService {
     getPostcardDesine(type: string) {
         const desine = {
             address: {
-                postcode: [50, 5, 0, 0, 10],
-                address1: [90, 15, 0, 0, 10],
-                address2: [80, 15, 0, 0, 10],
-                building: [70, 50, 0, 0, 10],
-                name1: [45, 20, 0, 0, 12]},
+                postcode: [50, 10, 0, 0, 13],
+                address1: [93, 15, 0, 0, 10],
+                address2: [85, 25, 0, 0, 10],
+                building: [77, 35, 0, 0, 10],
+                name1: [50, 30, 0, 0, 14]},
             company: {
                 postcode: [50, 5, 0, 0, 10],
                 address1: [0, 0, 0, 0, 0],
