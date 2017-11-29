@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 // Import TherdParty Service
 import { PdfMakerService } from '../_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index';
-import { PostcardMakerService } from '../_lib_service/index';
+import { PostcardMakerService, TacksheetLayoutService } from '../_lib_service/index';
 import { PostcardStatusService } from './postcard-status.service';
 import { PostcardService } from '../service/sheetDesine/index';
 
@@ -48,7 +48,8 @@ export class PostcardComponent {
         private pdfmakerService: PdfMakerService,
         private postcardStatusService: PostcardStatusService,
         private postcardService: PostcardService,
-        private postcardMakerService: PostcardMakerService
+        private postcardMakerService: PostcardMakerService,
+        private tacksheetLayoutService: TacksheetLayoutService
     ) {
         this.flags = postcardStatusService.flags;
         this.formStatus = postcardStatusService.formStatus;
@@ -294,7 +295,7 @@ export class PostcardComponent {
      * タックシートイメージ画像作成
      */
     buildIMage(): void {
-        this.postcardMakerService.setResulution(2);
+        this.postcardMakerService.setResulution(13.78095);
         this.postcardMakerService.setAddressLayout(
             this.postcardService.getPostcardDesine(this.postcardDesine)
         );
@@ -303,15 +304,21 @@ export class PostcardComponent {
             this.postcardMakerService.setMyAddressLayout(desine);
         }
         this.postcardMakerService.setPrintContents(this.formStatus);
-        this.postcardMakerService.sheetMaker();
-        this.postcardPreviewImage = this.postcardMakerService.getPreviewImage();
-        console.log(this.postcardPreviewImage);
+        this.postcardMakerService.sheetMaker().then(
+            (img) => {
+                this.postcardPreviewImage = img;
+                this.postcardImage = this.postcardMakerService.getSheetImage();
+            }
+        );
+
     }
 
     /**
     * PDFファイル作成
     */
     buildPdf(): void {
-
+        const layout = this.tacksheetLayoutService.makePdfLayout(this.postcardImage);
+        const pdf = this.pdfmakerService.testPdfMake(layout);
+        pdf.print();
     }
 }

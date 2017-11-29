@@ -10,8 +10,8 @@ export class PostcardMakerService {
      * 倍率は13.78095倍
      */
     private sheetSize = {
-        width: 200,
-        height: 296
+        width: 100,
+        height: 148
     };
     /**
      * ラベルに関するサイズ、余白情報
@@ -20,6 +20,8 @@ export class PostcardMakerService {
         marginTop: 0,       // ページ余白上
         marginLeft: 0,      // ページ余白左
     };
+    private postCodeMargin = [7, 4.3];
+
     /**
      * 文字デザイン
      */
@@ -85,73 +87,110 @@ export class PostcardMakerService {
         }
     }
 
-    sheetMaker(): void {
+    sheetMaker(): Promise<string> {
 
-        // this.doEnlargement();
+        this.doEnlargement();
 
         const oc = <HTMLCanvasElement> document.createElement('canvas');
         const ctx = oc.getContext('2d');
-        const sd = this.sheetSpec;
         const po = this.printOption;
         const rectPoints = [];
 
         oc.setAttribute('width', (this.sheetSize.width).toString());
         oc.setAttribute('height', (this.sheetSize.height).toString());
-        ctx.fillStyle = 'rgb(255, 255, 255)';
-        ctx.fillRect(0, 0, this.sheetSize.width, this.sheetSize.height);
-        ctx.strokeRect(0, 0, this.sheetSize.width, this.sheetSize.height);
-        ctx.textAlign = 'start';
+        // ctx.fillStyle = 'rgb(255, 255, 255, 0)';
+        // ctx.fillRect(0, 0, this.sheetSize.width, this.sheetSize.height);
+        ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
-        ctx.fillStyle = 'rgb(0, 0, 0)';
+        ctx.fillStyle = 'rgb(0, 0, 0, 0)';
 
-        const img = new Image();
-        img.onload = (e) => {
-            ctx.drawImage(img, 0, 0, this.sheetSize.width, this.sheetSize.height);
-            const transmittedImageData = ctx.getImageData(0, 0, this.sheetSize.width, this.sheetSize.height);
-            const transmittedData = transmittedImageData.data;
-
-
-            for (const key in this.addressLayout) {
-                if (this.addressLayout.hasOwnProperty(key)) {
-                    if (this.printContents[key] !== '') {
-                        ctx.font = this.addressLayout[key][4] + 'px "' + this.textDesine.fontDesine + '"';
-                        if (key === 'postcode') {
-                            ctx.fillText(
-                                this.printContents[key],
-                                this.addressLayout[key][0] * this.resulution,
-                                this.addressLayout[key][1] * this.resulution);
-                        } else {
-                            for (const n in this.printContents[key]) {
-                                if (this.printContents[key].hasOwnProperty(n)) {
-                                    ctx.fillText(
-                                        this.printContents[key][n],
-                                        this.addressLayout[key][0] * this.resulution,
-                                        this.resulution * (this.addressLayout[key][1] + (Number(n) * this.addressLayout[key][4] + 5)));
-                                }
+        for (const key in this.addressLayout) {
+            if (this.addressLayout.hasOwnProperty(key)) {
+                if (this.printContents[key] !== '') {
+                    ctx.font = this.addressLayout[key][4] + 'px "' + this.textDesine.fontDesine + '"';
+                    if (key === 'postcode') {
+                        for (const p in this.printContents[key]) {
+                            if (this.printContents[key].hasOwnProperty(p)) {
+                                ctx.fillText(
+                                    this.printContents[key][p],
+                                    this.addressLayout[key][0] + Number(p) * (this.postCodeMargin[0] * this.resulution),
+                                    this.addressLayout[key][1]);
                             }
                         }
-    
-                    }
-                }
-            }
-            if (this.myAddressFlag) {
-                for (const key in this.myAddressLayout) {
-                    if (this.myAddressLayout.hasOwnProperty(key)) {
-                        if (this.printContents[key] !== '') {
-                            ctx.font = this.myAddressLayout[key][4] + 'px "' + this.textDesine.fontDesine + '"';
-                            ctx.fillText(
-                                this.printContents[key],
-                                this.myAddressLayout[key][0],
-                                this.myAddressLayout[key][1]);
+                    } else {
+                        const margin = (key === 'company' || key === 'department') ? 0 : 0;
+
+                        const layout = this.addressLayout[key];
+                        for (const n in this.printContents[key]) {
+                            if (this.printContents[key].hasOwnProperty(n)) {
+                                ctx.fillText(
+                                    this.printContents[key][n],
+                                    layout[0],
+                                    layout[1] + ((Number(n) + margin) * layout[4]));
+                            }
                         }
                     }
                 }
             }
-            this.sheetImage = oc.toDataURL('image/jpg');
+        }
+        if (this.myAddressFlag) {
+            for (const key in this.myAddressLayout) {
+                if (this.myAddressLayout.hasOwnProperty(key)) {
+                    const layout = this.myAddressLayout[key];
+                    ctx.font = layout[4] + 'px "' + this.textDesine.fontDesine + '"';
+                    if (key === 'myPostcode') {
+                        for (const p in this.printContents[key]) {
+                            if (this.printContents[key].hasOwnProperty(p)) {
+                                ctx.fillText(
+                                    this.printContents[key][p],
+                                    layout[0] + Number(p) * (this.postCodeMargin[1] * this.resulution),
+                                    layout[1]);
+                            }
+                        }
+                    } else {
+                        const margin = 2.5;
 
-            this.prevewImage = oc.toDataURL('image/jpg');
-        };
-        img.src = this.getTestImage();
+                        for (const n in this.printContents[key]) {
+                            if (this.printContents[key].hasOwnProperty(n)) {
+                                ctx.fillText(
+                                    this.printContents[key][n],
+                                    layout[0],
+                                    layout[1] + (Number(n) * (layout[4] + margin)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        this.sheetImage = oc.toDataURL('image/jpg');
+
+        const loadImg = [this.getTestImage(), this.sheetImage];
+        const imgs = [];
+        let counter = 0;
+
+        return new Promise((resolve, reject) => {
+
+            const loadImage = () => {
+                const img = new Image();
+                    img.onload = (e) => {
+                        counter++;
+                        imgs.push(img);
+                        if (counter === 2) {
+                            ctx.drawImage(imgs[0], 0, 0, this.sheetSize.width, this.sheetSize.height);
+                            ctx.drawImage(imgs[1], 0, 0, this.sheetSize.width, this.sheetSize.height);
+                            this.prevewImage = oc.toDataURL('image/jpg');
+
+                            resolve(this.prevewImage);
+                        } else {
+                            loadImage();
+                    }
+                };
+
+                img.src = loadImg[imgs.length];
+            };
+            loadImage();
+        });
+
     }
 
 
@@ -160,9 +199,21 @@ export class PostcardMakerService {
      * 指定倍率の応じたシートサイズの拡大
      */
     doEnlargement(): void {
-        for (const key in this.sheetSpec) {
-            if (this.sheetSpec.hasOwnProperty(key)) {
-                this.sheetSpec[key] = this.sheetSpec[key] * this.resulution;
+        for (const key in this.addressLayout) {
+            if (this.addressLayout.hasOwnProperty(key)) {
+                this.addressLayout[key].forEach((element, index) => {
+                    this.addressLayout[key][index] = this.addressLayout[key][index] * this.resulution;
+                });
+            }
+        }
+
+        if (this.myAddressFlag) {
+            for (const key in this.myAddressLayout) {
+                if (this.myAddressLayout.hasOwnProperty(key)) {
+                    this.myAddressLayout[key].forEach((element, index) => {
+                        this.myAddressLayout[key][index] = this.myAddressLayout[key][index] * this.resulution;
+                    });
+                }
             }
         }
         this.sheetSize.width = this.sheetSize.width * this.resulution;
