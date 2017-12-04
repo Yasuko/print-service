@@ -108,10 +108,26 @@ textarea{
     background-color: rgba(100,100,100,0.5);
 }
 
+// -------------------------------------------
+//  プレビュー画面
+// -------------------------------------------
 .sheet-review {
     width: 210px;
-    height: 297px;
+    height: 305px;
+    overflow-x: scroll;
+    overflow-y: hidden;
 }
+
+.sheet-review-multi {
+    width: 1260px;
+    height: 297px;
+
+}
+.sheet-review-image {
+    position: relative;
+    float: left;
+}
+
 .ghost-cell {
     position: relative;
     float: left;
@@ -119,29 +135,6 @@ textarea{
     border-radius: 3px;
 }
 
-.box-content {
-    position: relative;
-    float: left;
-    width: 100%;
-    margin: 5px 0 5px 0;
-    cursor: pointer;
-}
-.box-content:hover {
-    opacity: 0.8;
-}
-.content-title{
-    text-align: center;
-    width: 100%;
-    height: 2em;
-}
-.content-type{
-    text-align: center;
-    width: 100%;
-    height: 2em;
-}
-.box-content > img {
-    width: 200px;
-}
 
 .input-form {
     width: 400px;
@@ -155,8 +148,32 @@ textarea{
 	width: 80%;
     margin: 8px auto;
 }
+// -------------------------------------------
+//  CSV読み込み内容の確認画面
+// -------------------------------------------
+.preview-csv-box {
+    width: 50%;
+    height: 350px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+.preview-csv-calam {
+    width: 1200px;
+    height: 100%;
+}
+.preview-csv-calam > li {
+    font-size: 0.9em;
+    position: relative;
+    float: left;
+    height: 100%;
+    width: 250px;
+    box-shadow: 1px 1px 2px #2fbdff;
+    margin: 0 5px;
+}
 
-
+// -------------------------------------------
+//  ロード画面他
+// -------------------------------------------
 .load-screen {
     position: absolute;
     width: 100%;

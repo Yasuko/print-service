@@ -14,43 +14,13 @@
         <div class="label-s"><h3>年賀</h3></div>
     </div>
 </div>
+<div class="select-box">
+    <div class="cargo-s click" routerLink="/" routerLinkActive="active">
+        <div class="label-s"><h3>MAIN</h3></div>
+    </div>
+</div>
 </ng-container>
 
-<!-- ---------------------------------------
-    敬称設定
---------------------------------------- -->
-<ng-container *ngIf="flags['onNameTitle']">
-    <div class="print-caption">敬称選択</div>
-    <div class="select-box">
-        <div class="print-cargo_high click" (click)="setNameTitle(0)">
-            <div class="label-s">様</div>
-            <div class="sheet-sample"></div>
-        </div>
-        <div class="print-cargo_high click" (click)="setNameTitle(1)">
-            <div class="label-s">殿</div>
-            <div class="sheet-sample"></div>
-        </div>
-        <div class="print-cargo_high click" (click)="setNameTitle('address3')">
-            <div class="label-s">先生</div>
-            <div class="sheet-sample"></div>
-        </div>
-        <div class="print-cargo_high click" (click)="setNameTitle('company1')">
-            <div class="label-s">御中</div>
-            <div class="sheet-sample"></div>
-        </div>
-        <div class="print-cargo_high click" (click)="setNameTitle('company2')">
-            <div class="label-s">各位</div>
-            <div class="sheet-sample"></div>
-        </div>
-        <div class="print-cargo_high click" (click)="setNameTitle('twice')">
-            <div class="label-s">行</div>
-            <div class="sheet-sample"></div>
-        </div>
-        <div class="print-cargo click" (click)="moveWindow('desine')">
-            <div class="label-s"><h3>戻る</h3></div>
-        </div>
-    </div>
-    </ng-container>
 
 <!-- ---------------------------------------
     CSVを読み込むか読み込まないか
@@ -100,13 +70,24 @@
     </form>
 </ng-container>
 <ng-container *ngIf="flags['onPreviewCSVFile']">
-    <ul class="preview-csv-calam">
-        <li *ngFor="let csv of readCSVFile">
-            <div>■１:{{csv[0]}}</div>
-            <div>■２:{{csv[1]}}</div>
-            <div>■３:{{csv[2]}}</div>
-        </li>
-    </ul>
+    <div class="preview-csv-box">
+        <ul class="preview-csv-calam">
+            <li *ngFor="let csv of readCSVFile">
+                <div *ngIf="checkNull(csv[0])">郵便:{{csv[0]}}</div>
+                <div *ngIf="checkNull(csv[1])">住所:{{csv[1]}}</div>
+                <div *ngIf="checkNull(csv[2])">番地:{{csv[2]}}</div>
+                <div *ngIf="checkNull(csv[3])">建物:{{csv[3]}}</div>
+                <div *ngIf="checkNull(csv[4])">名前:{{csv[4]}}</div>
+                <div *ngIf="checkNull(csv[5])">連名:{{csv[5]}}</div>
+                <div *ngIf="checkNull(csv[6])">敬称:{{csv[6]}}</div>
+                <div *ngIf="checkNull(csv[7])">会社:{{csv[7]}}</div>
+                <div *ngIf="checkNull(csv[8])">部署:{{csv[8]}}</div>
+                <div *ngIf="checkNull(csv[9])">差:郵便:{{csv[9]}}</div>
+                <div *ngIf="checkNull(csv[10])">差:番地:{{csv[10]}}</div>
+                <div *ngIf="checkNull(csv[10])">差:名前:{{csv[10]}}</div>
+            </li>
+        </ul>
+    </div>
 </ng-container>
 </div>
 <ng-container *ngIf="flags['onDragCSVFile']">
@@ -228,9 +209,22 @@
 <div class="print-caption">内容確認※下記はイメージです</div>
 <div class="select-box">
     <div class="box-flex-sngle order-center">
+    <ng-container *ngIf="multiPageFlag; else useSingle">
         <div class="sheet-review">
-        <img [attr.src]="postcardPreviewImage" width=200 height=296>
+            <div class="sheet-review-multi">
+            <ng-container *ngFor="let img of postcardPreviewImageMulti">
+                <div class="sheet-review-image">
+                    <img [attr.src]="img" width=200 height=296>
+                </div>
+            </ng-container>
+            </div>
         </div>
+    </ng-container>
+    <ng-template #useSingle>
+        <div class="sheet-review">
+            <img [attr.src]="postcardPreviewImage" width=200 height=296>
+        </div>
+    </ng-template>
     </div>
 </div>
 <div class="select-box-bottom">
@@ -248,7 +242,7 @@
 <ng-container *ngIf="flags['onDownload']">
     <div class="print-caption">PDFをダウンロードします</div>
     <div class="select-box">
-        <div class="print-cargo click" (click)="buildPdf()">
+        <div class="print-cargo click" (click)="setDownloadPDF()">
             <div class="label-s"><h3>ダウンロード</h3></div>
         </div>
         <div class="print-cargo click" (click)="moveWindow('type')">

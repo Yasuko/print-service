@@ -23,6 +23,26 @@ export class TacksheetLayoutService {
         return docDefinition;
 
     }
+    makePdfLayoutMulti(contents): any {
+        const _content = [];
+        for (const key in contents) {
+            if (contents.hasOwnProperty(key)) {
+                _content.push({
+                    image: contents[key],
+                    width: 595,
+                    height: 842,
+                    pageBreak: 'after'
+                });
+            }
+        }
+        const docDefinition = {
+            pageMargins: [0, 0, 0, 0],
+            content: [_content],
+            styles: {},
+            defaultStyle: {}
+        };
+        return docDefinition;
+    }
     convObjectToArray(content: any[]): any[] {
         const convData: any[] = [];
         const returnData: any[] = [];

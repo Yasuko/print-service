@@ -23,12 +23,16 @@ export class PostcardComponent {
     desineFlagsAddress;
     desineFlagsCompany;
     desineFlagsName;
+    multiPageFlag = false;
 
     postcardDesine = null;
-    postcarMyAddress = false;
+    postcardMyAddress = false;
 
     postcardPreviewImage;
     postcardImage;
+
+    postcardPreviewImageMulti = [];
+    postcardImageMulti = [];
 
     previewClass = '';
     previewScale = 0.1;
@@ -139,6 +143,7 @@ export class PostcardComponent {
     ******************************************** */
 
     setSheetType(type: number): void {
+        this.multiPageFlag = false;
         this.moveWindow('loadcsv');
     }
 
@@ -148,6 +153,7 @@ export class PostcardComponent {
     */
     setLoadCSV(choice): void {
         if (choice) {
+            this.multiPageFlag = true;
             this.moveWindow('includecsv');
         } else {
             this.moveWindow('input');
@@ -157,27 +163,8 @@ export class PostcardComponent {
     * CSVファイルの取り込み
     */
     setIncludeCSV(): void {
-
-        let keyCount = 0;
-        for (let i = 0; i < this.readCSVFile.length; i++) {
-            const cp = {};
-            const cprint = [];
-            for (const key in this.inputForm) {
-                if (this.formStatus.hasOwnProperty(key)
-                && this.inputForm[key]
-                && this.readCSVFile[i][keyCount] !== undefined
-                && this.readCSVFile[i][keyCount] !== '') {
-                    cp[key] = this.readCSVFile[i][keyCount];
-                    cprint.push(this.readCSVFile[i][keyCount]);
-                    keyCount++;
-                } else  {
-                    cp[key] = '';
-                }
-            }
-                keyCount = 0;
-        }
         this.moveWindow('reviewcsv');
-        this.buildIMage();
+        this.buildIMageMulti();
     }
     /**
     * 表示内容を入力
@@ -198,7 +185,11 @@ export class PostcardComponent {
     * PDFをダウンロード
     */
     setDownloadPDF(): void {
-
+        if (this.multiPageFlag) {
+            this.buildPdfMulti();
+        } else {
+            this.buildPdf();
+        }
     }
 
     /** ******************************************
@@ -257,7 +248,7 @@ export class PostcardComponent {
             this.postcardDesine = 'address';
         }
         if (this.formStatus.myName !== '') {
-            this.postcarMyAddress = true;
+            this.postcardMyAddress = true;
         }
         if (this.formStatus.title === '') {
             this.formStatus.title = '様';
@@ -281,6 +272,11 @@ export class PostcardComponent {
             }
         }
     }
+
+
+    checkNull(cell): boolean {
+        return (cell !== '') ? true : false;
+    }
     /**
     * 初期パラメーターの初期化
     */
@@ -299,7 +295,7 @@ export class PostcardComponent {
         this.postcardMakerService.setAddressLayout(
             this.postcardService.getPostcardDesine(this.postcardDesine)
         );
-        if (this.postcarMyAddress) {
+        if (this.postcardMyAddress) {
             const desine = this.postcardService.getPostcardDesine('myAddress');
             this.postcardMakerService.setMyAddressLayout(desine);
         }
@@ -313,11 +309,60 @@ export class PostcardComponent {
 
     }
 
+    buildIMageMulti(): void {
+        const pages = this.readCSVFile.length - 1;
+        let page = 0;
+        let column = 0;
+
+        const AddPage = () => {
+            column = 0;
+            this.postcardMakerService.initialization();
+
+            for (const key in this.formStatus) {
+                if (this.formStatus.hasOwnProperty(key)) {
+                    this.formStatus[key] = this.readCSVFile[page][column];
+                    column++;
+                }
+            }
+            this.setupPostcardDesine();
+            this.postcardMakerService.setResulution(13.78095);
+            this.postcardMakerService.setAddressLayout(
+                this.postcardService.getPostcardDesine(this.postcardDesine)
+            );
+            if (this.postcardMyAddress) {
+                const desine = this.postcardService.getPostcardDesine('myAddress');
+                this.postcardMakerService.setMyAddressLayout(desine);
+            }
+            this.postcardMakerService.setPrintContents(this.formStatus);
+            this.postcardMakerService.sheetMaker().then(
+                (img) => {
+                    this.postcardPreviewImageMulti.push(img);
+                    this.postcardImageMulti.push(this.postcardMakerService.getSheetImage());
+                    console.log(page + '::' + pages);
+                    if (page === pages) {
+                        // this.buildIMageMulti();
+                    } else {
+                        page++;
+                        AddPage();
+                    }
+                }
+            );
+        };
+
+        AddPage();
+
+    }
+
     /**
     * PDFファイル作成
     */
     buildPdf(): void {
         const layout = this.tacksheetLayoutService.makePdfLayout(this.postcardImage);
+        const pdf = this.pdfmakerService.testPdfMake(layout);
+        pdf.print();
+    }
+    buildPdfMulti(): void {
+        const layout = this.tacksheetLayoutService.makePdfLayoutMulti(this.postcardImageMulti);
         const pdf = this.pdfmakerService.testPdfMake(layout);
         pdf.print();
     }

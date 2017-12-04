@@ -102,7 +102,7 @@ export class PostcardMakerService {
         // ctx.fillRect(0, 0, this.sheetSize.width, this.sheetSize.height);
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
-        ctx.fillStyle = 'rgb(0, 0, 0, 0)';
+        // ctx.fillStyle = 'rgb(0, 0, 0, 0)';
 
         for (const key in this.addressLayout) {
             if (this.addressLayout.hasOwnProperty(key)) {
@@ -230,8 +230,8 @@ export class PostcardMakerService {
     initialization(): void {
         this.sheetImage = null;
         this.sheetSize = {
-            width: 210,
-            height: 297
+            width: 100,
+            height: 148
         };
         this.sheetSpec = {
             marginTop: 0,
@@ -245,6 +245,16 @@ export class PostcardMakerService {
 
         this.resulution = 1;
         this.printContents = [];
+        this.addressLayout = null;
+        this.myAddressLayout = null;
+        this.myAddressFlag = false;
+
+        this.resulution = 1;
+
+        this.printContents = [];
+
+        this.sheetImage = null;
+        this.prevewImage = null;
     }
 
     private getTestImage(): string {
