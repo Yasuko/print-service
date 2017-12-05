@@ -48,7 +48,7 @@ export class TacksheetMakerService {
             tel: [18.27, 89.94, 186.86, 89.94],
             fax: [18.27, 98.32, 186.86, 98.32],
             contactRuby: [18.27, 105.21, 186.86, 105.21],
-            contact: [18.27, 89.94, 186.86, 89.94],
+            contact: [102.56, 81.43, 102.56, 98.32],
         };
         for (const key in addressPathSet) {
             if (addressPathSet.hasOwnProperty(key)) {
@@ -59,15 +59,6 @@ export class TacksheetMakerService {
                 ctx.closePath();
             }
         }
-        ctx.moveTo(18.27, 89.94);    // TEL
-        ctx.lineTo(186.86, 89.94);
-        ctx.closePath();
-        ctx.moveTo(18.27, 98.32);    // FAX
-        ctx.lineTo(186.86, 98.32);
-        ctx.closePath();
-        ctx.moveTo(18.27, 105.21);    // 連絡先ふりがな
-        ctx.lineTo(133.29, 105.21);
-        ctx.closePath();
         ctx.moveTo(102.56, 81.43);    // 連絡先
         ctx.lineTo(102.56, 98.32);
         ctx.closePath();
