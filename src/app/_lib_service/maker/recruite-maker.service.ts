@@ -27,6 +27,7 @@ export class TacksheetMakerService {
      * @param ctx canvasコンテキスト
      */
     setAddressRect(ctx): void {
+        // 氏名・住所外枠作成
         ctx.beginPath();
         ctx.moveTo(18.27, 32.29);
         ctx.lineTo(141.44, 32.29);
@@ -38,6 +39,7 @@ export class TacksheetMakerService {
         ctx.lineTo(18.27, 32.29);
         ctx.closePath();
 
+        // デザインベース　志望動機・自己PR広め、特技欄あり.pdf
         const addressPathSet = {
             nameRuby: [18.27, 35.84, 101.31, 35.84],
             sex: [101.31, 32.29, 101.31, 54.74],
@@ -47,8 +49,10 @@ export class TacksheetMakerService {
             address: [18.27, 81.43, 186.86, 81.43],
             tel: [18.27, 89.94, 186.86, 89.94],
             fax: [18.27, 98.32, 186.86, 98.32],
-            contactRuby: [18.27, 105.21, 186.86, 105.21],
-            contact: [102.56, 81.43, 102.56, 98.32],
+            mobile: [133.29, 98.32, 133.29, 118.50],
+            contactRuby: [18.27, 101.26, 186.86, 101.26],
+            contact: [18.27, 105.21, 149.39, 105.21],
+            contactTel: [102.56, 81.43, 102.56, 98.32],
         };
         for (const key in addressPathSet) {
             if (addressPathSet.hasOwnProperty(key)) {
@@ -59,20 +63,38 @@ export class TacksheetMakerService {
                 ctx.closePath();
             }
         }
-        ctx.moveTo(102.56, 81.43);    // 連絡先
-        ctx.lineTo(102.56, 98.32);
-        ctx.closePath();
-        ctx.moveTo(133.29, 98.32);    // 携帯、mail縦線
-        ctx.lineTo(133.29, 118.50);
-        ctx.closePath();
 
-        ctx.moveTo(18.27, 126.76);    // 学歴職歴
+        // 学歴・職歴　外枠作成
+        ctx.moveTo(18.27, 126.76);
         ctx.lineTo(186.86, 118.50);
         ctx.lineTo(186.86, 264.99);
         ctx.lineTo(18.27, 264.99);
         ctx.lineTo(18.27, 126.76);
         ctx.closePath();
 
+        const PathSet = {
+            nameRuby: [18.27, 35.84, 101.31, 35.84],
+            sex: [101.31, 32.29, 101.31, 54.74],
+            name: [18.27, 51.13, 141.44, 54.74],
+            birth: [18.27, 64.17, 186.86, 64.17],
+            addressRuby: [18.27, 68.87, 186.86, 68.87],
+            address: [18.27, 81.43, 186.86, 81.43],
+            tel: [18.27, 89.94, 186.86, 89.94],
+            fax: [18.27, 98.32, 186.86, 98.32],
+            mobile: [133.29, 98.32, 133.29, 118.50],
+            contactRuby: [18.27, 101.26, 186.86, 101.26],
+            contact: [18.27, 105.21, 149.39, 105.21],
+            contactTel: [102.56, 81.43, 102.56, 98.32],
+        };
+        for (const key in addressPathSet) {
+            if (addressPathSet.hasOwnProperty(key)) {
+                const p = addressPathSet[key];
+                ctx.beginPath();
+                ctx.moveTo(p[0], p[1]);
+                ctx.lineTo(p[2], p[3]);
+                ctx.closePath();
+            }
+        }
         ctx.moveTo(18.27, 133.03);
         ctx.lineTo(186.86, 133.03);
         ctx.closePath();
