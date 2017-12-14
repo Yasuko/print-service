@@ -1,0 +1,225 @@
+input[type="number"],
+textarea{
+	width: 80px;
+}
+.selected {
+    background-color: #c7c7c7;
+}
+.print-caption {
+    text-align: center;
+    width: 100%;
+}
+.select-box {
+    position: relative;
+    display: flex;
+    max-width: 600px;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: baseline;
+	margin: auto;
+}
+.select-box-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: baseline;
+}
+.select-box-right {
+    position: absolute;
+    right: 0;
+    width: 150px;
+    display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: baseline;
+}
+.box-flex {
+    align-self: center;
+    flex-basis: 28%;
+	border-radius: 10px;
+	margin: 10px;    
+}
+.box-flex-single {
+    align-self: center;
+    flex-basis: 50%;
+	border-radius: 10px;
+	margin: 10px;    
+}
+.print-cargo {
+    flex-basis: 200px;
+    width: 200px;
+	height: 80px;
+	border-radius: 10px;
+	margin: 15px;
+}
+.print-cargo-s {
+    text-align: center;
+    flex-basis: 130px;
+	height: 30px;
+	border-radius: 5px;
+	margin: 10px;
+}
+.print-cargo-ss {
+    text-align: center;
+    flex-basis: 80px;
+	height: 25px;
+	border-radius: 5px;
+	margin: 5px;
+}
+.print-cargo-high {
+    flex-basis: 200px;
+    width: 200px;
+	height: 150px;
+	border-radius: 10px;
+	margin: 15px;
+}
+.drag-drop-area {
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 450px;
+    height: 300px;
+    border: dashed 2px #BFEBFF;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.drag-drop-inside {
+    text-align: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    margin: auto;
+}
+
+
+.drag-over {
+    background-color: rgba(100,100,100,0.5);
+}
+
+// -------------------------------------------
+//  プレビュー画面
+// -------------------------------------------
+.sheet-review {
+    width: 210px;
+    height: 305px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.sheet-review-multi {
+    width: 1260px;
+    height: 297px;
+
+}
+.sheet-review-image {
+    position: relative;
+    float: left;
+}
+
+.ghost-cell {
+    position: relative;
+    float: left;
+    border: solid 1px #a1a1a1;
+    border-radius: 3px;
+}
+
+
+.input-form {
+    width: 400px;
+}
+.input-form > div {
+	position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+	left: 0;
+	width: 80%;
+    margin: 8px auto;
+}
+// -------------------------------------------
+//  CSV読み込み内容の確認画面
+// -------------------------------------------
+.preview-svg-box {
+    width: 220px;
+    height: 350px;
+}
+.preview-svg-box > img {
+    border: solid 1px rgba(50, 50, 50, 0.8);
+}
+
+// -------------------------------------------
+//  編集画面
+// -------------------------------------------
+.edit-box {
+    position: relative;
+    width: 600px;
+    height: 500px;
+    margin: auto;
+
+    overflow: scroll;
+}
+.edit-bg,
+.edit-svg {
+    position: absolute;
+}
+
+.text-box {
+    position: absolute;
+    top: 50px;
+    right: 2%;
+
+    width: 300px;
+    height: 500px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+
+// -------------------------------------------
+//  ロード画面他
+// -------------------------------------------
+.load-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(150,150,150,0.4);
+    z-index: 300;
+}
+.load-screen > div {
+    font-size: 2em;
+    color: #819CF7;
+    text-align: center;
+    width: 100%;
+}
+
+.close-button {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+.reload-button {
+    position: absolute;
+    bottom: 5px;
+    left: 100px;
+}
+
+
+.selected {
+    background-color: #ccffd7;
+}
+
+

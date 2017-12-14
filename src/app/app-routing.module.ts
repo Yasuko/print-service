@@ -6,6 +6,7 @@ import { BusinessCardComponent } from './business_card/business_card.component';
 import { PostcardComponent } from './postcard/postcard.component';
 import { RecuruiteComponent } from './recruite/recruite.component';
 import { TacksheetComponent } from './tacksheet/tacksheet.component';
+import { LayoutComponent } from './layout/layout.component';
 
 const routes: Routes = [
     {
@@ -31,6 +32,10 @@ const routes: Routes = [
     {
         path:   'tacksheet',
         component:  TacksheetComponent,
+    },
+    {
+        path:   'layout',
+        component:  LayoutComponent,
     },
     {
         path: '**',

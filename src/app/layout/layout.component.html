@@ -1,0 +1,226 @@
+<div class="load-screen" *ngIf="flags['onLoad']">
+    <div>読み込み中</div>
+</div>
+
+
+<!-- ---------------------------------------
+    CSVを読み込むか読み込まないか
+--------------------------------------- -->
+<ng-container *ngIf="flags['main']">
+<div class="print-caption">レイアウトエディット</div>
+
+<div class="select-box">
+    <div class="print-cargo click" (click)="setNewLayout()">
+        <div class="label-s"><h3>新規作成</h3></div>
+    </div>
+    <div class="print-cargo click" (click)="moveWindow('type')">
+        <div class="label-s"><h3>戻る</h3></div>
+    </div>
+</div>
+
+<div>
+<div>登録済レイアウト</div>
+
+</div>
+</ng-container> 
+
+<!-- ---------------------------------------
+    用紙サイズ選択
+--------------------------------------- -->
+<ng-container *ngIf="flags['onSheetSize']">
+    <div class="print-caption">用紙サイズ選択</div>
+    
+    <div class="select-box">
+        <div
+            [class.selected]="sheetSpec['a5']"
+            class="print-cargo click" (click)="setSheetSize('a5')">
+            <div class="label-s"><h3>Ａ５</h3></div>
+        </div>
+        <div
+            [class.selected]="sheetSpec['a4']"
+            class="print-cargo click" (click)="setSheetSize('a4')">
+            <div class="label-s"><h3>Ａ４</h3></div>
+        </div>
+        <div
+            [class.selected]="sheetSpec['a3']"
+            class="print-cargo click" (click)="setSheetSize('a3')">
+            <div class="label-s"><h3>Ａ３</h3></div>
+        </div>
+        <div
+            [class.selected]="sheetSpec['b6']"
+            class="print-cargo click" (click)="setSheetSize('b6')">
+            <div class="label-s"><h3>Ｂ６</h3></div>
+        </div>
+        <div
+            [class.selected]="sheetSpec['b5']"
+            class="print-cargo click" (click)="setSheetSize('b5')">
+            <div class="label-s"><h3>Ｂ５</h3></div>
+        </div>
+        <div
+            [class.selected]="sheetSpec['b4']"
+            class="print-cargo click" (click)="setSheetSize('b4')">
+            <div class="label-s"><h3>Ｂ４</h3></div>
+        </div>
+        <div
+            [class.selected]="sheetSpec['vertical']"
+            class="print-cargo-s click" (click)="setupSheetDirection('vertical')">
+            <div class="label-s">縦</div>
+        </div>
+        <div
+            [class.selected]="sheetSpec['side']"
+            class="print-cargo-s click" (click)="setupSheetDirection('side')">
+            <div class="label-s">横</div>
+        </div>
+        <div class="print-cargo click" (click)="moveWindow('type')">
+            <div class="label-s"><h3>戻る</h3></div>
+        </div>
+    </div>
+
+
+</ng-container> 
+
+<!-- ---------------------------------------
+    SVGファイルの読込
+--------------------------------------- -->   
+<ng-container *ngIf="flags['onLoadSVG']">
+<ng-container *ngIf="flags['onDragSVGFile']">
+    <div class="print-caption">SVG読込</div>
+</ng-container>
+<ng-container *ngIf="flags['onPreviewSVGFile']">
+    <div class="print-caption">内容確認</div>
+</ng-container>
+<div class="select-box">
+<ng-container *ngIf="flags['onDragSVGFile']">
+    <form action=""
+        method="post"
+        enctype="multipart/form-data">
+        <div 
+            [class.drag-over]="flags['onDrag']"
+            class="drag-drop-area"
+            (dragover)="onDragOverHandler($event)" 
+            (dragleave)="onDragLeaveHandler($event)"
+            (drop)="onDropHandler($event, 'drag')" >
+            <div class="drag-drop-inside">
+                <p>ここにSVGをドロップ</p>
+                <p>または</p>
+                <input name="svg" (change)="onDropHandler($event, 'select')" type="file" value="ファイルを選択" >
+            </div>
+        </div>
+    </form>
+</ng-container>
+<ng-container *ngIf="flags['onPreviewSVGFile']">
+    <div class="preview-svg-box">
+<!--         <svg [attr.width]="sheetWidth" [attr.height]="sheetHeight" id="svg-box">
+        <ng-container *ngFor="let path of loadSVGData">
+            {{path}}
+        </ng-container>
+        </svg> -->
+        <img [attr.width]="sheetWidth" [attr.height]="sheetHeight" [attr.src]="loadSVGData">
+    </div>
+</ng-container>
+</div>
+
+<div class="select-box-bottom">
+    <ng-container *ngIf="flags['onPreviewSVGFile']">
+    <div class="print-cargo click" (click)="switchLoadtoPreview()">
+        <div class="label-s"><h3>再読込</h3></div>
+    </div>
+    <div class="print-cargo click" (click)="setLoadSVG()">
+        <div class="label-s"><h3>決定</h3></div>
+    </div>
+    </ng-container>
+    <div class="print-cargo click" (click)="moveWindow('sheetsize')">
+        <div class="label-s"><h3>戻る</h3></div>
+    </div>
+</div>
+</ng-container>
+
+<!-- ---------------------------------------
+    編集
+--------------------------------------- -->
+<ng-container *ngIf="flags['onEdit']">
+<div class="print-caption">編集</div>
+
+<div class="edit-box">
+    <div>
+        <div class="edit-bg">
+            <img [attr.width]="editWidth" [attr.height]="editHeight" [attr.src]="loadSVGData">
+        </div>
+        <div class="edit-svg">
+            <svg [attr.width]="editWidth" [attr.height]="editHeight">
+            <ng-container *ngFor="let text of textLists">
+                <text
+                    (mousedown)="onTextDownHadler($event)"
+                    (mousemove)="onTextMoveHadler($event)"
+                    (mouseup)="onTextUpHadler($event)"
+                    [attr.x]="text['x']" [attr.x]="text['y']"
+                    [attr.fontSize]="text['font']"
+                     font-family="MS Mincho" fill="black">text['text']</text>
+            </ng-container>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<div class="text-box">
+    <div>文字セット</div>
+
+    <div>
+        <div>テキスト登録</div>
+        <input type="text">
+        <div (click)="addNewText()">登録</div>
+    </div>
+    <ul>
+    <ng-container *ngFor="let text of textLists">
+        <li (click)="onEditTextHandler()">
+            <input type="text" width="150">
+            <input type="text" width="10">
+        </li>
+    </ng-container>
+    </ul>
+</div>
+
+<div class="select-box-bottom">
+    <div class="print-cargo click" (click)="setEdit()">
+        <div class="label-s"><h3>決定</h3></div>
+    </div>
+    <div class="print-cargo click" (click)="moveWindow('loadcsv')">
+        <div class="label-s"><h3>戻る</h3></div>
+    </div>
+</div>
+</ng-container>
+<!-- ---------------------------------------
+    プレビュー　最終確認
+--------------------------------------- -->
+<ng-container *ngIf="flags['onReviewCSV']">
+<div class="print-caption">内容確認※下記はイメージです</div>
+<div class="select-box">
+    <div class="box-flex-sngle order-center">
+    <ng-container *ngIf="multiPageFlag; else useSingle">
+        <div class="sheet-review">
+            <div class="sheet-review-multi">
+            <ng-container *ngFor="let img of postcardPreviewImageMulti">
+                <div class="sheet-review-image">
+                    <img [attr.src]="img" width=200 height=296>
+                </div>
+            </ng-container>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #useSingle>
+        <div class="sheet-review">
+            <img [attr.src]="postcardPreviewImage" width=200 height=296>
+        </div>
+    </ng-template>
+    </div>
+</div>
+<div class="select-box-bottom">
+    <div class="print-cargo click" (click)="setReviewSheet()">
+        <div class="label-s"><h3>決定</h3></div>
+    </div>
+    <div class="print-cargo click" (click)="moveWindow('loadcsv')">
+        <div class="label-s"><h3>戻る</h3></div>
+    </div>
+</div>
+</ng-container>
+

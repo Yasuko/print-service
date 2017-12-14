@@ -17,7 +17,27 @@ export class RecruiteLayoutService {
     setImage(url: String): void {
         this.image = url;
     }
-
+    makeRecruiteLayout(content): any {
+        const docDefinition = {
+            content: [
+                {
+                    image: content,
+                    width: 595,
+                    height: 842,
+                    margin: [0, 0, 0, 0]
+                },
+                {
+                    width: 100,
+                    image: this.image,
+                    margin: [430, 0, 0, 5]
+                }
+                ],
+                defaultStyle: {
+                    font: 'ipag'
+                }
+            };
+        return docDefinition;
+    }
     makePdfLayout(): any {
 
         const docDefinition = {

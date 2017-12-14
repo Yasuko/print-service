@@ -13,13 +13,15 @@ import { PostcardStatusService } from './postcard/postcard-status.service';
 import { RecuruiteComponent } from './recruite/recruite.component';
 import { TacksheetComponent } from './tacksheet/tacksheet.component';
 import { TacksheetStatusService } from './tacksheet/tacksheet-status.service';
+import { LayoutComponent } from './layout/layout.component';
+import { LayoutStatusService } from './layout/layout-status.service';
 
 import { ImageOrientationService } from './_lib_service/index';
 import { PdfMakerService } from './_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from './_lib_service/index';
 import { TacksheetLayoutService } from './_lib_service/index';
 import { TacksheetMakerService, ImageSaveService } from './_lib_service/index';
-import { PostcardMakerService } from './_lib_service/index';
+import { PostcardMakerService, RecruiteMakerService } from './_lib_service/index';
 
 // Import Service
 import { LavelSheetService, PostcardService} from './service/sheetDesine/index';
@@ -33,7 +35,8 @@ import { LavelSheetService, PostcardService} from './service/sheetDesine/index';
     BusinessCardComponent,
     PostcardComponent,
     RecuruiteComponent,
-    TacksheetComponent
+    TacksheetComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -46,10 +49,9 @@ import { LavelSheetService, PostcardService} from './service/sheetDesine/index';
     RecruiteLayoutService,
     TacksheetLayoutService,
     LavelSheetService, PostcardService,
-    TacksheetStatusService,
-    PostcardStatusService,
+    TacksheetStatusService, PostcardStatusService, LayoutStatusService,
     TacksheetMakerService, ImageSaveService,
-    PostcardMakerService,
+    PostcardMakerService, RecruiteMakerService,
     ImageOrientationService
   ],
   bootstrap: [AppComponent]

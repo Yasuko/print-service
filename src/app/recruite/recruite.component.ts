@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 // Import TherdParty Service
-import { PdfMakerService } from '../_lib_service/index';
+import { PdfMakerService, RecruiteMakerService } from '../_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index';
 import { ImageOrientationService } from '../_lib_service/index';
 
@@ -73,7 +73,8 @@ export class RecuruiteComponent {
         private pdfmakerService: PdfMakerService,
         private listlayoutService: ListLayoutService,
         private recruitelayoutService: RecruiteLayoutService,
-        private imageOrientationService: ImageOrientationService
+        private imageOrientationService: ImageOrientationService,
+        private recruiteMakerService: RecruiteMakerService
     ) {}
 
     onDragOverHandler(event: DragEvent): void {
@@ -365,10 +366,14 @@ export class RecuruiteComponent {
     }
 
     buildPdf(): void {
+        this.recruiteMakerService.setResolution(13.78095);
+        const img = this.recruiteMakerService.sheetMaker();
         this.recruitelayoutService.setImage(this.canvasBase.toDataURL(this.onImageType));
         this.recruitelayoutService.setFName(this.fname);
         this.recruitelayoutService.setName(this.name);
-        const layout = this.recruitelayoutService.makePdfLayout();
+        // const layout = this.recruitelayoutService.makePdfLayout();
+
+        const layout = this.recruitelayoutService.makeRecruiteLayout(img);
         const userAgent = window.navigator.userAgent.toLowerCase();
         this.pdfmakerService.pdfMakeForIE(layout);
 
