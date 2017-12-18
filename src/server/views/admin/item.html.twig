@@ -1,0 +1,236 @@
+{# view/menu/index.html.twig #}
+{% extends 'pc.html.twig' %}
+
+{% block title %}商品管理{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="../css/pc_base.css" type="text/css" />
+<link rel="stylesheet" href="../css/admin/item.css" type="text/css" />
+{% endblock %}
+
+{% block script %}
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+<script type="text/javascript" src="../js/admin/item.js"></script>
+<script type="text/javascript" src="../js/lib/get_all_form.js"></script>
+<script type="text/javascript" src="../js/lib/ajaxloader.js"></script>
+<script type="text/javascript" src="../js/lib/alert.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="item-add">
+	<p onclick="item.addItem()">商品</p>
+	<p onclick="item.addCategory()">カテゴリ</p>
+	<p onclick="item.addPhoto()">写真</p>
+</div>
+<ul id="category"></ul>
+
+<div id="item-state">
+	<p>履歴・情報</p>
+	<div></div>
+</div>
+<ul id="item-box"></ul>
+
+{% endblock %}
+
+
+{% block tmpl %}
+
+<!-- カテゴリ-リスト -->
+<script id="TmpListCategory" type="text/x-jquery-tmpl">
+<li onclick='item.editCategory("${id}")'>
+    ${name}
+</li>
+</script>
+
+<!-- アイテムリスト -->
+<script id="TmpListItem" type="text/x-jquery-tmpl">
+    <li class="item-view" onclick="item.editItem(${id})">
+        <div class="item-image">
+            <p>写真</p>
+            <p><img src="${photo}"></p>
+        </div>
+        <div class="item-title">
+            <p>名前</p>
+            <p>${name}</p>
+        </div>
+        <div class="item-price">
+            <p>値段</p>
+            <p>${price}</p>
+        </div>
+        <div class="item-text">
+            <p>説明</p>
+            <p>${text}</p>
+        </div>
+    </li>
+</script>
+
+<!-- カテゴリー追加登録画面 -->
+<script id="TmpAddCategory" type="text/x-jquery-tmpl">
+<div id="AddCategory">
+    <div id="addBar"></div>
+    <form id="CategoryForm" action="../aj">
+    <div id="addTitle">カテゴリ追加</div>
+    <div id="addName">
+        <p>名前</p>
+        <p><input type="text" name="data[name]"></p>
+    </div>
+    <div id="addText">
+        <p>説明</p>
+        <p><textarea rows="4" cols="35" name="data[text]"></textarea></p>
+    </div>
+    <div id="addText">
+        <p>メモ</p>
+        <p><textarea rows="2" cols="35" name="data[memo]"></textarea></p>
+    </div>
+    <div id="addPhoto">
+        <p>写真</p>
+        <p><input type="text" ></p>
+    </div>
+    <input type="hidden" name="job" value="category" />
+    <input type="hidden" name="menu" value="insert" />
+    </form>
+    <span class="addInsert">登録</span>
+    <span class="addCancel">キャンセル</span>
+</div>
+</script>
+
+<!-- カテゴリー編集画面 -->
+<script id="TmpEditCategory" type="text/x-jquery-tmpl">
+<div id="EditCategory">
+    <div id="addBar"></div>
+    <form id="CategoryForm" action="../aj">
+    <div id="addTitle">カテゴリ編集</div>
+    <div id="addName">
+        <p>名前</p>
+        <p><input type="text" name="data[name]" value="${name}" /></p>
+    </div>
+    <div id="addText">
+        <p>説明</p>
+        <p><textarea rows="4" cols="35" name="data[text]">${text}</textarea></p>
+    </div>
+    <div id="addText">
+        <p>メモ</p>
+        <p><textarea rows="2" cols="35" name="data[memo]">${memo}</textarea></p>
+    </div>
+    <div id="addPhoto">
+        <p>写真</p>
+        <p><input type="text" name="data[photo]" value="${photo}"></p>
+    </div>
+    <input type="hidden" name="data[id]" value="${id}" />
+    <input type="hidden" name="job" value="category" />
+    <input type="hidden" name="menu" value="update" />
+    </form>
+    <span class="addInsert">更新</span>
+    <span class="addCancel">キャンセル</span>
+</div>
+</script>
+
+<!-- アイテム追加画面 -->
+<script id="TmpAddItem" type="text/x-jquery-tmpl">
+<div id="AddItem">
+    <div id="addBar"></div>
+    <form id="CategoryForm" action="../aj">
+        <div id="addTitle">アイテム追加</div>
+        <div id="addName">
+            <p>名前</p>
+            <p><input type="text" name="data[name]"></p>
+        </div>
+        <div id="addSelect">
+            <p>カテゴリ</p>
+            <p>
+                <select name="data[category]">
+            {% raw %}{{each category}}
+                <option value="${$value.id}">${$value.name}</option>
+            {{/each}}{% endraw %}
+                </select>
+            </p>
+        </div>
+        <div id="addText">
+            <p>説明</p>
+            <p><textarea rows="4" cols="35" name="data[text]"></textarea></p>
+        </div>
+        <div id="addText">
+            <p>メモ</p>
+            <p><textarea rows="2" cols="35" name="data[memo]"></textarea></p>
+        </div>
+        <div id="addPhoto">
+            <p>写真</p>
+            <p><input type="text" name="data[photo]"></p>
+        </div>
+        <input type="hidden" name="job" value="item" />
+        <input type="hidden" name="menu" value="insert" />
+    </form>
+    <span class="addInsert">登録</span>
+    <span class="addCancel">キャンセル</span>
+</div>
+</script>
+
+<!-- アイテム編集画面 -->
+<script id="TmpEditItem" type="text/x-jquery-tmpl">
+<div id="EditItem">
+    <div id="addBar"></div>
+    <form id="CategoryForm" action="../aj">
+    <div id="addTitle">アイテム編集</div>
+    <div id="addName">
+        <p>名前</p>
+        <p><input type="text" name="data[name]" value="${name}"></p>
+    </div>
+    <div id="addText">
+        <p>説明</p>
+        <p><textarea rows="4" cols="35" name="data[text]">${text}</textarea></p>
+    </div>
+    <div id="addText">
+        <p>メモ</p>
+        <p><textarea rows="2" cols="35" name="data[memo]">${memo}</textarea></p>
+    </div>
+    <div id="addPhoto">
+        <p>写真</p>
+        <p><input type="text" ></p>
+    </div>
+    <input type="hidden" name="data[id]" value="${id}" />
+    <input type="hidden" name="job" value="item" />
+    <input type="hidden" name="menu" value="update" />
+    </form>
+    <span class="addInsert">登録</span>
+    <span class="addCancel">閉じる</span>
+</div>
+</script>
+
+
+<!-- 写真編集画面 -->
+<script id="TmpEditItem" type="text/x-jquery-tmpl">
+<div id="EditItem">
+    <div id="addBar"></div>
+    <form id="CategoryForm" action="../aj">
+    <div id="addTitle">写真追加</div>
+    <div id="addName">
+        <p>名前</p>
+        <p><input type="text" name="data[name]" value="${name}"></p>
+    </div>
+    <div id="addText">
+        <p>説明</p>
+        <p><textarea rows="4" cols="35" name="data[text]">${text}</textarea></p>
+    </div>
+    <div id="addText">
+        <p>メモ</p>
+        <p><textarea rows="2" cols="35" name="data[memo]">${memo}</textarea></p>
+    </div>
+    <div id="addPhoto">
+        <p>写真</p>
+        <p>
+            <img src="" id="addVPhoto">
+            <input type="hidden" name="data[photo]" value="${img}">
+        </p>
+    </div>
+    <input type="hidden" name="data[id]" value="${id}" />
+    <input type="hidden" name="job" value="item" />
+    <input type="hidden" name="menu" value="update" />
+    </form>
+    <span class="addInsert">登録</span>
+    <span class="addCancel">閉じる</span>
+</div>
+</script>
+
+{% endblock %}
+

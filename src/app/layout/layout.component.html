@@ -146,16 +146,16 @@
         <div class="edit-bg">
             <img [attr.width]="editWidth" [attr.height]="editHeight" [attr.src]="loadSVGData">
         </div>
-        <div class="edit-svg">
-            <svg [attr.width]="editWidth" [attr.height]="editHeight">
-            <ng-container *ngFor="let text of textLists">
+        <div class="edit-svg" id="edit-svg">
+            <svg [attr.width]="editWidth" [attr.height]="editHeight"
+                (mousemove)="onTextMoveHandler($event)"
+                (mouseup)="onTextUpHandler($event)">
+            <ng-container *ngFor="let text of textLists; index as i">
                 <text
-                    (mousedown)="onTextDownHadler($event)"
-                    (mousemove)="onTextMoveHadler($event)"
-                    (mouseup)="onTextUpHadler($event)"
-                    [attr.x]="text['x']" [attr.x]="text['y']"
-                    [attr.fontSize]="text['font']"
-                     font-family="MS Mincho" fill="black">text['text']</text>
+                    (mousedown)="onTextDownHandler($event, i)"
+                    [attr.x]="text[3]" [attr.y]="text[4]"
+                    [attr.font-size]="text[1]"
+                     font-family="MS Mincho" fill="black">{{text[0]}}</text>
             </ng-container>
             </svg>
         </div>
@@ -163,28 +163,27 @@
 </div>
 
 <div class="text-box">
-    <div>文字セット</div>
-
-    <div>
-        <div>テキスト登録</div>
-        <input type="text">
-        <div (click)="addNewText()">登録</div>
+    <div class="text-add">
+        <div>入力欄一覧</div>
+        <div class="click" (click)="addNewText()">追加</div>
     </div>
-    <ul>
+    <ul class="text-list">
     <ng-container *ngFor="let text of textLists">
-        <li (click)="onEditTextHandler()">
-            <input type="text" width="150">
-            <input type="text" width="10">
+        <li class="text-propatie">
+            <input type="text" size="30" [(ngModel)]="text[0]" class="text-input1">
+            <label>サイズ</label><input type="number" size="10" [(ngModel)]="text[1]" class="text-input2">
+            <label>文字数</label><input type="number" size="10" [(ngModel)]="text[2]" class="text-input2">
+            <div class="text-x">X:{{text[3]}}</div><div class="text-x">Y:{{text[4]}}</div>
         </li>
     </ng-container>
     </ul>
 </div>
 
-<div class="select-box-bottom">
+<div class="select-box-right">
     <div class="print-cargo click" (click)="setEdit()">
         <div class="label-s"><h3>決定</h3></div>
     </div>
-    <div class="print-cargo click" (click)="moveWindow('loadcsv')">
+    <div class="print-cargo click" (click)="moveWindow('main')">
         <div class="label-s"><h3>戻る</h3></div>
     </div>
 </div>

@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="Thu, 01 Dec 1994 16:00:00 GMT">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link href="{{asset('css/pc_base.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('css/admin/admin.css')}}" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+
+<div id="header">
+    <div>
+        <div>
+            <a href="../work">
+                <p></p>
+            </a>
+        </div>
+    </div>
+
+    <div  class="set_list">
+        <ul>
+            <li class="set_title">
+                <a href=""><p>予約</p></a>
+            </li>
+            <li class="set_title">
+                <a href="{{link.floor}}"><p>フロア</p></a>
+            </li>
+            <li class="set_title">
+                <a href="{{link.worker}}"><p>従業員</p></a>
+            </li>
+            <li class="set_title">
+                <a href="{{link.sift}}"><p>シフト</p></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="content">
+
+    <div>
+        <div><p>本日の予約</p></div>
+    </div>
+
+    <div>
+        <div><p>出勤情報</p></div>
+    </div>
+
+    <div>
+        <div><p>天気</p></div>
+    </div>
+
+</div>
+
+<div id="footer">
+
+
+</div>
+
+</body>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript" src="{{asset('js/lib/jquery.tmpl.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/lib/AjaxLoader.js')}}"></script>
+</html>
+

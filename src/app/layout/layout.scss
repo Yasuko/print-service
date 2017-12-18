@@ -32,6 +32,7 @@ textarea{
 .select-box-right {
     position: absolute;
     right: 0;
+    bottom: 0;
     width: 150px;
     display: flex;
 	flex-direction: row;
@@ -164,9 +165,11 @@ textarea{
 // -------------------------------------------
 .edit-box {
     position: relative;
-    width: 600px;
-    height: 500px;
-    margin: auto;
+    width: 950px;
+    height: 100%;
+    min-height: 700px;
+    max-height: 1000px;
+    left: 5%;
 
     overflow: scroll;
 }
@@ -174,7 +177,31 @@ textarea{
 .edit-svg {
     position: absolute;
 }
+.edit-bg {
+    border: solid 2px #000000;
+}
 
+// -------------------------------------------
+//  文字一覧
+// -------------------------------------------
+.text-add {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.text-add > div,
+.text-add > :-ms-input-placeholder{
+    position: relative;
+    float: left;
+}
+.text-add > div:last-child {
+    line-height: 1.5em;
+    text-align: center;
+    font-size: 0.9em;
+    width: 50px;
+    height: 25px;
+    border: solid 1px #b1b1b1;
+    border-radius: 5px;
+}
 .text-box {
     position: absolute;
     top: 50px;
@@ -186,7 +213,26 @@ textarea{
     overflow-y: scroll;
 }
 
+.text-x,
+.text-y {
+    font-size: 0.8em;
+    position: relative;
+    float: left;
+    width: 130px;
+}
 
+.text-propatie {
+    height: 90px;
+    border-bottom: solid 1px #87b1fd;
+    margin: 4px 0;
+}
+
+.text-input1 {
+    width: 290px;
+}
+.text-input2 {
+    width: 60px;
+}
 // -------------------------------------------
 //  ロード画面他
 // -------------------------------------------

@@ -28,6 +28,7 @@ export class LayoutComponent {
 
     loadSVGData;
     direction;
+
     textLists = [];
 
     sheetWidth = 0;
@@ -36,10 +37,12 @@ export class LayoutComponent {
     editWidth = 0;
     editHeight = 0;
 
+
     svgBox;
     x = 0;
     y = 0;
     moveSwitch = false;
+    moveTarget = 0;
     mouseStartingPointX = 0;
     mouseStartingPointY = 0;
     mouseMoveCheckX = 0;
@@ -130,24 +133,30 @@ export class LayoutComponent {
     /** ********************************************
     * テキストの移動
     ******************************************** */
-    onTextDownHandler(event: MouseEvent): void {
+    onTextDownHandler(event: MouseEvent, i: number): void {
+        this.moveTarget = i;
         this.svgBox = document.getElementById('edit-svg');
 
         const rect = this.svgBox.getBoundingClientRect();
         this.x = rect.left + window.pageXOffset;
         this.y = rect.top + window.pageYOffset;
-        this.mouseStartingPointX = event.pageX - rect.left;
-        this.mouseStartingPointY = event.pageY - rect.top;
+        this.mouseStartingPointX = event.pageX - this.x;
+        this.mouseStartingPointY = event.pageY - this.y;
         this.moveSwitch = true;
     }
 
     onTextMoveHandler(event: MouseEvent): void {
-        this.mouseMoveX = -((this.mouseStartingPointX + this.x) - event.pageX);
-        this.mouseMoveY = -(this.mouseMoveX / 0.75);
-        this.mouseMoveX = (this.mouseMoveX < 0) ? -(this.mouseMoveX) : this.mouseMoveX;
-        this.mouseMoveY = (this.mouseMoveY < 0) ? -(this.mouseMoveY) : this.mouseMoveY;
-        // this.catW = this.mouseMoveX;
-        // this.catH = this.mouseMoveY;
+        if (this.moveSwitch) {
+            console.log(this.mouseStartingPointX + '::' + this.mouseStartingPointY);
+            console.log(this.x + '::' + this.y);
+            console.log(event.pageX + '::' + event.pageY);
+            this.mouseMoveX = (this.mouseStartingPointX + this.x) - event.pageX;
+            this.mouseMoveY = (this.mouseStartingPointY + this.y) - event.pageY;
+            console.log(this.mouseMoveX + '::' + this.mouseMoveY);
+            this.textLists[this.moveTarget][3] = this.mouseStartingPointX - this.mouseMoveX;
+            this.textLists[this.moveTarget][4] = this.mouseStartingPointY - this.mouseMoveY;
+            console.log(this.mouseMoveX + '::' + this.mouseMoveY);
+        }
     }
 
     onTextUpHandler(event: MouseEvent): void {
@@ -158,8 +167,9 @@ export class LayoutComponent {
 
     }
 
-    addNewtext(): void {
-        
+    addNewText(): void {
+        const txt = ['ああああああああああ', 10, 20, 100, 200];
+        this.textLists.push(txt);
     }
 
     /** ********************************************
@@ -244,8 +254,8 @@ export class LayoutComponent {
                 }
             }
         }
-        this.editWidth = this.sheetWidth * 2.5;
-        this.editHeight = this.sheetHeight * 2.5;
+        this.editWidth = this.sheetWidth * 3;
+        this.editHeight = this.sheetHeight * 3;
     }
     setupSheetDirection(rotate: string): void {
         this.sheetSpec['vertical'] = (rotate === 'vertical') ? true : false;
