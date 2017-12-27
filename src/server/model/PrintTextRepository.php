@@ -13,9 +13,11 @@ class PrintTextRepository extends DbRepository
             "y"		    =>array("y","int","0",1),
             "font"	    =>array("font","text","",1),
             "desine"	=>array("desine","text","",1),
-            "length"	=>array("length","text","",1),
-            "create"	=>array("create","int","111111111111",1),
-            "update"	=>array("update","int","111111111111",1)
+            "length"	=>array("length","int","10",1),
+            "label" 	=>array("label","text","text",1),
+            "tag"	    =>array("tag","text","input",1),
+            "created"	=>array("created","int","111111111111",1),
+            "updated"	=>array("updated","int","111111111111",1)
     );
 
     public function insert($status){
@@ -24,15 +26,16 @@ class PrintTextRepository extends DbRepository
 
         $sql = "
             INSERT INTO print_text(
-                id, print_id, text, size, x, y, font, desine, length, create, update
+                print_id, text, size, x, y, font,
+                desine, length, label, tag, created, updated
                 )
             VALUES(
-                :id, :print_id, :text, :size, :x, :y, :font, :desine, :length, :create, :update
+                :print_id, :text, :size, :x, :y, :font, :desine,
+                :length, :label, :tag, :created, :updated
             )
         ";
 
         $stmt = $this->execute($sql,array(
-                ':id'		=> $status['id'],
                 ':print_id'	=> $status['print_id'],
                 ':text'		=> $status['text'],
                 ':size'     => $status['size'],
@@ -41,8 +44,10 @@ class PrintTextRepository extends DbRepository
                 ':font'	    => $status['font'],
                 ':desine'	=> $status['desine'],
                 ':length'	=> $status['length'],
-                ':create'   => $status['create'],
-                ':update'	=> $status['update']
+                ':label'	=> $status['label'],
+                ':tag'  	=> $status['tag'],
+                ':created'   => time(),
+                ':updated'	=> time()
             ));
     }
 
@@ -60,8 +65,9 @@ class PrintTextRepository extends DbRepository
             font		= :font,
             desine		= :desine,
             length		= :length,
-            create		= :create,
-            update		= :update
+            label		= :label,
+            tag 		= :tag,
+            updated		= :updated
         WHERE
             id			= :id
         ";
@@ -76,46 +82,67 @@ class PrintTextRepository extends DbRepository
             ':font'	    => $status['font'],
             ':desine'	=> $status['desine'],
             ':length'	=> $status['length'],
-            ':create'   => $status['create'],
-            ':update'	=> $status['update']
+            ':label'	=> $status['label'],
+            ':tag'  	=> $status['tag'],
+            ':updated'	=> time()
         ));
     }
 
-    public function fetchAll(){
+    public function delete($status){
+        $sql = "
+        DELETE FROM
+            print_text
+        WHERE
+            id          = :id
+        ";
+
+        $stmt = $this->execute($sql,array(
+            ':id'		=> $status['id'],
+        ));
+    }
+
+    public function deleteByPrintId($status){
+        $sql = "
+        DELETE FROM
+            print_text
+        WHERE
+            print_id          = :print_id
+        ";
+
+        $stmt = $this->execute($sql,array(
+            ':print_id'		=> $status['print_id'],
+        ));
+    }
+
+    public function getAll(){
         $sql = "
         SELECT
-            id,
-            print_id,
-            text,
-            size,
-            x,
-            y,
-            font,
-            desine,
-            length,
-            create,
-            update
+            id, print_id, text, size, x, y,
+            font, desine, length, label, tag, created, updated
         FROM
             print_text
         ";
 
         return $this->fetchAll($sql,array());
     }
-
-    public function fetchById($status){
+    public function getLatest(){
         $sql = "
         SELECT
-            id,
-            print_id,
-            text,
-            size,
-            x,
-            y,
-            font,
-            desine,
-            length,
-            create,
-            update
+            id, print_id, text, size, x, y,
+            font, desine, length, label, tag, created, updated
+        FROM
+            print_text
+        ORDER BY id DESC
+        LIMIT 1
+        ";
+
+        return $this->fetch($sql,array());
+    }
+    public function getById($status){
+        $sql = "
+        SELECT
+            id, print_id, text, size, x, y,
+            font, desine, length, label, tag, created, updated
         FROM
             print_text
         WHERE
@@ -126,28 +153,19 @@ class PrintTextRepository extends DbRepository
                 ':id'	=> $status['id']
         ));
     }
-    public function fetchByPrintId($status){
+    public function getByPrintId($status){
         $sql = "
         SELECT
-            id,
-            print_id,
-            text,
-            size,
-            x,
-            y,
-            font,
-            desine,
-            length,
-            create,
-            update
+            id, print_id, text, size, x, y,
+            font, desine, length, label, tag, created, updated
         FROM
             print_text
         WHERE
-            print_id	= :id
+            print_id	= :print_id
         ";
 
         return $this->fetchAll($sql,array(
-                ':id'	=> $status['id']
+                ':print_id'	=> $status['print_id']
         ));
     }
 }

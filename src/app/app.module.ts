@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { HttpModule, JsonpModule } from '@angular/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_BASE_HREF } from '@angular/common';
 // import Route Component
 import { AppRoutingModule } from './app-routing.module';
@@ -15,16 +17,19 @@ import { TacksheetComponent } from './tacksheet/tacksheet.component';
 import { TacksheetStatusService } from './tacksheet/tacksheet-status.service';
 import { LayoutComponent } from './layout/layout.component';
 import { LayoutStatusService } from './layout/layout-status.service';
+import { PrintComponent } from './print/print.component';
+import { PrintStatusService } from './print/print-status.service';
 
-import { ImageOrientationService } from './_lib_service/index';
+import { ImageOrientationService, ImageMakerService } from './_lib_service/index';
 import { PdfMakerService } from './_lib_service/index';
 import { ListLayoutService, RecruiteLayoutService } from './_lib_service/index';
-import { TacksheetLayoutService } from './_lib_service/index';
+import { TacksheetLayoutService, PrintLayoutService } from './_lib_service/index';
 import { TacksheetMakerService, ImageSaveService } from './_lib_service/index';
 import { PostcardMakerService, RecruiteMakerService } from './_lib_service/index';
 
 // Import Service
-import { LavelSheetService, PostcardService} from './service/sheetDesine/index';
+import { LavelSheetService, PostcardService} from './service/index';
+import { PrintDataService, PrintData, PrintText} from './service/index';
 
 
 
@@ -36,23 +41,28 @@ import { LavelSheetService, PostcardService} from './service/sheetDesine/index';
     PostcardComponent,
     RecuruiteComponent,
     TacksheetComponent,
-    LayoutComponent
+    LayoutComponent,
+    PrintComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    HttpModule,
+    JsonpModule,
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [
     PdfMakerService,
-    ListLayoutService,
-    RecruiteLayoutService,
-    TacksheetLayoutService,
+    ListLayoutService, RecruiteLayoutService,
+    TacksheetLayoutService, PrintLayoutService,
     LavelSheetService, PostcardService,
-    TacksheetStatusService, PostcardStatusService, LayoutStatusService,
+    TacksheetStatusService, PostcardStatusService,
+    LayoutStatusService, PrintStatusService,
     TacksheetMakerService, ImageSaveService,
     PostcardMakerService, RecruiteMakerService,
-    ImageOrientationService
+    ImageOrientationService, ImageMakerService,
+    PrintDataService, PrintData, PrintText
   ],
   bootstrap: [AppComponent]
 })

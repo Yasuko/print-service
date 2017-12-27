@@ -27,13 +27,13 @@ class AjaxController extends Controller
                 /**
                 * データ追加
                 **/
-                case 'add_p':   $this->addNewData('PrintData');   break;
-                case 'add_t':   $this->addNewData('PrintText');   break;
+                case 'add_p':   $this->addNewPrint('PrintData');   break;
+                case 'add_t':   $this->addNewText('PrintText');   break;
                 /**
                 * データ更新
                 **/
-                case 'update_p':  $this->updateData('PrintData');   break;
-                case 'update_t':  $this->updateData('PrintText');   break;
+                case 'update_p':  $this->updatePrint('PrintData');   break;
+                case 'update_t':  $this->updateText('PrintText');   break;
 
             }
         }
@@ -46,19 +46,19 @@ class AjaxController extends Controller
 
     public function getPrintData($repository){
         if($this->_id == "all"){
-            $data = $this->db_manager->get($repository)->fetchAllTitle();
+            $data = $this->db_manager->get($repository)->getAll();
         }else{
             $data = $this->db_manager->get($repository)
-            ->fetchById(array("id" => $this->_id));
+                ->getById(array("id" => $this->_id));
         }
         $this->json($data);
     }
     public function getTextData($repository){
         if($this->_id == "all"){
-            $data = $this->db_manager->get($repository)->fetchAllTitle();
+            $data = $this->db_manager->get($repository)->getAll();
         }else{
             $data = $this->db_manager->get($repository)
-            ->fetchByPrintId(array("id" => $this->_id));
+                ->getByPrintId(array("print_id" => $this->_data['print_id']));
         }
         $this->json($data);
     }
@@ -68,25 +68,79 @@ class AjaxController extends Controller
      *
      */
 
-     public function addNewData($repository){
+    public function addNewPrint($repository){
+        // $this->_data['template'] = $this->_data['template']['changingThisBreaksApplicationSecurity'];
         $this->db_manager->get($repository)->insert($this->_data);
-        $data = [];
-        $data['status'] = "success";
-        $this->json($data);
-     }
+        $last = $this->db_manager->get($repository)->getLatest();;
+        if ($last['title'] == $this->_data['title']) {
+            $this->json($last);
+        } else {
+            $data['status'] = "false";
+            $this->json($data);
+        }
+    }
 
+    public function addNewText($repository){
+        $num = count($this->_data['data']) - 1;
+        for($i = 0; $i <= $num; $i++){
+            $this->db_manager->get($repository)->insert($this->_data['data'][$i]);
+        }
+
+        $last = $this->db_manager->get($repository)->getLatest();;
+        if ($last['text'] == $this->_data['data'][$num]['text']) {
+            $this->json($last);
+        } else {
+            $data['status'] = "false";
+            $this->json($data);
+        }
+    }
 
     /**
      *
      * 更新処理
      *
      */
-     public function updateData($repository){
+     public function updatePrint($repository){
         $this->db_manager->get($repository)->update($this->_data);
-        $data = [];
-        $data["status"] = 'success';
-        $this->json($data);         
+        $data = $this->db_manager->get($repository)
+            ->getById(array('id' => $this->_data['id']));
+        $this->_data['created'] = $data['created'];
+        $this->_data['updated'] = $data['updated'];
+        $data['job'] = $this->_data['job'];
+        $diff = array_diff($this->_data, $data);
+        // var_dump($diff);
+        if (count($diff) > 0) {
+            $data = [];
+            $data["status"] = 'false';
+            $this->json($data);
+            return;
+        }
+        $this->json($data);
      }
+     public function updateText($repository){
 
+        $this->db_manager->get($repository)
+            ->deleteByPrintId(array('print_id' => $this->_data['data'][0]['print_id']));
+
+        foreach ($this->_data['data'] as $key => $value) {
+            $this->db_manager->get($repository)
+                ->insert($value);
+        }
+
+        $data = $this->db_manager->get($repository)
+            ->getByPrintId(array('print_id' => $this->_data['data'][0]['print_id']));
+
+        foreach ($this->_data['data'] as $key => $value) {
+
+            $diff = array_diff($value, $data[$key]);
+            if (count($diff) > 3) {
+                $data = [];
+                $data["status"] = 'false';
+                $this->json($data);
+                return;
+            }
+        }
+        $this->json($data);
+     }
 
 }

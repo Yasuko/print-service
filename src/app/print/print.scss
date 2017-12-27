@@ -162,13 +162,13 @@ textarea{
     width: 250px;
     height: 150px;
 }
+
 .edit-label-view {
     font-size: 0.7em;
     color: #1e8b1a;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: -1;
 }
 // -------------------------------------------
 //  文字一覧
@@ -223,8 +223,8 @@ textarea{
 }
 .text-propatie {
     height: 90px;
-    border-bottom: solid 5px #b1f6ff;
-    margin: 4px 0 10px 0;
+    border-bottom: solid 5px #d5e4ff;
+    margin: 4px 0;
 }
 .text-propatie > div {
     position: relative;
@@ -234,17 +234,11 @@ textarea{
 .text-propatie > div:nth-child(2) {
     font-size: 0.9em;
 }
-.text-propatie label {
-    font-size: 0.7em;
-}
 .text-input1 {
     width: 290px;
 }
 .text-input2 {
-    width: 50px;
-}
-.text-input3 {
-    width: 70px;
+    width: 60px;
 }
 // -------------------------------------------
 //  ロード画面他

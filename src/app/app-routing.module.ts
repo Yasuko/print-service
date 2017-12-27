@@ -7,6 +7,7 @@ import { PostcardComponent } from './postcard/postcard.component';
 import { RecuruiteComponent } from './recruite/recruite.component';
 import { TacksheetComponent } from './tacksheet/tacksheet.component';
 import { LayoutComponent } from './layout/layout.component';
+import { PrintComponent } from './print/print.component';
 
 const routes: Routes = [
     {
@@ -36,6 +37,10 @@ const routes: Routes = [
     {
         path:   'layout',
         component:  LayoutComponent,
+    },
+    {
+        path:   'print',
+        component:  PrintComponent,
     },
     {
         path: '**',

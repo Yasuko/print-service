@@ -4,80 +4,109 @@ import { Headers, Http, Response} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 
+import { PrintData } from './printData';
+import { PrintText } from './printText';
+
 @Injectable()
+
 export class PrintDataService {
 
-    private serverUrl = 'server/index.php';
+    private debug = true;
+    private serverUrl = 'server/aj';
     private headerJson: Headers = new Headers({'Content-Type': 'application/json'});
-    private job = '_m';
 
     private responseStatus: any[] = [];
+    private printData: PrintData[] = new Array();
+    private printText: PrintText[] = new Array();
 
     constructor(private http: Http) {}
 
-    getPrintDatas(): Promise<string[]> {
-        if (this.monsters.length > 1) {
-            return new Promise((resolve, reject) => {
-                resolve(this.monsters);
-            });
-        } else {
-            let data = {};
-            data['job'] = 'get' + this.job;
-            data['id'] = 'all';
+    getAllPrintData(): Promise<PrintData[]> {
+        const data = {'job' : '', 'id' : ''};
+        data['job'] = 'get_p';
+        data['id'] = 'all';
 
-            return this.http
-                .post(this.serverUrl,
-                     JSON.stringify(data),
-                    { headers: this.headerJson } )
-                .toPromise()
-                .then(response => {
-                    this.monsters = response.json();
-                    return response.json() as Monster[];
-                })
-                .catch(this.handleError);
+        return this.http
+            .post(this.serverUrl,
+                JSON.stringify(data),
+                { headers: this.headerJson } )
+            .toPromise()
+            .then(response => {
+                this.printData = response.json() as PrintData[];
+                return this.printData;
+            })
+            .catch(this.handleError);
+    }
+
+    getPrintData(id): Promise<PrintData> {
+        if (this.printData[id] === undefined) {
+            return this.getAllPrintData()
+                .then(print => {
+                    return print[id];
+                });
+        } else {
+            return new Promise((resolve, reject) => resolve(this.printData[id]));
         }
     }
 
-    getMonster(id: number): Promise<Monster> {
-        if (this.monsters.length > 1) {
-            return new Promise((resolve, reject) => {
-                resolve(this.monsters[id]);
-            });
-        } else {
-            const data = {};
-            data['job'] = 'get' + this.job;
-            data['id'] = `${id}`;
+    getText(id: number): Promise<PrintText[]> {
+        const data = {};
+        data['job'] = 'get_t';
+        data['print_id'] = Number(id);
 
-            return this.http
-                .post(this.serverUrl,
-                    JSON.stringify(data),
-                    { headers: this.headerJson } )
-                .toPromise()
-                .then((response: Response) => response.json() as Monster)
-                .catch(this.handleError);
-        }
+        return this.http
+            .post(this.serverUrl,
+                JSON.stringify(data),
+                { headers: this.headerJson } )
+            .toPromise()
+            .then((response: Response) => response.json() as PrintText[])
+            .catch(this.handleError);
     }
-    create(monster: Monster): Promise<Monster> {
+    setPrint(print: PrintData): Promise<PrintData> {
 
-        const addData: Monster = monster;
-        addData['job'] = 'add' + this.job;
+        const addData: PrintData = print;
+        addData['job'] = 'add_p';
 
         return this.http
             .post(this.serverUrl,
                 JSON.stringify(addData),
                 { headers: this.headerJson } )
             .toPromise()
-            .then((response: Response) => {
-                this.responseStatus = response.json();
-                this.monsters[(monster.id - 1)] = monster;
-            })
+            .then((response: Response) => response.json() as PrintData)
             .catch(this.handleError);
     }
+    setText(text: PrintText[]): Promise<any> {
 
-    update(monster: Monster): Promise<Monster> {
+        const addData = {'data': text, 'job': 'add_t'};
 
-        const updata: Monster = monster;
-        updata['job'] = 'update' + this.job;
+        return this.http
+            .post(this.serverUrl,
+                JSON.stringify(addData),
+                { headers: this.headerJson } )
+            .toPromise()
+            .then((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+    setTextMulti(text: PrintText[], id: number): Promise<any> {
+        for (const key in text) {
+            if (text.hasOwnProperty(key)) {
+                text[key]['print_id'] = Number(id);
+            }
+        }
+        const addData = {'data': text, 'job': 'add_t'};
+
+        return this.http
+            .post(this.serverUrl,
+                JSON.stringify(addData),
+                { headers: this.headerJson } )
+            .toPromise()
+            .then((response: Response) => response.json())
+            .catch(this.handleError);
+    }
+    updatePrint(print: PrintData): Promise<PrintData> {
+
+        const updata: PrintData = print;
+        updata['job'] = 'update_p';
 
         return this.http
             .post(this.serverUrl,
@@ -85,19 +114,34 @@ export class PrintDataService {
                 { headers: this.headerJson } )
             .toPromise()
             .then((response: Response) => {
-                this.responseStatus = response.json();
-                this.pullConsole('Update Monster :' + this.monsters[(monster.id - 1)].Name);
-                for (const key in monster) {
-                    if (monster.hasOwnProperty(key)) {
-                        this.monsters[(monster.id - 1)][key] = monster[key];
-                    }
-                }
-                this.monsters[(monster.id - 1)] = monster;
+                this.printData[print.id] = response.json() as PrintData;
+                return this.printData[print.id];
             })
             .catch(this.handleError);
     }
 
-    delete(id: number): Promise<void> {
+    updateText(text: PrintText[], id: number): Promise<PrintText[]> {
+        for (const key in text) {
+            if (text.hasOwnProperty(key)) {
+                if (!text[key].hasOwnProperty('print_id')) {
+                    text[key]['print_id'] = Number(id);
+                }
+            }
+        }
+        const updata = {'data': text, 'job': 'update_t'};
+
+        return this.http
+            .post(this.serverUrl,
+                JSON.stringify(updata),
+                { headers: this.headerJson } )
+            .toPromise()
+            .then((response: Response) => {
+                this.printText = response.json() as PrintText[];
+            })
+            .catch(this.handleError);
+    }
+
+    deletePrint(id: number): Promise<void> {
         return this.http
             .delete(this.serverUrl, {headers: this.headerJson})
             .toPromise()

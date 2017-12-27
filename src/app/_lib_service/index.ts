@@ -1,7 +1,13 @@
 
+// Animation Service
+export * from './animation/alert.animation';
+export * from './animation/fade-in.animation';
+export * from './animation/slide-content.animation';
+export * from './animation/slide-in-out.animation';
+
 // Image Service
 export * from './image/image-orientation.service';
-
+export * from './image/image-maker.service';
 // Maker Service
 export * from './maker/csv-maker.service';
 export * from './maker/pdf-maker.service';
@@ -16,6 +22,7 @@ export * from './maker/NotosansPDFFonts';
 export * from './pdf/list-layout.service';
 export * from './pdf/recruite-layout.service';
 export * from './pdf/tacksheet-layout.service';
+export * from './pdf/print-layout.service';
 
 // Download
 export * from './download/image-save.service';

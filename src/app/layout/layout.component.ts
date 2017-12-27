@@ -1,25 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { LayoutStatusService } from './layout-status.service';
+import { PrintDataService } from '../service/index';
+import { PrintData, PrintText } from '../service/index';
+
+import { fadeInAnimation, alertAnimation } from '../_lib_service/index';
+
 // Import TherdParty Service
 
 
 @Component({
     selector: 'layout-edit',
     templateUrl: './layout.component.html',
-    styleUrls: ['./layout.scss']
+    styleUrls: ['./layout.scss'],
+    animations: [ fadeInAnimation, alertAnimation ],
 })
 
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
 
+    loader = 'default';
+    loadMessage = '読み込み中';
+    alert = 'hide';
+    alertMessage = '';
     flags;
     sheetSpec;
     sheetSize;
     formStatus;
     inputForm;
     nameTitles;
+    editResolution = 3;
 
     fname = '';
     name = '';
@@ -29,7 +40,11 @@ export class LayoutComponent {
     loadSVGData;
     direction;
 
-    textLists = [];
+    layoutLists: PrintData[] = [];
+    textLists: PrintText[] = [];
+    editLayout: PrintData = new PrintData;
+    editSheetSize = 'a4';
+    editSheetDirection = 'vertical';
 
     sheetWidth = 0;
     sheetHeight = 0;
@@ -61,10 +76,15 @@ export class LayoutComponent {
         private router: Router,
         private sanitizer: DomSanitizer,
         private layoutStatusService: LayoutStatusService,
+        private printDataService: PrintDataService,
     ) {
         this.flags = this.layoutStatusService.flags;
         this.sheetSpec = this.layoutStatusService.sheetSpec;
         this.sheetSize = this.layoutStatusService.sheetSize;
+    }
+
+    ngOnInit(): void {
+        this.getALLPrintData();
     }
     /** ********************************************
     * ドラッグイベント
@@ -88,6 +108,7 @@ export class LayoutComponent {
     */
     onDropHandler(event, type: string): void {
         event.preventDefault();
+        this.onDrag = false;
         this.reset('fast');
 
         let files;
@@ -102,9 +123,9 @@ export class LayoutComponent {
         if (files[0].type === 'image/svg+xml') {
             const result = [];
             this.reader.onloadend = (e) => {
-                const body = this.sanitizer.bypassSecurityTrustResourceUrl(this.reader.result);
-                this.loadSVGData = body;
-                console.log();
+                // const body = this.sanitizer.bypassSecurityTrustResourceUrl(this.reader.result);
+                this.editLayout.template = String(this.reader.result);
+
                 // const svg = this.reader.result;
                 // const parser = new DOMParser();
                 // const dom = parser.parseFromString(svg, 'image/svg+xml');
@@ -147,15 +168,15 @@ export class LayoutComponent {
 
     onTextMoveHandler(event: MouseEvent): void {
         if (this.moveSwitch) {
-            console.log(this.mouseStartingPointX + '::' + this.mouseStartingPointY);
-            console.log(this.x + '::' + this.y);
-            console.log(event.pageX + '::' + event.pageY);
+            // console.log(this.mouseStartingPointX + '::' + this.mouseStartingPointY);
+            // console.log(this.x + '::' + this.y);
+            // console.log(event.pageX + '::' + event.pageY);
             this.mouseMoveX = (this.mouseStartingPointX + this.x) - event.pageX;
             this.mouseMoveY = (this.mouseStartingPointY + this.y) - event.pageY;
-            console.log(this.mouseMoveX + '::' + this.mouseMoveY);
-            this.textLists[this.moveTarget][3] = this.mouseStartingPointX - this.mouseMoveX;
-            this.textLists[this.moveTarget][4] = this.mouseStartingPointY - this.mouseMoveY;
-            console.log(this.mouseMoveX + '::' + this.mouseMoveY);
+            // console.log(this.mouseMoveX + '::' + this.mouseMoveY);
+            this.textLists[this.moveTarget]['x'] = this.mouseStartingPointX - this.mouseMoveX;
+            this.textLists[this.moveTarget]['y'] = this.mouseStartingPointY - this.mouseMoveY;
+            // console.log(this.mouseMoveX + '::' + this.mouseMoveY);
         }
     }
 
@@ -167,9 +188,68 @@ export class LayoutComponent {
 
     }
 
+    getALLPrintData(): void {
+        this.printDataService.getAllPrintData()
+            .then((print: PrintData[]) => {
+                this.layoutLists = [];
+                this.layoutLists = print;
+            });
+    }
+    getPrintData(id: number): void {
+        this.printDataService.getPrintData(id)
+            .then((print: PrintData) => {
+                console.log(print);
+                this.editLayout = print;
+                console.log(this.editLayout.template);
+                this.setupSheetType(this.editLayout.size);
+                this.setupSheetDirection(this.editLayout.direction);
+                this.getPrintText(this.editLayout.id);
+                this.moveWindow('edit');
+            });
+    }
+    getPrintText(id: number): void {
+        this.printDataService.getText(id)
+            .then((texts: PrintText[]) => this.textLists = texts);
+    }
+
     addNewText(): void {
-        const txt = ['ああああああああああ', 10, 20, 100, 200];
+        const txt = {
+            id: 0 , text: 'ああああああああああ',
+            size: 10, x: 20, y: 100, font: '',
+            length: 50, create: 0, update: 0} as PrintText;
         this.textLists.push(txt);
+    }
+    addLayout(): Promise<PrintData> {
+        const print = {
+            title: this.editLayout.title,
+            template: this.editLayout.template,
+            size: this.editSheetSize,
+            direction: this.editSheetDirection
+        } as PrintData;
+
+        return this.printDataService.setPrint(print)
+            .then((response: PrintData) => response);
+    }
+    addText(id): void {
+        this.printDataService.setTextMulti(this.textLists, id);
+    }
+
+    updateLayout(): Promise<PrintData> {
+        const print = {
+            id: Number(this.editLayout.id),
+            title: this.editLayout.title,
+            template: this.editLayout.template,
+            size: this.editSheetSize,
+            direction: this.editSheetDirection
+        } as PrintData;
+        return this.printDataService.updatePrint(print);
+    }
+
+    updateText(id: number): void {
+        this.printDataService.updateText(this.textLists, id)
+            .then((response: PrintText[]) => {
+                // this.textLists = response;
+            });
     }
 
     /** ********************************************
@@ -179,27 +259,38 @@ export class LayoutComponent {
     ******************************************** */
 
     setNewLayout(): void {
-        this.moveWindow('sheetsize');
-    }
-    setSheetSize(type: string): void {
-        this.setupSheetType(type);
         this.moveWindow('loadsvg');
     }
 
     setLoadSVG(): void {
         this.moveWindow('edit');
     }
-    setEdit(): void {
-        this.moveWindow('review');
-    }
+    setEdit(id: number): void {
+        this.getPrintData(id);
 
-    setReview(): void {
-        this.moveWindow('save');
     }
-
     setSave(): void {
+        this.setupLoading('保存中');
 
+        if (this.editLayout.id !== undefined) {
+            this.updateLayout()
+                .then((response) => {
+                    this.updateText(response.id);
+                    this.setupLoadend();
+                    this.setupAlert('保存完了');
+                });
+        } else {
+            this.addLayout().then((response: PrintData) => {
+                this.addText(response['id']);
+                this.setupLoadend();
+                this.setupAlert('登録完了');
+            });
+        }
+        this.getALLPrintData();
+        // this.moveWindow('main');
     }
+
+
     /** ******************************************
     * 数値計算、移動先計算他、補助ライブラリ
     ****************************************** */
@@ -214,8 +305,9 @@ export class LayoutComponent {
                 this.flags[key] = false;
             }
         }
+        console.log(window);
         if (window === 'main') {
-            this.flags.mian = true;
+            this.flags.main = true;
         } else if (window === 'sheetsize') {
             this.flags.onSheetSize = true;
         } else if (window === 'loadsvg') {
@@ -232,9 +324,33 @@ export class LayoutComponent {
             this.flags.onDownload = true;
         }
     }
+    /**
+     * 読み込み中画面表示
+     * @param message
+     */
+    setupLoading(message: string): void {
+        this.loader = 'loading';
+        this.loadMessage = message;
+    }
+    setupLoadend(): void {
+        this.loader = 'loadend';
+        this.loadMessage = '';
+    }
+    /**
+     * アラート画面表示
+     * @param message
+     */
+    setupAlert(message: string): void {
+        this.alert = 'show';
+        this.alertMessage = message;
+        setTimeout(() => {
+            this.alert = 'hide';
+            this.alertMessage = '';
+        }, 2000);
+    }
 
     setupSheetType(desine): void {
-
+        this.editSheetSize = desine;
         for (const key in this.sheetSpec) {
             if (this.sheetSpec.hasOwnProperty(key)) {
                 if (key !== 'vertical' && key !== 'side') {
@@ -254,12 +370,14 @@ export class LayoutComponent {
                 }
             }
         }
-        this.editWidth = this.sheetWidth * 3;
-        this.editHeight = this.sheetHeight * 3;
+        this.editWidth = this.sheetWidth * this.editResolution;
+        this.editHeight = this.sheetHeight * this.editResolution;
     }
     setupSheetDirection(rotate: string): void {
+        this.editSheetDirection = rotate;
         this.sheetSpec['vertical'] = (rotate === 'vertical') ? true : false;
         this.sheetSpec['side'] = (rotate === 'side') ? true : false;
+        this.setupSheetType(this.editSheetSize);
     }
 
     checkNull(cell): boolean {
@@ -269,11 +387,10 @@ export class LayoutComponent {
     * 初期パラメーターの初期化
     */
     reset(type: string): void {
-        if (type === 'last') {
-
-        } else if (type === 'first') {
-            this.reader = null;
-        }
+        this.editLayout = new PrintData;
+        this.editSheetSize = 'a4';
+        this.editSheetDirection = 'vertical';
+        this.textLists = [];
     }
 
 

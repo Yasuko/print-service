@@ -1,0 +1,84 @@
+<div class="load-screen" [@fadeInAnimation]="loader">
+    <div>{{loadMessage}}</div>
+</div>
+<div class="alert-window" [@alertAnimation]="alert">
+    <div>{{alertMessage}}</div>
+</div>
+
+<!-- ---------------------------------------
+    CSVを読み込むか読み込まないか
+--------------------------------------- -->
+<ng-container *ngIf="flags['main']">
+
+<div>
+<div>印刷レイアウト</div>
+<ul class="layout-list">
+    <ng-container *ngFor="let layout of layoutLists; index as i">
+    <li class="layout-propatie click"
+        (click)="setEdit(i)">
+        <div>title:{{layout["title"]}}</div>
+        <div>id:{{layout["id"]}}</div>
+    </li>
+    </ng-container>
+</ul>
+</div>
+</ng-container> 
+
+<!-- ---------------------------------------
+    印刷
+--------------------------------------- -->
+<ng-container *ngIf="flags['onEdit']">
+<div class="edit-box">
+    <div>
+        <div class="edit-bg">
+            <img [attr.width]="editWidth" [attr.height]="editHeight"
+                [attr.src]="sanitizer.bypassSecurityTrustResourceUrl(editLayout.template)">
+        </div>
+        <div class="edit-svg" id="edit-svg"
+            [attr.width]="editWidth" [attr.height]="editHeight">
+            <ng-container *ngFor="let text of textLists; index as i">
+            <div [style.left]="text['x']+'px'" [style.top]="text['y']+'px'"
+                class="edit-label-view">{{text["label"]}}</div>
+            </ng-container>
+            <svg [attr.width]="editWidth" [attr.height]="editHeight">
+            <ng-container *ngFor="let text of textLists; index as i">
+                <text
+                    [attr.x]="text['x']" [attr.y]="text['y']"
+                    [attr.font-size]="text['size']"
+                     font-family="MS Mincho" fill="black">{{text["text"]}}</text>
+            </ng-container>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<div class="text-box">
+    <div class="edit-name">
+        <label>名前:</label>{{editLayout.title}}
+    </div>
+    <div class="text-list">
+        <ul>
+    <ng-container *ngFor="let text of textLists">
+        <li class="text-propatie">
+            <div>
+                <div>ラベル：{{text['label']}}</div>
+                <input type="text" size="30"
+                    [(ngModel)]="text['text']" class="text-input1">
+            </div>
+        </li>
+    </ng-container>
+        </ul>
+    </div>
+</div>
+
+<div class="select-box-right">
+    <div class="print-cargo click" (click)="setPrint()">
+        <div class="label-s"><h3>印刷</h3></div>
+    </div>
+    <div class="print-cargo click" (click)="moveWindow('main')">
+        <div class="label-s"><h3>戻る</h3></div>
+    </div>
+</div>
+</ng-container>
+
+
