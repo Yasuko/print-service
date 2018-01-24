@@ -23,6 +23,11 @@ export * from './pdf/list-layout.service';
 export * from './pdf/recruite-layout.service';
 export * from './pdf/tacksheet-layout.service';
 export * from './pdf/print-layout.service';
+export * from './pdf/recruite-layout-type1.service';
+export * from './pdf/recruite-layout-type2.service';
+export * from './pdf/recruite-layout-type3.service';
+export * from './pdf/recruite-layout-type4.service';
+export * from './pdf/recruite-layout-type5.service';
 
 // Download
 export * from './download/image-save.service';

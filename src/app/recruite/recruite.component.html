@@ -2,31 +2,6 @@
     <div>読み込み中</div>
 </div>
 
-<ng-container *ngIf="flags['onType']">
-<div class="print-caption">履歴書のタイプを選択</div>
-<div class="select-box">
-    <div class="print-cargo click" (click)="setRecruiteType(0)">
-        <div class="label-s"><h4>JIS規格(職歴多め)</h4></div>
-    </div>
-    <div class="print-cargo click" (click)="setRecruiteType(1)">
-        <div class="label-s"><h4>JIS規格(職歴少なめ)</h4></div>
-    </div>
-    <div class="print-cargo click" (click)="setRecruiteType(2)">
-        <div class="label-s"><h4>職歴なし</h4><h4>健康状態あり</h4></div>
-    </div>
-    <div class="print-cargo click" (click)="setRecruiteType(3)">
-        <div class="label-s"><h4>職歴なし</h4><h4>特技自己PR広め</h4></div>
-    </div>
-    <div class="print-cargo click" (click)="setRecruiteType(4)">
-        <div class="label-s"><h4>学歴職歴統合</h4></div>
-    </div>
-</div>
-<div class="select-box">
-    <div class="cargo-s click" routerLink="/" routerLinkActive="active">
-        <div class="label-s"><h3>MAIN</h3></div>
-    </div>
-</div>
-</ng-container>
 <ng-container *ngIf="flags['onSelectPhoto']">
     <div class="print-caption">顔写真を取り込みますか？</div>
     <div class="select-box">
@@ -36,8 +11,8 @@
         <div class="print-cargo click" (click)="setPicutureType(0)">
             <div class="label-s"><h3>取り込まない</h3></div>
         </div>
-        <div class="print-cargo click" (click)="moveWindow('type')">
-            <div class="label-s"><h3>戻る</h3></div>
+        <div class="print-cargo click" routerLink="/" routerLinkActive="active">
+            <div class="label-s"><h3>MAIN</h3></div>
         </div>
     </div>
 </ng-container>
@@ -72,11 +47,11 @@
     </div>
     </ng-container>
     <ng-container *ngIf="flags['onFaceCat']">
-    <div class="print-cargo_s click" (click)="buildPdf()">
-        <div class="label-s">ダウンロード</div>
+    <div class="print-cargo_s click" (click)="setReview()">
+        <div class="label-s">最終確認</div>
     </div>
     </ng-container>
-    <div class="print-cargo_s click" (click)="moveWindow('type')">
+    <div class="print-cargo_s click" (click)="moveWindow('picture')">
         <div class="label-s">戻る</div>
     </div>
 </div>
@@ -84,13 +59,38 @@
 </ng-container>
 
 <ng-container *ngIf="flags['onDownload']">
-    <div class="print-caption">PDFをダウンロードします</div>
-    <div class="select-box-bottom">
-        <div class="print-cargo_s click" (click)="buildPdf()">
-            <div class="label-s"><h3>ダウンロード</h3></div>
+    <div class="print-caption">PDFをダウンロード</div>
+    <div class="select-box-right">
+        <div class="print-cargo_s click" (click)="setupLayoutType(0)">
+            <div class="label-s">JIS規格</div>
         </div>
-        <div class="print-cargo_s click" (click)="moveWindow('type')">
-            <div class="label-s"><h3>初めに戻る</h3></div>
+        <div class="print-cargo_s click" (click)="setupLayoutType(1)">
+            <div class="label-s">タイプ１</div>
+        </div>
+        <div class="print-cargo_s click" (click)="setupLayoutType(2)">
+            <div class="label-s">タイプ２</div>
+        </div>
+        <div class="print-cargo_s click" (click)="setupLayoutType(3)">
+            <div class="label-s">タイプ３</div>
+        </div>
+        <div class="print-cargo_s click" (click)="setupLayoutType(4)">
+            <div class="label-s">タイプ４</div>
+        </div>
+        <div class="print-cargo_s click" (click)="setDownload()">
+            <div class="label-s">ダウンロード</div>
+        </div>
+        <div class="print-cargo_s click" (click)="moveWindow('picture')">
+            <div class="label-s">初めに戻る</div>
+        </div>
+    </div>
+    <div class="preview">
+        <div class="">
+            <img width="250px"
+                [attr.src]="sanitizer.bypassSecurityTrustResourceUrl(pageLayout[0])">
+        </div>
+        <div>
+            <img width="250px"
+                [attr.src]="sanitizer.bypassSecurityTrustResourceUrl(pageLayout[1])">
         </div>
     </div>
 </ng-container>

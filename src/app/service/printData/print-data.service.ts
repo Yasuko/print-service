@@ -142,13 +142,29 @@ export class PrintDataService {
     }
 
     deletePrint(id: number): Promise<void> {
+
+        const del = {'data': id, 'job': 'delete_p'};
+
         return this.http
-            .delete(this.serverUrl, {headers: this.headerJson})
+            .post(this.serverUrl,
+                JSON.stringify(del),
+                {headers: this.headerJson})
             .toPromise()
             .then((response: Response) => this.responseStatus = response.json())
             .catch(this.handleError);
     }
+    deleteText(id: number): Promise<PrintText[]> {
 
+        const del = {'data': id, 'job': 'delete_t'};
+
+        return this.http
+            .post(this.serverUrl,
+                JSON.stringify(del),
+                {headers: this.headerJson})
+            .toPromise()
+            .then((response: Response) => this.responseStatus = response.json())
+            .catch(this.handleError);
+    }
     private handleError(error: any): Promise<any> {
         console.error('An error occured', error);
         return Promise.reject(error.message || error);

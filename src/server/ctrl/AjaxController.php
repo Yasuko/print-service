@@ -34,7 +34,11 @@ class AjaxController extends Controller
                 **/
                 case 'update_p':  $this->updatePrint('PrintData');   break;
                 case 'update_t':  $this->updateText('PrintText');   break;
-
+                /**
+                * データ削除
+                **/
+                case 'delete_p':  $this->deletePrint('PrintData');   break;
+                case 'delete_t':  $this->deleteText('PrintText');   break;
             }
         }
     }
@@ -44,7 +48,7 @@ class AjaxController extends Controller
      *
      */
 
-    public function getPrintData($repository){
+    private function getPrintData($repository){
         if($this->_id == "all"){
             $data = $this->db_manager->get($repository)->getAll();
         }else{
@@ -53,7 +57,7 @@ class AjaxController extends Controller
         }
         $this->json($data);
     }
-    public function getTextData($repository){
+    private function getTextData($repository){
         if($this->_id == "all"){
             $data = $this->db_manager->get($repository)->getAll();
         }else{
@@ -68,7 +72,7 @@ class AjaxController extends Controller
      *
      */
 
-    public function addNewPrint($repository){
+    private function addNewPrint($repository){
         // $this->_data['template'] = $this->_data['template']['changingThisBreaksApplicationSecurity'];
         $this->db_manager->get($repository)->insert($this->_data);
         $last = $this->db_manager->get($repository)->getLatest();;
@@ -80,7 +84,7 @@ class AjaxController extends Controller
         }
     }
 
-    public function addNewText($repository){
+    private function addNewText($repository){
         $num = count($this->_data['data']) - 1;
         for($i = 0; $i <= $num; $i++){
             $this->db_manager->get($repository)->insert($this->_data['data'][$i]);
@@ -100,7 +104,7 @@ class AjaxController extends Controller
      * 更新処理
      *
      */
-     public function updatePrint($repository){
+     private function updatePrint($repository){
         $this->db_manager->get($repository)->update($this->_data);
         $data = $this->db_manager->get($repository)
             ->getById(array('id' => $this->_data['id']));
@@ -117,7 +121,7 @@ class AjaxController extends Controller
         }
         $this->json($data);
      }
-     public function updateText($repository){
+     private function updateText($repository){
 
         $this->db_manager->get($repository)
             ->deleteByPrintId(array('print_id' => $this->_data['data'][0]['print_id']));
@@ -143,4 +147,20 @@ class AjaxController extends Controller
         $this->json($data);
      }
 
+     private function deletePrint($repository) {
+
+     }
+     private function deleteText($repository){
+
+        $text = $this->db_manager->get($repository)
+                    ->getById(array('id' => $this->_data['data']));
+
+        $this->db_manager->get($repository)
+                ->delete(array('id' => $this->_data['data']));
+
+        $data = $this->db_manager->get($repository)
+            ->getByPrintId(array('print_id' => $text['print_id']));
+
+        $this->json($data);
+     }
 }

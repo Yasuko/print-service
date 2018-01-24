@@ -93,11 +93,11 @@ class PrintTextRepository extends DbRepository
         DELETE FROM
             print_text
         WHERE
-            id          = :id
+            id      = :id
         ";
 
         $stmt = $this->execute($sql,array(
-            ':id'		=> $status['id'],
+            ':id'   => $status['id'],
         ));
     }
 
@@ -106,11 +106,11 @@ class PrintTextRepository extends DbRepository
         DELETE FROM
             print_text
         WHERE
-            print_id          = :print_id
+            print_id    = :print_id
         ";
 
         $stmt = $this->execute($sql,array(
-            ':print_id'		=> $status['print_id'],
+            ':print_id' => $status['print_id'],
         ));
     }
 

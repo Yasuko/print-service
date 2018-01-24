@@ -5,10 +5,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { LayoutStatusService } from './layout-status.service';
 import { PrintDataService } from '../service/index';
 import { PrintData, PrintText } from '../service/index';
+import { SubjectsService } from '../service/index';
 
 import { fadeInAnimation, alertAnimation } from '../_lib_service/index';
-
-// Import TherdParty Service
+// Import Component Liblary
+import { AlertComponent, LoadingComponent } from '../_lib_component/index';
 
 
 @Component({
@@ -31,6 +32,8 @@ export class LayoutComponent implements OnInit {
     inputForm;
     nameTitles;
     editResolution = 3;
+    editScale = 'scale(1)';
+    editScaleCount = 1;
 
     fname = '';
     name = '';
@@ -52,6 +55,13 @@ export class LayoutComponent implements OnInit {
     editWidth = 0;
     editHeight = 0;
 
+    pageMoveSwitch = false;
+    pageMoveBasePointX = 0;
+    pageMoveBasePointY = 0;
+    pageMoveFinalPointX = 0;
+    pageMoveFinalPointY = 0;
+    pageMoveX = 0;
+    pageMoveY = 0;
 
     svgBox;
     x = 0;
@@ -77,6 +87,7 @@ export class LayoutComponent implements OnInit {
         private sanitizer: DomSanitizer,
         private layoutStatusService: LayoutStatusService,
         private printDataService: PrintDataService,
+        private subjectsService: SubjectsService,
     ) {
         this.flags = this.layoutStatusService.flags;
         this.sheetSpec = this.layoutStatusService.sheetSpec;
@@ -85,9 +96,10 @@ export class LayoutComponent implements OnInit {
 
     ngOnInit(): void {
         this.getALLPrintData();
+        console.log('aaaaa');
     }
     /** ********************************************
-    * ドラッグイベント
+    * SVGファイルドラッグイベント
     ******************************************** */
 
     /**
@@ -109,7 +121,7 @@ export class LayoutComponent implements OnInit {
     onDropHandler(event, type: string): void {
         event.preventDefault();
         this.onDrag = false;
-        this.reset('fast');
+        // this.reset('fast');
 
         let files;
         if (type === 'drag') {
@@ -123,20 +135,9 @@ export class LayoutComponent implements OnInit {
         if (files[0].type === 'image/svg+xml') {
             const result = [];
             this.reader.onloadend = (e) => {
-                // const body = this.sanitizer.bypassSecurityTrustResourceUrl(this.reader.result);
                 this.editLayout.template = String(this.reader.result);
-
-                // const svg = this.reader.result;
-                // const parser = new DOMParser();
-                // const dom = parser.parseFromString(svg, 'image/svg+xml');
-                // const layer = dom.querySelector('g');
-                // console.log(layer);
-                // this.loadSVGData = layer.children;
-                // console.log(this.loadSVGData[0]);
             };
             this.reader.readAsDataURL(files[0]);
-            // this.reader.readAsText(files[0]);
-
             this.switchLoadtoPreview();
         }
         event.stopPropagation();
@@ -152,6 +153,31 @@ export class LayoutComponent implements OnInit {
 
     }
     /** ********************************************
+    * 画面移動
+    ******************************************** */
+    onPageDownHandler(event: MouseEvent): void {
+        if (!this.moveSwitch) {
+            this.pageMoveBasePointX = event.pageX;
+            this.pageMoveBasePointY = event.pageY;
+            this.pageMoveSwitch = true;
+        }
+    }
+
+    onPageMoveHandler(event: MouseEvent): void {
+        if (this.pageMoveSwitch) {
+            this.pageMoveX =  -(this.pageMoveBasePointX - event.pageX) + this.pageMoveFinalPointX;
+            this.pageMoveY = -(this.pageMoveBasePointY - event.pageY) + this.pageMoveFinalPointY;
+        }
+    }
+
+    onPageUpHandler(event: MouseEvent): void {
+        if (this.pageMoveSwitch) {
+            this.pageMoveFinalPointX = this.pageMoveX;
+            this.pageMoveFinalPointY = this.pageMoveY;
+            this.pageMoveSwitch = false;
+        }
+    }
+    /** ********************************************
     * テキストの移動
     ******************************************** */
     onTextDownHandler(event: MouseEvent, i: number): void {
@@ -159,33 +185,28 @@ export class LayoutComponent implements OnInit {
         this.svgBox = document.getElementById('edit-svg');
 
         const rect = this.svgBox.getBoundingClientRect();
-        this.x = rect.left + window.pageXOffset;
-        this.y = rect.top + window.pageYOffset;
-        this.mouseStartingPointX = event.pageX - this.x;
-        this.mouseStartingPointY = event.pageY - this.y;
+        const sc = this.editScaleCount;
+        this.x = rect.left / sc + window.pageXOffset / sc;
+        this.y = rect.top / sc + window.pageYOffset / sc;
+        this.mouseStartingPointX = event.pageX / sc - this.x;
+        this.mouseStartingPointY = event.pageY / sc - this.y;
         this.moveSwitch = true;
     }
 
     onTextMoveHandler(event: MouseEvent): void {
+        const sc = this.editScaleCount;
         if (this.moveSwitch) {
-            // console.log(this.mouseStartingPointX + '::' + this.mouseStartingPointY);
-            // console.log(this.x + '::' + this.y);
-            // console.log(event.pageX + '::' + event.pageY);
-            this.mouseMoveX = (this.mouseStartingPointX + this.x) - event.pageX;
-            this.mouseMoveY = (this.mouseStartingPointY + this.y) - event.pageY;
-            // console.log(this.mouseMoveX + '::' + this.mouseMoveY);
-            this.textLists[this.moveTarget]['x'] = this.mouseStartingPointX - this.mouseMoveX;
-            this.textLists[this.moveTarget]['y'] = this.mouseStartingPointY - this.mouseMoveY;
-            // console.log(this.mouseMoveX + '::' + this.mouseMoveY);
+            this.mouseMoveX = (this.mouseStartingPointX + this.x) - event.pageX / sc;
+            this.mouseMoveY = (this.mouseStartingPointY + this.y) - event.pageY / sc;
+            const x = Math.floor((this.mouseStartingPointX - this.mouseMoveX) * 1000);
+            const y = Math.floor((this.mouseStartingPointY - this.mouseMoveY) * 1000);
+            this.textLists[this.moveTarget]['x'] = x / 1000;
+            this.textLists[this.moveTarget]['y'] = y / 1000;
         }
     }
 
     onTextUpHandler(event: MouseEvent): void {
         this.moveSwitch = false;
-    }
-
-    onEditTextHandler(): void {
-
     }
 
     getALLPrintData(): void {
@@ -198,9 +219,9 @@ export class LayoutComponent implements OnInit {
     getPrintData(id: number): void {
         this.printDataService.getPrintData(id)
             .then((print: PrintData) => {
-                console.log(print);
+
                 this.editLayout = print;
-                console.log(this.editLayout.template);
+
                 this.setupSheetType(this.editLayout.size);
                 this.setupSheetDirection(this.editLayout.direction);
                 this.getPrintText(this.editLayout.id);
@@ -252,6 +273,13 @@ export class LayoutComponent implements OnInit {
             });
     }
 
+    deleteText(id: number): Promise<any> {
+        return this.printDataService.deleteText(id)
+            .then((response: PrintText[]) => {
+                this.textLists = response;
+            });
+    }
+
     /** ********************************************
          *
          * 画面毎の処理
@@ -270,24 +298,35 @@ export class LayoutComponent implements OnInit {
 
     }
     setSave(): void {
-        this.setupLoading('保存中');
+
+        this.subjectsService.publish('load', 'show');
 
         if (this.editLayout.id !== undefined) {
             this.updateLayout()
                 .then((response) => {
                     this.updateText(response.id);
-                    this.setupLoadend();
-                    this.setupAlert('保存完了');
+                    this.subjectsService.publish('load', 'hide');
+                    this.subjectsService.publish('alert', '保存完了');
                 });
         } else {
             this.addLayout().then((response: PrintData) => {
                 this.addText(response['id']);
-                this.setupLoadend();
-                this.setupAlert('登録完了');
+                this.subjectsService.publish('load', 'hide');
+                this.subjectsService.publish('alert', '登録完了');
             });
         }
         this.getALLPrintData();
         // this.moveWindow('main');
+    }
+    setDelete(id: number): void {
+        this.subjectsService.publish('load', 'show');
+        this.deleteText(id)
+            .then(() => {
+                this.subjectsService.publish('load', 'hide');
+                this.subjectsService.publish('alert', '削除完了');
+            }
+
+            );
     }
 
 
@@ -305,7 +344,7 @@ export class LayoutComponent implements OnInit {
                 this.flags[key] = false;
             }
         }
-        console.log(window);
+
         if (window === 'main') {
             this.flags.main = true;
         } else if (window === 'sheetsize') {
@@ -323,30 +362,6 @@ export class LayoutComponent implements OnInit {
         } else if (window === 'download') {
             this.flags.onDownload = true;
         }
-    }
-    /**
-     * 読み込み中画面表示
-     * @param message
-     */
-    setupLoading(message: string): void {
-        this.loader = 'loading';
-        this.loadMessage = message;
-    }
-    setupLoadend(): void {
-        this.loader = 'loadend';
-        this.loadMessage = '';
-    }
-    /**
-     * アラート画面表示
-     * @param message
-     */
-    setupAlert(message: string): void {
-        this.alert = 'show';
-        this.alertMessage = message;
-        setTimeout(() => {
-            this.alert = 'hide';
-            this.alertMessage = '';
-        }, 2000);
     }
 
     setupSheetType(desine): void {
@@ -378,6 +393,14 @@ export class LayoutComponent implements OnInit {
         this.sheetSpec['vertical'] = (rotate === 'vertical') ? true : false;
         this.sheetSpec['side'] = (rotate === 'side') ? true : false;
         this.setupSheetType(this.editSheetSize);
+    }
+    setupBig(): void {
+        this.editScaleCount += 0.1;
+        this.editScale = 'scale(' + this.editScaleCount + ')';
+    }
+    setupLittle(): void {
+        this.editScaleCount -= 0.1;
+        this.editScale = 'scale(' + this.editScaleCount + ')';
     }
 
     checkNull(cell): boolean {

@@ -37,19 +37,19 @@ export class PostcardStatusService {
     };
     printSheetDesine = '';
     formStatus = {
-        postcode: '6711104',
-        address1: '兵庫県姫路市広畑区才',
-        address2: '６２９－８',
-        building: '宇宙怪獣ももりやん',
-        name1: '守屋　雅之',
-        name2: '',
+        postcode: '1234567',
+        address1: '兵庫県神戸市中央区',
+        address2: '1234-1',
+        building: 'もの凄いビル',
+        name1: 'どっかのだれか',
+        name2: 'どっかとだれか',
         title: '',
-        company: 'あああああ',
-        department: 'あああああああああ',
-        myPostcode: '6711104',
-        myAddress: '兵庫県姫路市広畑区才６２９',
-        myBuilding: '宇宙怪獣ももりやん',
-        myName: '宇宙怪獣も',
+        company: '破れない商事',
+        department: '引き裂かない課',
+        myPostcode: '1234567',
+        myAddress: '兵庫県神戸市中央区',
+        myBuilding: '空前絶後のアパート',
+        myName: 'どこぞのだれか',
     };
     inputForm = {
         company: false,

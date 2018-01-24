@@ -58,6 +58,11 @@ export class PostcardService {
                 myAddress: [29, 50, 0, 0, 4.5],
                 myBuilding: [24, 50, 0, 0, 4.5],
                 myName: [10, 60, 0, 0, 8]},
+            myAddressNewYear: {
+                myPostcode: [8, 127, 0, 0, 5],
+                myAddress: [29, 40, 0, 0, 4.5],
+                myBuilding: [24, 40, 0, 0, 4.5],
+                myName: [10, 45, 0, 0, 8]},
         };
         return desine[type];
     }

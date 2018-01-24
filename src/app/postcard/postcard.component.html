@@ -7,10 +7,10 @@
 <ng-container *ngIf="flags['onType']">
 <div class="print-caption">はがきタイプ選択</div>
 <div class="select-box">
-    <div class="print-cargo click" (click)="setSheetType(0)">
+    <div class="print-cargo click" (click)="setSheetType('normal')">
         <div class="label-s"><h3>普通</h3></div>
     </div>
-    <div class="print-cargo click" (click)="setSheetType(1)">
+    <div class="print-cargo click" (click)="setSheetType('newyear')">
         <div class="label-s"><h3>年賀</h3></div>
     </div>
 </div>

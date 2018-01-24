@@ -25,6 +25,7 @@ export class PostcardComponent {
     desineFlagsName;
     multiPageFlag = false;
 
+    postcardType = 'normal';
     postcardDesine = null;
     postcardMyAddress = false;
 
@@ -142,7 +143,8 @@ export class PostcardComponent {
          *
     ******************************************** */
 
-    setSheetType(type: number): void {
+    setSheetType(type: string): void {
+        this.postcardType = type;
         this.multiPageFlag = false;
         this.moveWindow('loadcsv');
     }
@@ -288,7 +290,7 @@ export class PostcardComponent {
         }
     }
     /**
-     * タックシートイメージ画像作成
+     * 画像作成
      */
     buildIMage(): void {
         this.postcardMakerService.setResulution(13.78095);
@@ -296,7 +298,14 @@ export class PostcardComponent {
             this.postcardService.getPostcardDesine(this.postcardDesine)
         );
         if (this.postcardMyAddress) {
-            const desine = this.postcardService.getPostcardDesine('myAddress');
+            let desine = [];
+
+            if (this.postcardType === 'normal') {
+                desine = this.postcardService.getPostcardDesine('myAddress');
+            } else {
+                desine = this.postcardService.getPostcardDesine('myAddressNewYear');
+            }
+
             this.postcardMakerService.setMyAddressLayout(desine);
         }
         this.postcardMakerService.setPrintContents(this.formStatus);
@@ -330,15 +339,22 @@ export class PostcardComponent {
                 this.postcardService.getPostcardDesine(this.postcardDesine)
             );
             if (this.postcardMyAddress) {
-                const desine = this.postcardService.getPostcardDesine('myAddress');
+                let desine = [];
+                console.log(this.postcardType);
+                if (this.postcardType === 'normal') {
+                    desine = this.postcardService.getPostcardDesine('myAddress');
+                } else {
+                    desine = this.postcardService.getPostcardDesine('myAddressNewYear');
+                }
                 this.postcardMakerService.setMyAddressLayout(desine);
             }
             this.postcardMakerService.setPrintContents(this.formStatus);
+            this.postcardMakerService.setSheetType(this.postcardType);
             this.postcardMakerService.sheetMaker().then(
                 (img) => {
                     this.postcardPreviewImageMulti.push(img);
                     this.postcardImageMulti.push(this.postcardMakerService.getSheetImage());
-                    console.log(page + '::' + pages);
+                    // console.log(page + '::' + pages);
                     if (page === pages) {
                         // this.buildIMageMulti();
                     } else {

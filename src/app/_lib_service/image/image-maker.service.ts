@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ImageMakerService {
 
+    alreadyEnlargement = false;
 
     /**
      * 印刷サイズ
@@ -39,9 +40,24 @@ export class ImageMakerService {
 
     constructor(
     ) {}
+    /**
+     * 用紙サイズ設定
+     * @param width
+     * @param height
+     */
     setSheetSize(width: number, height: number): void {
         this.sheetSize.width = width;
         this.sheetSize.height = height;
+        this.alreadyEnlargement = false;
+    }
+    /**
+     * 拡大率設定
+     * 印刷用に350dpiに合わせる場合13.78095を設定
+     * @param magnification
+     */
+    setResulution(magnification): void {
+        this.resulution = magnification;
+        this.alreadyEnlargement = false;
     }
     setSheetPropatie(spec): void {
         this.setParams(spec, 'sheetSpec');
@@ -60,9 +76,6 @@ export class ImageMakerService {
     }
     setTextDesine(desine): void {
         this.setParams(desine, 'textDesine');
-    }
-    setResulution(magnification): void {
-        this.resulution = magnification;
     }
 
     /**
@@ -128,14 +141,81 @@ export class ImageMakerService {
 
     }
 
+    svgToImg(): Promise<string> {
 
+        this.doEnlargement();
+        const oc = <HTMLCanvasElement> document.createElement('canvas');
+        const ctx = oc.getContext('2d');
+        const bg = <HTMLCanvasElement> document.createElement('canvas');
+        const bgctx = bg.getContext('2d');
+
+        oc.setAttribute('width', (this.sheetSize.width).toString());
+        oc.setAttribute('height', (this.sheetSize.height).toString());
+        bg.setAttribute('width', (this.sheetSize.width).toString());
+        bg.setAttribute('height', (this.sheetSize.height).toString());
+        return new Promise((resolve, reject) => {
+
+            const loadImage = () => {
+                const img = new Image();
+                img.onload = (e) => {
+                    bgctx.drawImage(img, 0, 0, this.sheetSize.width, this.sheetSize.height);
+                    ctx.drawImage(bg, 0, 0, this.sheetSize.width, this.sheetSize.height);
+
+                    this.sheetImage = oc.toDataURL('image/jpg');
+                    resolve(this.sheetImage);
+                };
+                img.src = this.sheetBackground;
+            };
+            loadImage();
+        });
+    }
+    overFaceShot(face: string): Promise<string> {
+        this.doEnlargement();
+        const oc = <HTMLCanvasElement> document.createElement('canvas');
+        const ctx = oc.getContext('2d');
+        const bg = <HTMLCanvasElement> document.createElement('canvas');
+        const bgctx = bg.getContext('2d');
+        const fg = <HTMLCanvasElement> document.createElement('canvas');
+        const fgctx = fg.getContext('2d');
+
+        oc.setAttribute('width', (this.sheetSize.width).toString());
+        oc.setAttribute('height', (this.sheetSize.height).toString());
+        bg.setAttribute('width', (this.sheetSize.width).toString());
+        bg.setAttribute('height', (this.sheetSize.height).toString());
+        fg.setAttribute('width', (this.sheetSize.width).toString());
+        fg.setAttribute('height', (this.sheetSize.height).toString());
+        const imgFace = new Image();
+        imgFace.src = face;
+        fgctx.drawImage(imgFace, 2205, 234, 400, 524);
+        return new Promise((resolve, reject) => {
+
+            const loadImage = () => {
+                const img = new Image();
+                    img.onload = (e) => {
+                        bgctx.drawImage(img, 0, 0, this.sheetSize.width, this.sheetSize.height);
+
+                        ctx.drawImage(bg, 0, 0, this.sheetSize.width, this.sheetSize.height);
+                        ctx.drawImage(fg, 0, 0, this.sheetSize.width, this.sheetSize.height);
+
+                        console.log(oc.width);
+                        this.sheetImage = oc.toDataURL('image/jpg');
+                        resolve(this.sheetImage);
+                    };
+                img.src = this.sheetBackground;
+            };
+            loadImage();
+        });
+    }
 
     /**
      * 指定倍率の応じたシートサイズの拡大
      */
     doEnlargement(): void {
-        this.sheetSize.width = this.sheetSize.width * this.resulution;
-        this.sheetSize.height = this.sheetSize.height * this.resulution;
+        if (!this.alreadyEnlargement) {
+            this.sheetSize.width = this.sheetSize.width * this.resulution;
+            this.sheetSize.height = this.sheetSize.height * this.resulution;
+            this.alreadyEnlargement = true;
+        }
     }
 
     getSheetImage(): string {

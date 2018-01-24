@@ -230,7 +230,6 @@ export class PrintComponent implements OnInit {
                 this.buildPdf();
             }
         );
-
     }
 
     /**

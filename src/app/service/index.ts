@@ -7,3 +7,7 @@ export * from './printData/printText';
 export * from './sheetDesine/label-sheet.service';
 export * from './sheetDesine/postcard.service';
 
+
+
+// Main Service
+export * from './subjects.service';

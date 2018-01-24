@@ -1,10 +1,16 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subscription } from 'rxjs/Subscription';
 // Import TherdParty Service
 import { PdfMakerService, RecruiteMakerService } from '../_lib_service/index';
-import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index';
-import { ImageOrientationService } from '../_lib_service/index';
+// import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index';
+import { ImageMakerService, ImageOrientationService } from '../_lib_service/index';
+
+// Import Layout
+import { RecruiteLayoutType1Service, RecruiteLayoutType2Service } from '../_lib_service/index';
+import { RecruiteLayoutType3Service, RecruiteLayoutType4Service } from '../_lib_service/index';
+import { RecruiteLayoutType5Service } from '../_lib_service/index';
 
 @Component({
     selector: 'recruite-print',
@@ -23,11 +29,12 @@ export class RecuruiteComponent {
             onReview: false,
             onFaceCat: false,
         onDrag: false,
-        onType: true,
-        onSelectPhoto: false,
+        onType: false,
+        onSelectPhoto: true,
         onDownload: false,
         onLoad: false
     };
+    pageLayout = [];
 
     fname = '';
     name = '';
@@ -70,12 +77,22 @@ export class RecuruiteComponent {
     subscription: Subscription;
     constructor(
         private router: Router,
+        private sanitizer: DomSanitizer,
         private pdfmakerService: PdfMakerService,
-        private listlayoutService: ListLayoutService,
-        private recruitelayoutService: RecruiteLayoutService,
+        // private listlayoutService: ListLayoutService,
+        // private recruitelayoutService: RecruiteLayoutService,
         private imageOrientationService: ImageOrientationService,
-        private recruiteMakerService: RecruiteMakerService
-    ) {}
+        private imageMakerService: ImageMakerService,
+        private recruiteMakerService: RecruiteMakerService,
+        private recruiteLayout1: RecruiteLayoutType1Service,
+        private recruiteLayout2: RecruiteLayoutType2Service,
+        private recruiteLayout3: RecruiteLayoutType3Service,
+        private recruiteLayout4: RecruiteLayoutType4Service,
+        private recruiteLayout5: RecruiteLayoutType5Service,
+    ) {
+        this.pageLayout[0] = this.recruiteLayout5.getLayoutPage1();
+        this.pageLayout[1] = this.recruiteLayout5.getLayoutPage2();
+    }
 
     onDragOverHandler(event: DragEvent): void {
         event.preventDefault();
@@ -151,58 +168,14 @@ export class RecuruiteComponent {
         this.canvasImage.src = this.onImage;
     }
     rotationImage(rotate): void {
-        const img_type = this.onImage.substring(5, this.onImage.indexOf(';'));
-        // Source Image
-        const img = new Image();
-        img.onload = (e) => {
-            // New Canvas
-            const canvas = <HTMLCanvasElement> document.createElement('canvas');
-            const width = img.naturalWidth;
-            const height = img.naturalHeight;
 
-            if (rotate === 5 || rotate === 6 || rotate === 7 || rotate === 8) {
-                // swap w <==> h
-                canvas.setAttribute('width', height.toString());
-                canvas.setAttribute('height', width.toString());
-            } else {
-                canvas.setAttribute('width', width.toString());
-                canvas.setAttribute('height', height.toString());
-            }
+        this.imageOrientationService
+            .ImgRotation(this.onImage, rotate)
+            .then((img) => {
+                this.onImage = img;
+                this.resultImage();
+            });
 
-            // Draw (Resize)
-            const ctx = canvas.getContext('2d');
-            if (rotate === 0) {
-
-            } else if (rotate === 1) {
-
-            } else if (rotate === 2) {
-                ctx.transform(1, -1, 0, 0, 0, 0);
-            } else if (rotate === 3) {
-                ctx.rotate(180 * Math.PI / 180);
-                ctx.translate(-width, -height);
-            } else if (rotate === 4) {
-                ctx.transform(1, 0, 0, -1, 0, 0);
-            } else if (rotate === 5) {
-                ctx.rotate(270 * Math.PI / 180);
-                ctx.translate(-width, 0);
-                ctx.transform(1, 0, 0, -1, 0, 0);
-            } else if (rotate === 6) {
-                ctx.rotate(90 * Math.PI / 180);
-                ctx.translate(0, -height);
-            } else if (rotate === 7) {
-                ctx.rotate(rotate * Math.PI / 180);
-                ctx.translate(0, -height);
-                ctx.transform(1, 0, 0, -1, 0, 0);
-            } else if (rotate === 8) {
-                ctx.rotate(270 * Math.PI / 180);
-                ctx.translate(-width, 0);
-            }
-            ctx.drawImage(img, 0, 0, width, height);
-
-            this.onImage = canvas.toDataURL(img_type);
-            this.resultImage();
-        };
-        img.src = this.onImage;
     }
 
     /**
@@ -297,11 +270,11 @@ export class RecuruiteComponent {
         img.src = this.onImage;
     }
 
+/******************************************************
+ * ページ毎の処理
+ *
+ *****************************************************/
 
-    setRecruiteType(type: number): void {
-        this.moveWindow('picture');
-
-    }
     setPicutureType(choice: boolean): void {
         if (choice) {
             this.moveWindow('edit');
@@ -314,29 +287,31 @@ export class RecuruiteComponent {
         this.moveWindow('edit');
 
     }
-    setDonload(): void {
+    setReview(): void {
+        if (!this.pageLayout.hasOwnProperty(0)) {
+            this.setLayout(0);
+        }
         this.moveWindow('download');
     }
+    setDownload(): void {
+        this.buildIMage();
+    }
+
     moveWindow(window: string): void {
+        for (const key in this.flags) {
+            if (this.flags.hasOwnProperty(key)) {
+                this.flags[key] = false;
+            }
+        }
         if (window === 'type') {
             this.flags.onType = true;
-            this.flags.onSelectPhoto = false;
-            this.flags.onFileLoad = false;
-            this.flags.onDownload = false;
+            this.flags.onPicuture = true;
         } else if (window === 'picture') {
-            this.flags.onType = false;
             this.flags.onSelectPhoto = true;
-            this.flags.onFileLoad = false;
-            this.flags.onDownload = false;
         } else if (window === 'edit') {
-            this.flags.onType = false;
-            this.flags.onSelectPhoto = false;
             this.flags.onFileLoad = true;
-            this.flags.onDownload = false;
+            this.flags.onPicuture = true;
         } else if (window === 'download') {
-            this.flags.onType = false;
-            this.flags.onSelectPhoto = false;
-            this.flags.onFileLoad = false;
             this.flags.onDownload = true;
         }
     }
@@ -364,16 +339,60 @@ export class RecuruiteComponent {
             this.moveSwitch = false;
         }
     }
+    setupLayoutType(type: number): void {
+        this.pageLayout = this.setLayout(type);
+    }
 
+    setLayout(type: number): string[] {
+        if (type === 1) {
+            return [
+                this.recruiteLayout1.getLayoutPage1(),
+                this.recruiteLayout1.getLayoutPage2()
+            ];
+        } else if (type === 2) {
+            return [
+                this.recruiteLayout1.getLayoutPage1(),
+                this.recruiteLayout2.getLayoutPage2()
+            ];
+        } else if (type === 3) {
+            return [
+                this.recruiteLayout1.getLayoutPage1(),
+                this.recruiteLayout3.getLayoutPage2()
+            ];
+        } else if (type === 4) {
+            return [
+                this.recruiteLayout1.getLayoutPage1(),
+                this.recruiteLayout4.getLayoutPage2()
+            ];
+        } else if (type === 0) {
+            return [
+                this.recruiteLayout5.getLayoutPage1(),
+                this.recruiteLayout5.getLayoutPage2()
+            ];
+        }
+    }
+    buildIMage(): void {
+        this.imageMakerService.setResulution(13.78095);
+        this.imageMakerService.setSheetSize(210, 297);
+        this.imageMakerService.setSheetBackground(this.pageLayout[0]);
+        this.imageMakerService.overFaceShot(this.onImage).then(
+            (img1) => {
+                const image0 = img1;
+                this.imageMakerService.setSheetBackground(this.pageLayout[1]);
+                this.imageMakerService.svgToImg().then(
+                    (img2) => {
+                        this.pageLayout = [image0, img2];
+                        this.buildPdf();
+                    }
+                );
+            }
+        );
+    }
     buildPdf(): void {
-        this.recruiteMakerService.setResolution(13.78095);
-        const img = this.recruiteMakerService.sheetMaker();
-        this.recruitelayoutService.setImage(this.canvasBase.toDataURL(this.onImageType));
-        this.recruitelayoutService.setFName(this.fname);
-        this.recruitelayoutService.setName(this.name);
-        // const layout = this.recruitelayoutService.makePdfLayout();
+        this.recruiteMakerService.setResolution(2.8333);
+        this.recruiteMakerService.setLayout(this.pageLayout);
 
-        const layout = this.recruitelayoutService.makeRecruiteLayout(img);
+        const layout = this.recruiteMakerService.makeRecruiteLayout();
         const userAgent = window.navigator.userAgent.toLowerCase();
         this.pdfmakerService.pdfMakeForIE(layout);
 
@@ -383,5 +402,4 @@ export class RecuruiteComponent {
         const type = header[0].split(':');
         this.onImageType = type[1];
     }
-
 }

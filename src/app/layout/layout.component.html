@@ -1,9 +1,7 @@
-<div class="load-screen" [@fadeInAnimation]="loader">
-    <div>{{loadMessage}}</div>
-</div>
-<div class="alert-window" [@alertAnimation]="alert">
-    <div>{{alertMessage}}</div>
-</div>
+
+<loading></loading>
+
+<alert></alert>
 
 <!-- ---------------------------------------
     トップ画面
@@ -30,7 +28,11 @@
 </ul>
 </div>
 </ng-container> 
-
+<div class="select-box">
+    <div class="cargo-s click" routerLink="/" routerLinkActive="active">
+        <div class="label-s"><h3>MAIN</h3></div>
+    </div>
+</div>
 <!-- ---------------------------------------
     SVGファイルの読込
 --------------------------------------- -->   
@@ -139,32 +141,41 @@
         </div>
     </div>
 </div>
-<div class="edit-box">
-    <div>
-        <div class="edit-bg">
-            <img [attr.width]="editWidth" [attr.height]="editHeight"
-                [attr.src]="sanitizer.bypassSecurityTrustResourceUrl(editLayout.template)">
-        </div>
-        <div class="edit-svg" id="edit-svg">
-            <ng-container *ngFor="let text of textLists; index as i">
-            <div [style.left]="text['x']+'px'" [style.top]="text['y']+'px'"
-                class="edit-label-view">{{text["label"]}}</div>
-            </ng-container>
-            <svg [attr.width]="editWidth" [attr.height]="editHeight"
-                (mousemove)="onTextMoveHandler($event)"
-                (mouseup)="onTextUpHandler($event)">
-            <ng-container *ngFor="let text of textLists; index as i">
-                <text
-                    (mousedown)="onTextDownHandler($event, i)"
-                    [attr.x]="text['x']" [attr.y]="text['y']"
-                    [attr.font-size]="text['size']"
-                     font-family="MS Mincho" fill="black">{{text["text"]}}</text>
-            </ng-container>
-            </svg>
-        </div>
+<div class="edit-box"
+    (mousedown)="onPageDownHandler($event)"
+    (mousemove)="onPageMoveHandler($event)"
+    (mouseup)="onPageUpHandler($event)">
+    <div class="edit-frame"
+        [attr.width]="editWidth"
+        [attr.height]="editHeight"
+        [style.top]="pageMoveY + 'px'"
+        [style.left]="pageMoveX + 'px'">
+    <div class="edit-bg" [style.transform]="editScale">
+        <img [attr.width]="editWidth" [attr.height]="editHeight"
+            [attr.src]="sanitizer.bypassSecurityTrustResourceUrl(editLayout.template)">
+    </div>
+    <div class="edit-svg" id="edit-svg"
+        [style.transform]="editScale">
+        <ng-container *ngFor="let text of textLists; index as i">
+        <div [style.left]="text['x']+'px'" [style.top]="text['y']+'px'"
+            class="edit-label-view">{{text["label"]}}</div>
+        </ng-container>
+        <svg [attr.width]="editWidth" [attr.height]="editHeight"
+            (mousemove)="onTextMoveHandler($event)"
+            (mouseup)="onTextUpHandler($event)">
+        <ng-container *ngFor="let text of textLists; index as i">
+            <text
+                (mousedown)="onTextDownHandler($event, i)"
+                [attr.x]="text['x']" [attr.y]="text['y']"
+                [attr.font-size]="text['size']"
+                 font-family="MS Mincho" fill="black">{{text["text"]}}</text>
+        </ng-container>
+        </svg>
+    </div>
     </div>
 </div>
-
+<div (click)="setupBig()" class="scale-button click">拡大</div>
+<div (click)="setupLittle()" class="scale-button click">縮小</div>
 <div class="text-box">
     <div class="edit-name">
         <label>名前:</label><input type="text" [(ngModel)]="editLayout.title">
@@ -188,6 +199,7 @@
             <div>
                 <div class="text-x">X:{{text["x"]}}</div>
                 <div class="text-x">Y:{{text["y"]}}</div>
+                <div class="text-del click" (click)="setDelete(text['id'])">消す</div>
             </div>
         </li>
     </ng-container>

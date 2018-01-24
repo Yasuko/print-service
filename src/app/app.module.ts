@@ -30,8 +30,15 @@ import { PostcardMakerService, RecruiteMakerService } from './_lib_service/index
 // Import Service
 import { LavelSheetService, PostcardService} from './service/index';
 import { PrintDataService, PrintData, PrintText} from './service/index';
+import { SubjectsService } from './service/index';
 
+// Import Componente Liblary
+import { AlertComponent, LoadingComponent } from './_lib_component/index';
 
+// Import Layout
+import { RecruiteLayoutType1Service, RecruiteLayoutType2Service } from './_lib_service/index';
+import { RecruiteLayoutType3Service, RecruiteLayoutType4Service } from './_lib_service/index';
+import { RecruiteLayoutType5Service } from './_lib_service/index';
 
 @NgModule({
   declarations: [
@@ -42,7 +49,8 @@ import { PrintDataService, PrintData, PrintText} from './service/index';
     RecuruiteComponent,
     TacksheetComponent,
     LayoutComponent,
-    PrintComponent
+    PrintComponent,
+    AlertComponent, LoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +70,11 @@ import { PrintDataService, PrintData, PrintText} from './service/index';
     TacksheetMakerService, ImageSaveService,
     PostcardMakerService, RecruiteMakerService,
     ImageOrientationService, ImageMakerService,
-    PrintDataService, PrintData, PrintText
+    PrintDataService, PrintData, PrintText,
+    SubjectsService,
+    RecruiteLayoutType1Service, RecruiteLayoutType2Service,
+    RecruiteLayoutType3Service, RecruiteLayoutType4Service,
+    RecruiteLayoutType5Service
   ],
   bootstrap: [AppComponent]
 })
