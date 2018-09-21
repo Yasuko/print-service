@@ -1094,7 +1094,9 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var PdfMakerService = /** @class */ (function () {
-    function PdfMakerService() {
+    function PdfMakerService(
+    // private Pdfmake: any = new pdfMake
+    ) {
         // フォント設定を行う
         pdfmake_build_pdfmake_js__WEBPACK_IMPORTED_MODULE_2__["fonts"] = {
             ipag: {
