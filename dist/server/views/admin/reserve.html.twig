@@ -1,0 +1,142 @@
+{# view/menu/index.html.twig #}
+{% extends 'pc.html.twig' %}
+
+{% block title %}商品管理{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="../css/pc_base.css" type="text/css" />
+<link rel="stylesheet" href="../css/item.css" type="text/css" />
+{% endblock %}
+
+{% block script %}
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../js/admin/item.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="item-add">
+	<p onclick="item.addItem()">商品</p>
+	<p onclick="item.addCategory()">カテゴリ</p>
+</div>
+<ul id="category">
+	<li>ごはん</li>
+	<li>麺</li>
+	<li>サラダ</li>
+	<li>パスタ</li>
+</ul>
+<div id="item-state">
+	<p>履歴・情報</p>
+	<div></div>
+</div>
+<ul id="item-box">
+	<li class="item-view">
+		<div class="item-image">
+			<p>写真</p>
+			<p><img src=""></p>
+		</div>
+		<div class="item-title">
+			<p>名前</p>
+			<p>aaaa</p>
+		</div>
+		<div class="item-price">
+			<p>値段</p>
+			<p>1000</p>
+		</div>
+		<div class="item-text">
+			<p>説明</p>
+			<p>aaaa</p>
+		</div>
+	</li>
+	<li class="item-view">
+		<div class="item-image">
+			<p>写真</p>
+			<p><img src=""></p>
+		</div>
+		<div class="item-title">
+			<p>名前</p>
+			<p>aaaa</p>
+		</div>
+		<div class="item-price">
+			<p>値段</p>
+			<p>1000</p>
+		</div>
+		<div class="item-text">
+			<p>説明</p>
+			<p>aaaa</p>
+		</div>
+	</li>
+	<li class="item-view">
+		<div class="item-image">
+			<p>写真</p>
+			<p><img src=""></p>
+		</div>
+		<div class="item-title">
+			<p>名前</p>
+			<p>aaaa</p>
+		</div>
+		<div class="item-price">
+			<p>値段</p>
+			<p>1000</p>
+		</div>
+		<div class="item-text">
+			<p>説明</p>
+			<p>aaaa</p>
+		</div>
+	</li>
+	<li class="item-view">
+		<div class="item-image">
+			<p>写真</p>
+			<p><img src=""></p>
+		</div>
+		<div class="item-title">
+			<p>名前</p>
+			<p>aaaa</p>
+		</div>
+		<div class="item-price">
+			<p>値段</p>
+			<p>1000</p>
+		</div>
+		<div class="item-text">
+			<p>説明</p>
+			<p>aaaa</p>
+		</div>
+	</li>
+	<li class="item-view">
+		<div class="item-image">
+			<p>写真</p>
+			<p><img src=""></p>
+		</div>
+		<div class="item-title">
+			<p>名前</p>
+			<p>aaaa</p>
+		</div>
+		<div class="item-price">
+			<p>値段</p>
+			<p>1000</p>
+		</div>
+		<div class="item-text">
+			<p>説明</p>
+			<p>aaaa</p>
+		</div>
+	</li>
+	<li class="item-view">
+		<div class="item-image">
+			<p>写真</p>
+			<p><img src=""></p>
+		</div>
+		<div class="item-title">
+			<p>名前</p>
+			<p>aaaa</p>
+		</div>
+		<div class="item-price">
+			<p>値段</p>
+			<p>1000</p>
+		</div>
+		<div class="item-text">
+			<p>説明</p>
+			<p>aaaa</p>
+		</div>
+	</li>
+</ul>
+
+{% endblock %}

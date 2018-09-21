@@ -1,0 +1,1285 @@
+<html>
+<head>
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="Thu, 01 Dec 1994 16:00:00 GMT">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<META name="description" content="パズドラシミュレーター">
+<META name="keywords" content="パズドラ,計算,シミュレーター,パーティー,ドロップ">
+<link href="{{asset('css/pcalc.css')}}" rel="stylesheet" type="text/css" />
+<title>パズドラ計算・シミュレーター</title>
+</head>
+<body>
+
+<div id="load-screen">
+    <p></p>
+</div>
+<div id="content">
+<div id="top-view">
+
+
+</div>
+<div id="left-space">
+
+
+</div>
+<div id="left-view">
+
+<div id="pazzle-view">
+    <div id="dObj"></div>
+    <div class="pazzle">
+        <ul>
+            <li class="purple"></li>
+            <li class="purple" ></li>
+            <li class="purple"></li>
+            <li class="yellow"></li>
+            <li class="blue"></li>
+            <li class="red"></li>
+        </ul>
+        <ul>
+            <li class="purple"></li>
+            <li class="heart" ></li>
+            <li class="green"></li>
+            <li class="yellow"></li>
+            <li class="blue"></li>
+            <li class="red"></li>
+        </ul>
+        <ul>
+            <li class="purple"></li>
+            <li class="heart" ></li>
+            <li class="green"></li>
+            <li class="yellow"></li>
+            <li class="blue"></li>
+            <li class="red"></li>
+        </ul>
+        <ul>
+            <li class="purple"></li>
+            <li class="heart" ></li>
+            <li class="green"></li>
+            <li class="yellow"></li>
+            <li class="blue"></li>
+            <li class="red"></li>
+        </ul>
+        <ul>
+            <li class="purple"></li>
+            <li class="heart" ></li>
+            <li class="green"></li>
+            <li class="yellow"></li>
+            <li class="blue"></li>
+            <li class="red"></li>
+        </ul>
+    </div>
+
+    <div id="drop-list">
+        <ul class="drop-type">
+            <li class="purple"></li>
+            <li class="heart" ></li>
+            <li class="green"></li>
+            <li class="yellow"></li>
+            <li class="blue"></li>
+            <li class="red"></li>
+        </ul>
+        <ul class="drop-type">
+            <li class="purple_plus"></li>
+            <li class="heart_plus" ></li>
+            <li class="green_plus"></li>
+            <li class="yellow_plus"></li>
+            <li class="blue_plus"></li>
+            <li class="red_plus"></li>
+        </ul>
+        <div>スキル変換もどき</div>
+        <ul id="chenge-template">
+            <li onclick="edit.chengeTmp(1)">1色</li>
+            <li onclick="edit.chengeTmp(2)">2色</li>
+            <li onclick="edit.chengeTmp(3)">3色</li>
+            <li onclick="edit.chengeTmp(5)">5色</li>
+            <li onclick="edit.chengeTmp(6)">6色</li>
+            <li onclick="edit.chengeTmp('a')">Rand</li>
+        </ul>
+        <ul class="template-type">
+            <li id="1color">
+                <ul>
+                    <li class="gr0" onclick="edit.chengeMap([0])">
+                        <p class="red">　</p>
+                    </li>
+                    <li class="gr1" onclick="edit.chengeMap([1])">
+                        <p class="blue">　</p>
+                    </li>
+                    <li class="gr2" onclick="edit.chengeMap([2])">
+                        <p class="green">　</p>
+                    </li>
+                </ul>
+            </li>
+            <li id="2color">
+                <ul>
+                    <li class="gr04" onclick="edit.chengeMap([0,4])">
+                        <p class="red">　</p>
+                        <p class="purple">　</p>
+                    </li>
+                    <li class="gr14" onclick="edit.chengeMap([1,4])">
+                        <p class="blue">　</p>
+                        <p class="purple">　</p>
+                    </li>
+                    <li class="gr24" onclick="edit.chengeMap([2,4])">
+                        <p class="green">　</p>
+                        <p class="purple">　</p>
+                    </li>
+                    <li class="gr32" onclick="edit.chengeMap([3,2])">
+                        <p class="green">　</p>
+                        <p class="yellow">　</p>
+                    </li>
+                    <li class="gr02" onclick="edit.chengeMap([0,2])">
+                        <p class="red">　</p>
+                        <p class="green">　</p>
+                    </li>
+                </ul>
+            </li>
+            <li id="3color">
+                <ul>
+                    <li class="gr023" onclick="edit.chengeMap([0,2,3])">
+                        <p class="red">　</p>
+                        <p class="green">　</p>
+                        <p class="yellow">　</p>
+                    </li>
+                    <li class="gr124" onclick="edit.chengeMap([1,2,4])">
+                        <p class="blue">　</p>
+                        <p class="green">　</p>
+                        <p class="purple">　</p>
+                    </li>
+                    <li class="gr234" onclick="edit.chengeMap([2,3,4])">
+                        <p class="green">　</p>
+                        <p class="yellow">　</p>
+                        <p class="purple">　</p>
+                    </li>
+                    <li class="gr014" onclick="edit.chengeMap([0,1,4])">
+                        <p class="red">　</p>
+                        <p class="blue">　</p>
+                        <p class="purple">　</p>
+                    </li>
+                    <li class="gr013" onclick="edit.chengeMap([0,1,3])">
+                        <p class="red">　</p>
+                        <p class="blue">　</p>
+                        <p class="yellow">　</p>
+                    </li>
+                    <li onclick="edit.chengeMap([0,1,5])">
+                        <p class="red">　</p>
+                        <p class="blue">　</p>
+                        <p class="heart">　</p>
+                    </li>
+                    <li onclick="edit.chengeMap([0,2,5])">
+                        <p class="red">　</p>
+                        <p class="green">　</p>
+                        <p class="heart">　</p>
+                    </li>
+                    <li onclick="edit.chengeMap([1,2,5])">
+                        <p class="blue">　</p>
+                        <p class="green">　</p>
+                        <p class="heart">　</p>
+                    </li>
+                    <li onclick="edit.chengeMap([3,4,5])">
+                        <p class="yellow">　</p>
+                        <p class="purple">　</p>
+                        <p class="heart">　</p>
+                    </li>
+                    <li onclick="edit.chengeMap([0,2,3])">
+                        <p class="red">　</p>
+                        <p class="green">　</p>
+                        <p class="yellow">　</p>
+                    </li>
+                </ul>
+            </li>
+            <li id="5color">
+                <ul>
+                    <li onclick="edit.chengeMap([0,1,2,3,4])">
+                        <p class="red">　</p>
+                        <p class="blue">　</p>
+                        <p class="green">　</p>
+                        <p class="yellow">　</p>
+                        <p class="purple">　</p>
+                    </li>
+                </ul>
+            </li>
+            <li id="6color">
+                <ul>
+                    <li onclick="edit.chengeMap([0,1,2,3,4,5])">
+                        <p class="red">　</p>
+                        <p class="blue">　</p>
+                        <p class="green">　</p>
+                        <p class="yellow">　</p>
+                        <p class="purple">　</p>
+                        <p class="heart">　</p>
+                    </li>
+                </ul>
+            </li>
+            <li id="randam">
+                <ul>
+                    <li onclick="edit.chengeMap([0,1,2,3,4,5])">
+                        <p class="red">　</p>
+                        <p class="blue">　</p>
+                        <p class="green">　</p>
+                        <p class="yellow">　</p>
+                        <p class="purple">　</p>
+                        <p class="heart">　</p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="edit_switch" onclick="edit.showEdit()">
+        <p>Edit</p>
+    </div>
+    <div id="checksum" onclick="pazzle.getMap()">
+        <p>Count</p>
+    </div>
+    <div id="edit_close" onclick="edit.closeEdit()">
+        <p>Close</p>
+    </div>
+
+    <div id="combo-view"></div>
+</div>
+
+<div id="master-calc" onclick="damage.finalFusion();">
+    <p>計算</p>
+</div>
+
+<div id="tips">
+    <p>パズドラ計算機 ver 0.6</p>
+<pre>
+盤面、パーティー構成から
+最終ダメージを計算する
+簡易シミュレーターです。
+
+初回ページ読み込みが11MBあるので
+相応の早いネット環境が必要です
+
+フルHD以上の解像度のタブレットか
+パソコン環境以外では
+恐らくまともに見れません
+
+</pre>
+
+<iframe     scrolling="no" frameborder="0" id="twitterWindIframe"     style="width:240px;height:250px; border:none;"     src="http://www.tweetswind.com/show?option=%7B%22isOnlyMe%22%3A%20%22true%22%2C%20%22twitterwind_frame_width%22%3A%20%22240%22%2C%20%22twitterwind_frame_height%22%3A%20%22250%22%2C%20%22twitterwind_frame_border%22%3A%20%22none%22%2C%20%22twitterwind_frame_border_color%22%3A%20%22C0DEED%22%2C%20%22twitterwind_base_font_size%22%3A%20%2212%22%2C%20%22twitterwind_logoimage%22%3A%20%22blueonwhite%22%2C%20%22twitterwind_username%22%3A%20%22on%22%2C%20%22twitterwind_username_bgcolor%22%3A%20%22FFFFFF%22%2C%20%22twitterwind_username_color%22%3A%20%22333333%22%2C%20%22twitterwind_username_follow%22%3A%20%22on%22%2C%20%22twitterwind_max_length%22%3A%20%2239%22%2C%20%22twitterwind_logo_bgcolor%22%3A%20%22FFFFFF%22%2C%20%22twitterwind_twit%22%3A%20%22on%22%2C%20%22twitterwind_twit_scroll_color%22%3A%20%22C0DEED%22%2C%20%22twitterwind_twit_scroll_bg_color%22%3A%20%22FFFFFF%22%2C%20%22twitterwind_twit_bgcolor%22%3A%20%22FFFFFF%22%2C%20%22twitterwind_twit_color%22%3A%20%22333333%22%2C%20%22twitterwind_twit_link_color%22%3A%20%220084B4%22%2C%20%22twitterwind_opacity%22%3A%20%22off%22%2C%20%22twitterwind_follower%22%3A%20%22inherit%22%2C%20%22twitterwind_follower_bgcolor%22%3A%20%22FFFFFF%22%2C%20%22usn%22%3A%20%22152933%22%7D"     > </iframe>
+<!--利用規約に従ってページ内に必ずリンクを表示してください-->
+<div style="font-size:12px; text-align:right; width:240px"><a target="_blank" href="http://www.tweetswind.com">TweetsWind</a></div>
+<!-- end TweetsWind code -->
+
+</div>
+</div>
+<div id="right-view">
+
+    <div id="monster-search">
+        <div>
+            <div id="search-type-list">
+                <p>検索タイプ</p>
+                <ul>
+                    <li><p>絞り込み</p></li>
+                    <li><p>検索</p></li>
+                    <li><p>スキルタイプ</p></li>
+                    <li><p>ドロップ変換</p></li>
+                    <li><p>リーダースキル</p></li>
+                </ul>
+            </div>
+            <div id="search-type1">
+                <ul class="search-tab-box" id="search-attribute">
+                    <li><p>火</p><p class="red"></p></li>
+                    <li><p>水</p><p class="blue"></p></li>
+                    <li><p>木</p><p class="green"></p></li>
+                    <li><p>光</p><p class="yellow"></p></li>
+                    <li><p>闇</p><p class="purple"></p></li>
+                </ul>
+                <ul class="search-tab-box" id="search-type">
+                    <li><p>ドラゴン</p><p class="t1"></p></li>
+                    <li><p>体力</p><p class="t2"></p></li>
+                    <li><p>攻撃</p><p class="t3"></p></li>
+                    <li><p>回復</p><p class="t4"></p></li>
+                    <li><p>バランス</p><p class="t5"></p></li>
+                    <li><p>神</p><p class="t6"></p></li>
+                    <li><p>悪魔</p><p class="t7"></p></li>
+                    <li><p>進化</p><p class="t8"></p></li>
+                    <li><p>覚醒</p><p class="t9"></p></li>
+                    <li><p>強化合成</p><p class="t10"></p></li>
+                    <li><p>特別保護</p><p class="t11"></p></li>
+                    <li><p>マシン</p><p class="t12"></p></li>
+                </ul>
+                <ul class="search-tab-box" id="search-arousal">
+                    <li><p>HP強化</p><p class="a1"></p></li>
+                    <li><p>攻撃強化</p><p class="a2"></p></li>
+                    <li><p>回復強化</p><p class="a3"></p></li>
+                    <li><p>火軽減</p><p class="a4"></p></li>
+                    <li><p>水軽減</p><p class="a5"></p></li>
+                    <li><p>木軽減</p><p class="a6"></p></li>
+                    <li><p>光軽減</p><p class="a7"></p></li>
+                    <li><p>闇軽減</p><p class="a8"></p></li>
+                    <li><p>自動回復</p><p class="a9"></p></li>
+                    <li><p>ﾊﾞｲﾝﾄﾞ耐性</p><p class="a10"></p></li>
+                    <li><p>暗闇耐性</p><p class="a11"></p></li>
+                    <li><p>お邪魔耐性</p><p class="a12"></p></li>
+                    <li><p>毒耐性</p><p class="a13"></p></li>
+                    <li><p>火強化</p><p class="a14"></p></li>
+                    <li><p>水強化</p><p class="a15"></p></li>
+                    <li><p>木強化</p><p class="a16"></p></li>
+                    <li><p>光強化</p><p class="a17"></p></li>
+                    <li><p>闇強化</p><p class="a18"></p></li>
+                    <li><p>操作延長</p><p class="a19"></p></li>
+                    <li><p>ﾊﾞｲﾝﾄﾞ回復</p><p class="a20"></p></li>
+                    <li><p>ｽｷﾙﾌﾞｰｽﾄ</p><p class="a21"></p></li>
+                    <li><p>火属性強化</p><p class="a22"></p></li>
+                    <li><p>水属性強化</p><p class="a23"></p></li>
+                    <li><p>木属性強化</p><p class="a24"></p></li>
+                    <li><p>光属性強化</p><p class="a25"></p></li>
+                    <li><p>闇属性強化</p><p class="a26"></p></li>
+                    <li><p>2体攻撃</p><p class="a27"></p></li>
+                    <li><p>ｽｷﾙ封印</p><p class="a28"></p></li>
+                    <li><p>回復ﾄﾞﾛ強</p><p class="a29"></p></li>
+        </ul>
+        <ul class="search-tab-box" id="search-cost">
+                    <li><p>コスト10以下</p><p></p></li>
+                    <li><p>コスト14以下</p><p></p></li>
+                    <li><p>コスト20以下</p><p></p></li>
+                    <li><p>コスト20以上</p><p></p></li>
+        </ul>
+                <ul class="search-tab-box" id="search-rea">
+                    <li><p>星4以下</p><p></p></li>
+                    <li><p>星6以下</p><p></p></li>
+                    <li><p>星2以上</p><p></p></li>
+                    <li><p>星5以上</p><p></p></li>
+                </ul>
+                <ul id="monster-box">
+                    <li></li>
+                </ul>
+            </div>
+            <div id="search-type2">
+                            <div><p>名前・番号</p></div>
+                <ul class="search-word">
+                    <li><input type="search" size="50" id="word_search"><p class="search-clear" onclick="word.clear()">ｸﾘｱ</p></li>
+                    <li><p>名前か番号を入力、一部のみで勝手に検索します。</p></li>
+                </ul>
+                <ul id="monster-box2">
+                    <li></li>
+                </ul>
+        </div>
+            <div id="search-type3">
+                <div><p>スキルタイプ</p></div>
+                <ul class="search-tab-box" id="ss-stype">
+                    <li><p>攻撃（攻撃倍）</p><p></p></li>
+                    <li><p>攻撃（割合）</p><p></p></li>
+                    <li><p>攻撃（固定値）</p><p></p></li>
+                    <li><p>攻撃（HP依存）</p><p></p></li>
+                    <li><p>攻撃（ランダム）</p><p></p></li>
+                    <li><p>固定ダメージ</p><p></p></li>
+                    <li><p>ドロップ強化</p><p></p></li>
+                    <li><p>変換</p><p></p></li>
+                    <li><p>毒</p><p></p></li>
+                    <li><p>エンハ(属性)</p><p></p></li>
+                    <li><p>エンハ(タイプ)</p><p></p></li>
+                    <li><p>防御ダウン</p><p></p></li>
+                    <li><p>ターン延長</p><p></p></li>
+                    <li><p>ダメ軽減（割合）</p><p></p></li>
+                    <li><p>ダメ軽減（属性）</p><p></p></li>
+                    <li><p>回復</p><p></p></li>
+                    <li><p>バインド回復</p><p></p></li>
+                    <li><p>スキル発動</p><p></p></li>
+                    <li><p>時間停止</p><p></p></li>
+                    <li><p>操作延長</p><p></p></li>
+                    <li><p>反撃</p><p></p></li>
+                    <li><p>入れ替え</p><p></p></li>
+                    <li><p>全体攻撃</p><p></p></li>
+                    <li><p>回復アップ</p><p></p></li>
+                    <li><p>落ちやすくなる</p><p></p></li>
+                    <li><p>属性変化</p><p></p></li>
+                </ul>
+                <ul class="search-tab-box" id="ss-attribute">
+                    <li><p>火</p><p class="red"></p></li>
+                    <li><p>水</p><p class="blue"></p></li>
+                    <li><p>木</p><p class="green"></p></li>
+                    <li><p>光</p><p class="yellow"></p></li>
+                    <li><p>闇</p><p class="purple"></p></li>
+                </ul>
+                <ul class="search-tab-box" id="ss-type">
+                    <li><p>ドラゴン</p><p class="t1"></p></li>
+                    <li><p>体力</p><p class="t2"></p></li>
+                    <li><p>攻撃</p><p class="t3"></p></li>
+                    <li><p>回復</p><p class="t4"></p></li>
+                    <li><p>バランス</p><p class="t5"></p></li>
+                    <li><p>神</p><p class="t6"></p></li>
+                    <li><p>悪魔</p><p class="t7"></p></li>
+                    <li><p>進化</p><p class="t8"></p></li>
+                    <li><p>覚醒</p><p class="t9"></p></li>
+                    <li><p>強化合成</p><p class="t10"></p></li>
+                    <li><p>特別保護</p><p class="t11"></p></li>
+                    <li><p>マシン</p><p class="t12"></p></li>
+         </ul>
+                <ul id="skill-box">
+                    <li></li>
+                </ul>
+            </div>
+            <div id="search-type4">
+                <div><p>ドロップ変換</p></div>
+                <ul class="search-tab-box">
+                変換元
+                </ul>
+                <ul class="search-tab-box" id="dm-asearch">
+                    <li><p>火</p><p class="red"></p></li>
+                    <li><p>水</p><p class="blue"></p></li>
+                    <li><p>木</p><p class="green"></p></li>
+                    <li><p>光</p><p class="yellow"></p></li>
+                    <li><p>闇</p><p class="purple"></p></li>
+                    <li><p>回復</p><p class="heart"></p></li>
+                    <li><p>おじゃま</p><p class="hitch"></p></li>
+                    <li><p>毒</p><p class="poison"></p></li>
+                    <li><p>全て</p><p></p></li>
+                    <li><p>1列</p><p></p></li>
+                    <li><p>ドロップ作成</p><p></p></li>
+                    <li><p>入れ替え</p><p></p></li>
+                </ul>
+                <ul class="search-tab-box">
+                変換先
+                </ul>
+                <ul class="search-tab-box"id="dm-bsearch">
+                    <li><p>火</p><p class="red"></p></li>
+                    <li><p>水</p><p class="blue"></p></li>
+                    <li><p>木</p><p class="green"></p></li>
+                    <li><p>光</p><p class="yellow"></p></li>
+                    <li><p>闇</p><p class="purple"></p></li>
+                    <li><p>回復</p><p class="heart"></p></li>
+                    <li><p>おじゃま</p><p class="hitch"></p></li>
+                    <li><p>毒</p><p class="poison"></p></li>
+                </ul>
+        <ul id="dropmap-box">
+                    <li></li>
+                </ul>
+            </div>
+            <div id="search-type5">
+                <div><p>リーダースキル</p></div>
+                <ul class="search-tab-box" id="ls-ssearch">
+                    <li><p>攻撃↑</p><p></p></li>
+                    <li><p>HP↑</p><p></p></li>
+                    <li><p>回復↑</p><p></p></li>
+                    <li><p>多色(色指定)</p><p></p></li>
+                    <li><p>多色</p><p></p></li>
+                    <li><p>コンボ</p><p></p></li>
+                    <li><p>同時消し</p><p></p></li>
+                    <li><p>HP変動</p><p></p></li>
+                    <li><p>ｽﾃｰﾀｽ犠牲</p><p></p></li>
+                    <li><p>ｽｷﾙ使用</p><p></p></li>
+                    <li><p>特定ﾒﾝﾊﾞｰ</p><p></p></li>
+                    <li><p>ダメ軽減</p><p></p></li>
+                    <li><p>ﾀｰﾝ回復</p><p></p></li>
+                    <li><p>操作延長</p><p></p></li>
+                    <li><p>追い打ち</p><p></p></li>
+                    <li><p>反撃</p><p></p></li>
+                    <li><p>ふんばる</p><p></p></li>
+                    <li><p>コイン↑</p><p></p></li>
+                    <li><p>覚醒</p><p></p></li>
+                    <li><p>スキル↑</p><p></p></li>
+                </ul>
+                <ul class="search-tab-box"id="ls-asearch">
+                    <li><p>火</p><p class="red"></li>
+                    <li><p>水</p><p class="blue"></li>
+                    <li><p>木</p><p class="green"></li>
+                    <li><p>光</p><p class="yellow"></li>
+                    <li><p>闇</p><p class="purple"></li>
+                </ul>
+                <ul class="search-tab-box" id="ls-tsearch">
+                    <li><p>ドラゴン</p><p class="t1"></p></li>
+                    <li><p>体力</p><p class="t2"></p></li>
+                    <li><p>攻撃</p><p class="t3"></p></li>
+                    <li><p>回復</p><p class="t4"></p></li>
+                    <li><p>バランス</p><p class="t5"></p></li>
+                    <li><p>神</p><p class="t6"></p></li>
+                    <li><p>悪魔</p><p class="t7"></p></li>
+                    <li><p>進化</p><p class="t8"></p></li>
+                    <li><p>覚醒</p><p class="t9"></p></li>
+                    <li><p>強化合成</p><p class="t10"></p></li>
+                    <li><p>特別保護</p><p class="t11"></p></li>
+                    <li><p>マシン</p><p class="t12"></p></li>
+                </ul>
+                <ul id="leader-box">
+                </ul>
+            </div>
+            <div id="monster-status-view">
+                <div id="ms-img"></div>
+                <ul>
+                    <li><p>番号</p><div id="ms-number"></div></li>
+                    <li><p>名前</p><div id="ms-name"></div></li>
+                    <li>
+                        <p>属性</p><p id="ms-attribute"></p>
+                        <p>副属性</p><p id="ms-subattribute"></p>
+                    </li>
+                    <li>
+                        <p>ﾀｲﾌﾟ</p>
+                        <div class="monster-type-list">
+                            <p id="ms-type"></p>
+                            <p id="ms-subtype"></p>
+                            <p id="ms-thirdtype"></p>
+                        </div>
+                    </li>
+                    <li>
+                        <p>コスト</p><p id="ms-cost"></p>
+                        <p>レア</p><p id="ms-rarity"></p>
+                    </li>
+                    <li><p>HP</p><p id="ms-hp"></p></li>
+                    <li><p>攻撃</p><p id="ms-attack"></p></li>
+                    <li><p>回復</p><p id="ms-cure"></p></li>
+                    <li>
+                        <div class="monster-status-skill-na">
+                            <p>スキル</p>
+                            <p id="ms-skill-na" onclick="monster.sameSkill()"></p>
+                            <p id="ms-skill-l"></p>
+                        </div>
+            <div class="monster-status-skill-pro">
+                            <p>効果</p><p id="ms-skill-pro"></p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="monster-status-skill-na">
+                            <p>リーダー</p><p id="ms-leader-na"></p>
+                        </div>
+                        <div class="monster-status-skill-pro">
+                            <p>効果</p><p id="ms-leader-pro"></p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="monster-status-arousal-na">
+                            <p>覚醒</p>
+                            <div id="ms-arousal-pro" class="monster-status-arousal-pro">
+
+
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div id="monster-push" onclick="monster.select();"><p>決定</p></div>
+                <div id="monster-close" onclick="monster.search();"><p>閉じる</p></div>
+                <div id="monster-ev" onclick="evolution.show();"><p>進化詳細</p></div>
+            </div>
+            <div id="monster-skill-same">
+                <div>
+                    <p></p>
+                </div>
+                <ul>
+                    <li></li>
+                </ul>
+                <p onclick="monster.sameClose()">閉じる</p>
+            </div>
+            <div id="monster-evol"></div>
+        </div>
+    </div>
+
+    <div class="monster-list">
+        <div class="monster_0">
+            <div class="monster-number"></div>
+            <div class="monster-type">
+                <div class="monster-type1">
+                </div>
+                <div class="monster-type2">
+                </div>
+            </div>
+            <div class="monster-name"></div>
+            <div class="monster-img mimage-s" onclick="monster.search(0);">リ選ぶ</div>
+            <div class="monster-hp">
+                <p>ＨＰ</p><p><input type="text" name="hp" value="0" size="5"></p>
+                <p>＋</p>
+                <p onclick="numchoice.setup(this,'',0)"></p>
+            </div>
+            <div class="monster-atack">
+                <p>攻主</p><p><input type="text" name="atack" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',0)"></p>
+            </div>
+            <div class="monster-atack-sub">
+                <p>攻副</p><p><input type="text" name="atack-sub" value="0" size="5"></p>
+            </div>
+            <div class="monster-cure">
+                <p>回復</p><p><input type="text" name="cure" value="0" size="5"></p>
+                <p>＋</p>
+                <p onclick="numchoice.setup(this,'',0)"></p>
+            </div>
+            <div class="monster-skill"></div>
+            <div class="monster-reader"></div>
+            <div class="monster-arousal"></div>
+        </div>
+        <div class="monster_1">
+            <div class="monster-number"></div>
+            <div class="monster-type">
+                <div class="monster-type1"></div>
+                <div class="monster-type2"></div>
+            </div>
+            <div class="monster-name"></div>
+            <div class="monster-img mimage-s" onclick="monster.search(1);">選ぶ</div>
+             <div class="monster-hp">
+                <p>ＨＰ</p><p><input type="text" name="hp" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',1)"></p>
+            </div>
+            <div class="monster-atack">
+                <p>攻主</p><p><input type="text" name="atack" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',1)"></p>
+            </div>
+            <div class="monster-atack-sub">
+                <p>攻副</p><p><input type="text" name="atack-sub" value="0" size="5"></p>
+            </div>
+            <div class="monster-cure">
+                <p>回復</p><p><input type="text" name="cure" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',1)"></p>
+            </div>
+            <div class="monster-skill"></div>
+            <div class="monster-reader"></div>
+            <div class="monster-arousal"></div>
+        </div>
+        <div class="monster_2">
+            <div class="monster-number"></div>
+            <div class="monster-type">
+                <div class="monster-type1"></div>
+                <div class="monster-type2"></div>
+            </div>
+            <div class="monster-name"></div>
+            <div class="monster-img mimage-s" onclick="monster.search(2);">選ぶ</div>
+            <div class="monster-hp">
+                <p>ＨＰ</p><p><input type="text" name="hp" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',2)"></p>
+            </div>
+            <div class="monster-atack">
+                <p>攻主</p><p><input type="text" name="atack" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',2)"></p>
+            </div>
+            <div class="monster-atack-sub">
+                <p>攻副</p><p><input type="text" name="atack-sub" value="0" size="5"></p>
+            </div>
+            <div class="monster-cure">
+                <p>回復</p><p><input type="text" name="cure" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',2)"></p>
+            </div>
+            <div class="monster-skill"></div>
+            <div class="monster-reader"></div>
+            <div class="monster-arousal"></div>
+        </div>
+        <div class="monster_3">
+            <div class="monster-number"></div>
+            <div class="monster-type">
+                <div class="monster-type1"></div>
+                <div class="monster-type2"></div>
+            </div>
+            <div class="monster-name"></div>
+            <div class="monster-img mimage-s" onclick="monster.search(3);">選ぶ</div>
+            <div class="monster-hp">
+                <p>ＨＰ</p><p><input type="text" name="hp" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',3)"></p>
+            </div>
+            <div class="monster-atack">
+                <p>攻主</p><p><input type="text" name="atack" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',3)"></p>
+            </div>
+            <div class="monster-atack-sub">
+                <p>攻副</p><p><input type="text" name="atack-sub" value="0" size="5"></p>
+            </div>
+            <div class="monster-cure">
+                <p>回復</p><p><input type="text" name="cure" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',3)"></p>
+            </div>
+            <div class="monster-skill"></div>
+            <div class="monster-reader"></div>
+            <div class="monster-arousal"></div>
+        </div>
+        <div class="monster_4">
+            <div class="monster-number"></div>
+            <div class="monster-type">
+                <div class="monster-type1"></div>
+                <div class="monster-type2"></div>
+            </div>
+            <div class="monster-name"></div>
+            <div class="monster-img mimage-s" onclick="monster.search(4);">選ぶ</div>
+            <div class="monster-hp">
+                <p>ＨＰ</p><p><input type="text" name="hp" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',4)"></p>
+            </div>
+            <div class="monster-atack">
+                <p>攻主</p><p><input type="text" name="atack" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',4)"></p>
+            </div>
+            <div class="monster-atack-sub">
+                <p>攻副</p><p><input type="text" name="atack-sub" value="0" size="5"></p>
+            </div>
+            <div class="monster-cure">
+                <p>回復</p><p><input type="text" name="cure" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',4)"></p>
+            </div>
+            <div class="monster-skill"></div>
+            <div class="monster-reader"></div>
+            <div class="monster-arousal"></div>
+        </div>
+        <div class="monster_5">
+            <div class="monster-number"></div>
+            <div class="monster-type">
+                <div class="monster-type1"></div>
+                <div class="monster-type2"></div>
+            </div>
+            <div class="monster-name"></div>
+            <div class="monster-img mimage-s" onclick="monster.search(5);">フ選ぶ</div>
+            <div class="monster-hp">
+                <p>ＨＰ</p><p><input type="text" name="hp" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',5)"></p>
+            </div>
+            <div class="monster-atack">
+                <p>攻主</p><p><input type="text" name="atack" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',5)"></p>
+            </div>
+            <div class="monster-atack-sub">
+                <p>攻副</p><p><input type="text" name="atack-sub" value="0" size="5"></p>
+            </div>
+            <div class="monster-cure">
+                <p>回復</p><p><input type="text" name="cure" value="0" size="5"></p>
+                <p>＋</p><p onclick="numchoice.setup(this,'',5)"></p>
+            </div>
+            <div class="monster-skill"></div>
+            <div class="monster-reader"></div>
+            <div class="monster-arousal"></div>
+        </div>
+    </div>
+
+    <div class="party-status">
+        <div class="party-st-view">
+            <div class="partie-st-tab">
+                <p>総攻撃力</p><p id="party-t-attack">0</p>
+            </div>
+            <div class="partie-st-tab">
+                <p>総攻撃力</p><p id="party-t-subattack">0</p>
+            </div>
+            <div class="partie-st-tab">
+                <p>総HP</p><p id="party-t-hp">0</p>
+            </div>
+            <div class="partie-st-tab">
+                <p>総回復力</p><p id="party-t-cure">0</p>
+            </div>
+            <div class="partie-st-tab">
+                <p>総コスト</p><p id="party-t-cost">0</p>
+            </div>
+            <div class="partie-st-tab">
+                <p>総レアリティ</p><p id="party-t-rea">0</p>
+            </div>
+            <div class="partie-st-tab">
+                <p>リーダー１</p><p id="party-t-leader1"></p>
+            </div>
+            <div class="partie-st-tab">
+                <p>リーダー２</p><p id="party-t-leader2"></p>
+            </div>
+            <div class="partie-arousal-list">
+                <p>覚醒スキル</p>
+                <p>
+                    <ul class="partie-arousal">
+                        <li><p class="a1"></p><p>×</p><p id="pa1">0</p></li>
+                        <li><p class="a2"></p><p>×</p><p id="pa2">0</p></li>
+                        <li><p class="a3"></p><p>×</p><p id="pa3">0</p></li>
+                        <li><p class="a4"></p><p>×</p><p id="pa4">0</p></li>
+                        <li><p class="a5"></p><p>×</p><p id="pa5">0</p></li>
+                        <li><p class="a6"></p><p>×</p><p id="pa6">0</p></li>
+                        <li><p class="a7"></p><p>×</p><p id="pa7">0</p></li>
+                        <li><p class="a8"></p><p>×</p><p id="pa8">0</p></li>
+                        <li><p class="a9"></p><p>×</p><p id="pa9">0</p></li>
+                        <li><p class="a10"></p><p>×</p><p id="pa10">0</p></li>
+                        <li><p class="a11"></p><p>×</p><p id="pa11">0</p></li>
+                        <li><p class="a12"></p><p>×</p><p id="pa12">0</p></li>
+                        <li><p class="a13"></p><p>×</p><p id="pa13">0</p></li>
+                        <li><p class="a14"></p><p>×</p><p id="pa14">0</p></li>
+                        <li><p class="a15"></p><p>×</p><p id="pa15">0</p></li>
+                        <li><p class="a16"></p><p>×</p><p id="pa16">0</p></li>
+                        <li><p class="a17"></p><p>×</p><p id="pa17">0</p></li>
+                        <li><p class="a18"></p><p>×</p><p id="pa18">0</p></li>
+                        <li><p class="a19"></p><p>×</p><p id="pa19">0</p></li>
+                        <li><p class="a20"></p><p>×</p><p id="pa20">0</p></li>
+                        <li><p class="a21"></p><p>×</p><p id="pa21">0</p></li>
+                        <li><p class="a22"></p><p>×</p><p id="pa22">0</p></li>
+                        <li><p class="a23"></p><p>×</p><p id="pa23">0</p></li>
+                        <li><p class="a24"></p><p>×</p><p id="pa24">0</p></li>
+                        <li><p class="a25"></p><p>×</p><p id="pa25">0</p></li>
+                        <li><p class="a26"></p><p>×</p><p id="pa26">0</p></li>
+                        <li><p class="a27"></p><p>×</p><p id="pa27">0</p></li>
+                        <li><p class="a28"></p><p>×</p><p id="pa28">0</p></li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+        <div class="party-combo-view">
+            <div class="">
+                <p>コンボ詳細</p>
+                <ul class="combo-list-view">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="partie-final-status">
+
+        <div id="pfs-drag">
+            <p>Drag Area　計算結果</p>
+        </div>
+        <div id="pfs-small" onclick="damage.closeF()">
+            <p>閉じる</p>
+        </div>
+
+        <div class="pfs-partie">
+            <div class="pfs_m_0">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                <div class="monster-hp"></div>
+                <div class="monster-atack"></div>
+                <div class="monster-atack-sub"></div>
+                <div class="monster-cure"></div>
+                <div class="monster-skill"></div>
+                <div class="monster-reader"></div>
+            </div>
+            <div class="pfs_m_1">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                 <div class="monster-hp"></div>
+                <div class="monster-atack"></div>
+                <div class="monster-atack-sub"></div>
+                <div class="monster-cure"></div>
+                <div class="monster-skill"></div>
+            </div>
+            <div class="pfs_m_2">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                <div class="monster-hp"></div>
+                <div class="monster-atack"></div>
+                <div class="monster-atack-sub"></div>
+                <div class="monster-cure"></div>
+                <div class="monster-skill"></div>
+            </div>
+            <div class="pfs_m_3">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                <div class="monster-hp"></div>
+                <div class="monster-atack"></div>
+                <div class="monster-atack-sub"></div>
+                <div class="monster-cure"></div>
+                <div class="monster-skill"></div>
+            </div>
+            <div class="pfs_m_4">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                <div class="monster-hp"></div>
+                <div class="monster-atack"></div>
+                <div class="monster-atack-sub"></div>
+                <div class="monster-cure"></div>
+                <div class="monster-skill"></div>
+            </div>
+            <div class="pfs_m_5">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                <div class="monster-hp"></div>
+                <div class="monster-atack"></div>
+                <div class="monster-atack-sub"></div>
+                <div class="monster-cure"></div>
+                <div class="monster-skill"></div>
+                <div class="monster-reader"></div>
+            </div>
+        </div>
+        <div class="pfs-status">
+            <div class="pfs-tab1">
+                <p></p>
+                <p>主攻撃</p>
+                <p id="pfs-attack"></p>
+            </div>
+            <div class="pfs-tab1">
+                <p></p>
+                <p>副攻撃</p>
+                <p id="pfs-attack-sub"></p>
+            </div>
+            <div class="pfs-tab1">
+                <p></p>
+                <p>HP</p>
+                <p id="pfs-hp"></p>
+            </div>
+            <div class="pfs-tab1">
+                <p></p>
+                <p>回復</p>
+                <p id="pfs-cure"></p>
+            </div>
+
+            <div class="pfs-tab1">
+                <p class="red"></p>
+                <p>火攻撃</p>
+                <p id="pfs-color1"></p>
+            </div>
+            <div class="pfs-tab1">
+                <p class="red"></p>
+                <p>火副攻撃</p>
+                <p id="pfs-color1-sub"></p>
+            </div>
+
+            <div class="pfs-tab1">
+                <p class="blue"></p>
+                <p>水攻撃</p>
+                <p id="pfs-color2"></p>
+            </div>
+            <div class="pfs-tab1">
+                <p class="blue"></p>
+                <p>水副攻撃</p>
+                <p id="pfs-color2-sub"></p>
+            </div>
+
+            <div class="pfs-tab1">
+                <p class="green"></p>
+                <p>木攻撃</p>
+                <p id="pfs-color3"></p>
+            </div>
+            <div class="pfs-tab1">
+                <p class="green"></p>
+                <p>木副攻撃</p>
+                <p id="pfs-color3-sub"></p>
+            </div>
+
+            <div class="pfs-tab1">
+                <p class="yellow"></p>
+                <p>光攻撃</p>
+                <p id="pfs-color4"></p>
+            </div>
+            <div class="pfs-tab1">
+                <p class="yellow"></p>
+                <p>光副攻撃</p>
+                <p id="pfs-color4-sub"></p>
+            </div>
+
+            <div class="pfs-tab1">
+                <p class="purple"></p>
+                <p>闇攻撃</p>
+                <p id="pfs-color5"></p>
+            </div>
+            <div class="pfs-tab1">
+                <p class="purple"></p>
+                <p>闇副攻撃</p>
+                <p id="pfs-color5-sub"></p>
+            </div>
+
+            <div class="pfs-tab1">
+                <p class="heart"></p>
+                <p>回復</p>
+                <p id="pfs-color6"></p>
+            </div>
+        </div>
+        <div class="pfs-combo">
+            <div class="party-combo-view">
+                <div class="">
+                    <p>コンボ詳細</p>
+                    <ul class="combo-list-view">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="save-partie">
+
+        <div id="pfs-drag">
+            <p>Drag Area　　パーティー１</p>
+        </div>
+
+
+        <div class="pfs-partie">
+            <div class="monster_0">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                <div class="monster-hp">
+                    <p>ＨＰ</p><p></p>
+                </div>
+                <div class="monster-atack">
+                    <p>攻撃</p><p></p>
+                </div>
+                <div class="monster-cure">
+                    <p>回復</p><p></p>
+                </div>
+                <div class="monster-skill"></div>
+                <div class="monster-reader"></div>
+                <div class="monster-arousal"></div>
+            </div>
+            <div class="monster_1">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                 <div class="monster-hp">
+                    <p>ＨＰ</p><p></p>
+                </div>
+                <div class="monster-atack">
+                    <p>攻撃</p><p></p>
+                </div>
+                <div class="monster-cure">
+                    <p>回復</p><p></p>
+                </div>
+                <div class="monster-skill"></div>
+                <div class="monster-arousal"></div>
+            </div>
+            <div class="monster_2">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                <div class="monster-hp">
+                    <p>ＨＰ</p><p></p>
+                </div>
+                <div class="monster-atack">
+                    <p>攻撃</p><p></p>
+                </div>
+                <div class="monster-cure">
+                    <p>回復</p><p></p>
+                </div>
+                <div class="monster-skill"></div>
+                <div class="monster-arousal"></div>
+            </div>
+            <div class="monster_3">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                <div class="monster-hp">
+                    <p>ＨＰ</p><p></p>
+                </div>
+                <div class="monster-atack">
+                    <p>攻撃</p><p></p>
+                </div>
+                <div class="monster-cure">
+                    <p>回復</p><p></p>
+                </div>
+                <div class="monster-skill"></div>
+                <div class="monster-arousal"></div>
+            </div>
+            <div class="monster_4">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                <div class="monster-hp">
+                    <p>ＨＰ</p><p></p>
+                </div>
+                <div class="monster-atack">
+                    <p>攻撃</p><p></p>
+                </div>
+                <div class="monster-cure">
+                    <p>回復</p><p></p>
+                </div>
+                <div class="monster-skill"></div>
+                <div class="monster-arousal"></div>
+            </div>
+            <div class="monster_5">
+                <div class="monster-name"></div>
+                <div class="monster-img mimage-s"></div>
+                <div class="monster-hp">
+                    <p>ＨＰ</p><p></p>
+                </div>
+                <div class="monster-atack">
+                    <p>攻撃</p><p></p>
+                </div>
+                <div class="monster-cure">
+                    <p>回復</p><p></p>
+                </div>
+                <div class="monster-skill"></div>
+                <div class="monster-reader"></div>
+                <div class="monster-arousal"></div>
+            </div>
+            <div>
+                <div class="ps-status">
+                    <div class="pfs-tab1">
+                        <p>攻撃</p><p id="party-t-attack">0</p>
+                    </div>
+                    <div class="pfs-tab1">
+                        <p>HP</p><p id="party-t-hp">0</p>
+                    </div>
+                    <div class="pfs-tab1">
+                        <p>回復</p><p id="party-t-cure">0</p>
+                    </div>
+                    <div class="pfs-tab1">
+                        <p>コスト</p><p id="party-t-cost">0</p>
+                    </div>
+                    <div class="pfs-tab1">
+                        <p>レア</p><p id="party-t-rea">0</p>
+                    </div>
+                    <div class="pfs-tab2">
+                        <p>リーダー１</p><p id="party-t-leader1"></p>
+                    </div>
+                    <div class="pfs-tab2">
+                        <p>リーダー２</p><p id="party-t-leader2"></p>
+                    </div>
+                    <div class="pfs-arousal">
+                        <p>覚醒スキル</p>
+                        <p>
+                            <ul class="pfs-arousal-list">
+                                <li><p class="a1"></p><p id="pa1">0</p></li>
+                                <li><p class="a2"></p><p id="pa2">0</p></li>
+                                <li><p class="a3"></p><p id="pa3">0</p></li>
+                                <li><p class="a4"></p><p id="pa4">0</p></li>
+                                <li><p class="a5"></p><p id="pa5">0</p></li>
+                                <li><p class="a6"></p><p id="pa6">0</p></li>
+                                <li><p class="a7"></p><p id="pa7">0</p></li>
+                                <li><p class="a8"></p><p id="pa8">0</p></li>
+                                <li><p class="a9"></p><p id="pa9">0</p></li>
+                                <li><p class="a10"></p><p id="pa10">0</p></li>
+                                <li><p class="a11"></p><p id="pa11">0</p></li>
+                                <li><p class="a12"></p><p id="pa12">0</p></li>
+                                <li><p class="a13"></p><p id="pa13">0</p></li>
+                                <li><p class="a14"></p><p id="pa14">0</p></li>
+                                <li><p class="a15"></p><p id="pa15">0</p></li>
+                                <li><p class="a16"></p><p id="pa16">0</p></li>
+                                <li><p class="a17"></p><p id="pa17">0</p></li>
+                                <li><p class="a18"></p><p id="pa18">0</p></li>
+                                <li><p class="a19"></p><p id="pa19">0</p></li>
+                                <li><p class="a20"></p><p id="pa20">0</p></li>
+                                <li><p class="a21"></p><p id="pa21">0</p></li>
+                                <li><p class="a22"></p><p id="pa22">0</p></li>
+                                <li><p class="a23"></p><p id="pa23">0</p></li>
+                                <li><p class="a24"></p><p id="pa24">0</p></li>
+                                <li><p class="a25"></p><p id="pa25">0</p></li>
+                                <li><p class="a26"></p><p id="pa26">0</p></li>
+                                <li><p class="a27"></p><p id="pa27">0</p></li>
+                                <li><p class="a28"></p><p id="pa28">0</p></li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--
+    <div id="enemy">
+        <div><p>適当なモンスターA</p></div>
+        <div>画像</div>
+        <div>HP</div>
+        <div>攻撃</div>
+        <div>防御</div>
+        <div>
+            <ul>
+                <li><p>スキル１</p></li>
+                <li><p>スキル２</p></li>
+            </ul>
+        </div>
+    </div>
+ -->
+</div>
+<div id="right-space">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- pazzdra_right -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:120px;height:600px"
+     data-ad-client="ca-pub-8548023170159321"
+     data-ad-slot="5322536977"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+</div>
+</div>
+</body>
+
+
+{% raw %}
+<script id="TmpEvob" type="text/x-jquery-tmpl">
+        <div class="Ev-b${posi}">
+            <div class="ev-im" onclick="monster.buildView(this)" data-role="${id}">
+                <p class="mimage-s"><img src="img/m/${id}.jpg"></p>
+            </div>
+            <div class="ev-na"><p>${id}：${name}</p></div>
+            <ul class="ev-st-li">
+                <li class="ev-at">
+                    <p class="${attri}"></p><p class="ev-sp">/</p><p class="${subattri}"></p>
+                    <p class="ev-sp"></p><p class="t${typ} ev-ty"></p><p class="ev-sp">/</p><p class="t${subtyp} ev-ty"></p>
+                    <p>ﾚｱ:</p><p class="ev-sp">${rea}</p><p>ｺｽﾄ:</p><p class="ev-sp">${cost}</p>
+                </li>
+            </ul>
+            <ul>
+                <li class="ev-st">
+                    <p>HP:</p><p>${HP}</p><p>攻:</p><p>${At}</p><p>回:</p><p>${Cu}</p>
+                </li>
+            </ul>
+            <ul>
+                <li class="ev-sk"><p>ｽｷﾙ:</p><p>${skil}</p><p>${skilp}</p></li>
+                <li class="ev-le"><p>ﾘｰﾀﾞｰ:</p><p>${lea}</p><p>${leap}</p></li>
+            </ul>
+        </div>
+</script>
+<script id="TmpEvop" type="text/x-jquery-tmpl">
+        <div class="Ev-p${posi}">
+            <div class="Ev-materials">
+                <p>進化素材</p>
+                <ul>
+                    <li onclick="monster.buildView(this)" data-role="${ma1}">
+                        <p class="mimage-s"><img src="img/m/${ma1}.jpg"></p>
+                    </li>
+                    <li onclick="monster.buildView(this)" data-role="${ma2}">
+                        <p class="mimage-s"><img src="img/m/${ma2}.jpg"></p>
+                    </li>
+                    <li onclick="monster.buildView(this)" data-role="${ma3}">
+                        <p class="mimage-s"><img src="img/m/${ma3}.jpg"></p>
+                    </li>
+                    <li onclick="monster.buildView(this)" data-role="${ma4}">
+                        <p class="mimage-s"><img src="img/m/${ma4}.jpg"></p>
+                    </li>
+                    <li onclick="monster.buildView(this)" data-role="${ma5}">
+                        <p class="mimage-s"><img src="img/m/${ma5}.jpg"></p>
+                    </li>
+                </ul>
+            </div>
+            <div class="Ev-stup">
+                <ul>
+                    <li><p>主</p><p class="${atri} ${atrip} ev-stupa"></p></li>
+                    <li><p>副</p><p class="${subatri} ${subatrip} ev-stupa"></p></li>
+                    <li><p>主</p><p class="t${type} ${typep} ev-stupt"></p></li>
+                    <li><p>副</p><p class="t${subtype} ${subtypep} ev-stupt"></p></li>
+                    <li><p>HP</p><p class="${hpp}">${hp}</p></li>
+                    <li><p>攻</p><p class="${atp}">${at}</p></li>
+                    <li><p>回</p><p class="${cup}">${cu}</p></li>
+                    <li class="ev-stups"><p class="${skp}">sk</p></li>
+                    <li class="ev-stups"><p class="${lsp}">ls</p></li>
+                </ul>
+            </div>
+        </div>
+</script>
+<script id="TmpEvoa" type="text/x-jquery-tmpl">
+        <div class="Ev-a-${posi}">
+            <div class="Ev-a">
+            <div class="ev-ultimate">究極</div>
+            <div class="ev-im" onclick="monster.buildView(this)" data-role="${id}">
+                <p class="mimage-s"><img src="img/m/${id}.jpg"></p>
+            </div>
+            <div class="ev-na"><p>${id}：${name}</p></div>
+            <ul class="ev-st-li">
+                <li class="ev-at">
+                    <p class="${attri}"></p><p class="ev-sp">/</p>
+                    <p class="${subattri}"></p>
+                    <p class="ev-sp"></p><p class="t${typ} ev-ty"></p><p class="ev-sp">/</p>
+                    <p class="${subtyp} ev-ty"></p>
+                    <p>ﾚｱ:</p><p class="ev-sp">${rea}</p>
+                    <p>ｺｽﾄ:</p><p class="ev-sp">${cost}</p>
+                </li>
+            </ul>
+            <ul>
+                <li class="ev-st">
+                    <p>HP:</p><p>${HP}</p><p>攻:</p><p>${At}</p><p>回:</p><p>${Cu}</p>
+                </li>
+            </ul>
+            <ul>
+                <li class="ev-sk"><p>ｽｷﾙ:</p><p>${skil}</p><p>${skilp}</p></li>
+                <li class="ev-le"><p>ﾘｰﾀﾞｰ:</p><p>${lea}</p><p>${leap}</p></li>
+            </ul>
+            </div>
+        </div>
+</script>
+
+<script id="TmpEvoarr" type="text/x-jquery-tmpl">
+        <div class="Ev-ar${id} ev-rr${num}"></div>
+</script>
+
+{% endraw %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.css" />
+<script src="{{asset('js/lib/ajaxloader.js')}}"></script>
+<script src="{{asset('js/lib/jquery.tmpl.js')}}"></script>
+<script src="{{asset('js/lib/numChoice.js')}}"></script>
+<link rel="stylesheet" href="{{asset('css/lib/numChoice.css')}}" />
+<script src="{{asset('js/lib/drag.js')}}"></script>
+<script src="{{asset('js/pcalc.js')}}"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-15744414-5', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</html>

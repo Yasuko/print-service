@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response} from '@angular/http';
 // import { Observable } from 'rxjs';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
 
 import { PrintData } from './printData';
 import { PrintText } from './printText';

@@ -1,0 +1,34 @@
+{# view/menu/index.html.twig #}
+{% extends 'pc.html.twig' %}
+
+{% block title %}フロア状況{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="../css/pc_base.css" type="text/css" />
+<link rel="stylesheet" href="../css/admin/floor.css" type="text/css" />
+{% endblock %}
+
+{% block script %}
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="../js/admin/floor.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="item-add">
+    <p onclick="item.addItem()">アラート設定</p>
+    <p onclick="item.addCategory()"></p>
+</div>
+<ul id="category">
+    <li>A</li>
+    <li>B</li>
+    <li>C</li>
+    <li>D</li>
+</ul>
+<div id="item-state">
+    <p>情報</p>
+    <div></div>
+</div>
+<ul>
+</ul>
+
+{% endblock %}

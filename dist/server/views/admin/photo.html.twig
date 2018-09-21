@@ -1,0 +1,80 @@
+{# view/menu/index.html.twig #}
+{% extends 'pc.html.twig' %}
+
+{% block title %}写真管理{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="../css/pc_base.css" type="text/css" />
+<link rel="stylesheet" href="../css/admin/photo.css" type="text/css" />
+{% endblock %}
+
+{% block script %}
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+<script type="text/javascript" src="../js/lib/file-upload.js"></script>
+<script type="text/javascript" src="../js/lib/ajaxloader.js"></script>
+<script type="text/javascript" src="../js/admin/photo.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="drop-files" ondragover="return false">
+
+    <p onclick="item.addItem()">ファイルを選択</p>
+    <span>ここへ写真をドラッグ</span>
+
+</div>
+
+    <div id="uploaded-holder">
+        <div id="dropped-files">
+            <div id="upload-button">
+                <a href="#" class="upload">アップロード</a>
+                <a href="#" class="delete">削除</a>
+                <span>0 Files</span>
+            </div>
+        </div>
+        <div id="extra-files">
+            <div class="number">
+                0
+            </div>
+            <div id="file-list">
+                <ul></ul>
+            </div>
+        </div>
+    </div>
+    <div id="loading">
+        <div id="loading-bar">
+            <div class="loading-color"> </div>
+        </div>
+        <div id="loading-content">Uploading file.jpg</div>
+    </div>
+
+<ul id="item-box">
+
+</ul>
+
+{% endblock %}
+
+{% block tmpl %}
+
+
+<!-- 写真リスト -->
+<script id="TmpListPhoto" type="text/x-jquery-tmpl">
+    <li class="item-view" onclick="item.editItem(${id})">
+        <div class="item-image">
+            <p><img src="../img/small/${path}"></p>
+        </div>
+        <div class="item-title">
+            <p>${name}</p>
+        </div>
+        <div class="item-text">
+            <p>説明</p>
+            <p>${text}</p>
+        </div>
+        <div class="item-text">
+            <p>登録商品</p>
+            <p>${text}</p>
+        </div>
+    </li>
+</script>
+
+{% endblock %}

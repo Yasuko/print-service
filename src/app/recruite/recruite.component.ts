@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 // Import TherdParty Service
 import { PdfMakerService, RecruiteMakerService } from '../_lib_service/index';
 // import { ListLayoutService, RecruiteLayoutService } from '../_lib_service/index';

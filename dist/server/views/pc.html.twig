@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="Thu, 01 Dec 1994 16:00:00 GMT">
+
+    <title>{% block title %}{% endblock %}</title>
+    {% block style %}{% endblock %}
+    </head>
+<body>
+
+<div id="page">
+<!-- ヘッダー -->
+<div id="header">
+{% block header %}{% endblock %}
+    <table id="head-table">
+        <tr>
+            <td id="head-titlebox">
+                <div id="head-date">
+                    <p>{{year}}年 {{month}} 月</p>
+                </div>
+                <div id="head-floor">
+                    <p>{{group}}昼夜時間外</p>
+                </div>
+            </td>
+            <td id="head-moveboxb">
+                <div class="head-move" onclick="header.move('back')">
+                    ＜＜
+                </div>
+            </td>
+            <td id="head-linkbox">
+                <div>
+                    <dt>川飛</dt>
+                    <span>
+                        <dd>
+                            <a href="?releace=day&yyyy=2013&mm=3&act=iti">昼</a>
+                        </dd>
+                        <dd>
+                            <a href="?releace=night&yyyy=2013&mm=3&act=iti">夜</a>
+                        </dd>
+                        <dd>
+                            <a href="?releace=ather&yyyy=2013&mm=3&act=iti">時間外</a>
+                        </dd>
+                    </span>
+                </div>
+                <div>
+                    <dt>こころ庵</dt>
+                    <span >
+                        <dd>
+                            <a href="?releace=day&yyyy=2013&mm=3&act=iti">昼</a>
+                        </dd>
+                        <dd>
+                            <a href="?releace=night&yyyy=2013&mm=3&act=iti">夜</a>
+                        </dd>
+                        <dd>
+                            <a href="?releace=ather&yyyy=2013&mm=3&act=iti">時間外</a>
+                        </dd>
+                    </span>
+                </div>
+                <div>
+                    <dt>川飛　厨房</dt>
+                    <span>
+                        <dd>
+                            <a href="?releace=day&yyyy=2013&mm=3">昼</a>
+                        </dd>
+                        <dd>
+                            <a href="?releace=night&yyyy=2013&mm=3">夜</a>
+                        </dd>
+                        <dd>
+                            <a href="?releace=ather&yyyy=2013&mm=3">時間外</a>
+                        </dd>
+                    </span>
+                </div>
+                <div>
+                    <dt>こころ庵　厨房</dt>
+                    <span>
+                        <dd>
+                            <a href="?releace=day_ather&yyyy=2013&mm=3">昼</a>
+                        </dd>
+                        <dd>
+                            <a href="?releace=night_ather&yyyy=2013&mm=3">夜</a>
+                        </dd>
+                        <dd>
+                            <a href="?releace=ather_ather&yyyy=2013&mm=3">時間外</a>
+                        </dd>
+                    </span>
+                </div>
+                <div>
+                    <dt>他</dt>
+                    <span>
+                        <dd>
+                            <a href="shidashi.php?year=2013&month=3">仕出</a>
+                        </dd>
+                        <dd>
+                            <a href="madori.php?hiduke=2013/03/11">御新規</a>
+                        </dd>
+                        <dd>
+                            <a href="work">出勤</a>
+                        </dd>
+                        <dd>
+                            <a href="month_view.php">予約一覧</a>
+                        </dd>
+                    </span>
+                </div>
+            </td>
+            <td id="head-moveboxa">
+                <div class="head-move" onclick="header.move('next')">
+                    ＞＞
+                </div>
+            </td>
+            <td id="head-atherbox">
+                <div>
+                    <a id="kinshi" href="../kinshi/iframe_node.php?flag=1">予約禁止</a>
+                </div>
+                <div>
+                    <a id="tyui" href="../yoyaku/tyui_view/tyui_view.html">注意</a>
+                </div>
+                <div>
+                    <a id="tyui" href="../yoyaku/tyui_view/tyui_view.html">緊急メール</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- メインコンテンツ -->
+<div id="content">
+{% block content %}{% endblock %}
+</div>
+
+<!-- フッター -->
+
+<div id="footer"></div>
+{% block footer %}{% endblock %}
+
+
+<!-- テンプレート -->
+{% block tmpl %}{% endblock %}
+</body>
+{% block script %}{% endblock %}
+</html>

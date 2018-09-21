@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+// import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PrintStatusService } from './print-status.service';
 import { PrintDataService } from '../service/index';
@@ -58,7 +58,7 @@ export class PrintComponent implements OnInit {
     svgBox;
 
 
-    subscription: Subscription;
+    // subscription: Subscription;
     constructor(
         private router: Router,
         private sanitizer: DomSanitizer,
