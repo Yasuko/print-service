@@ -1,6 +1,10 @@
 # PrintService
-
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.3.
+
+ブラウザ完結型、履歴書、はがきの宛名、タックシート印刷
+
+#サンプル
+https://epri.yasukosan.net/
 
 ## Development server
 
